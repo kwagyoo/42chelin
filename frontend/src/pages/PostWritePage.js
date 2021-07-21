@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PostWritePage = () => {
-  return <div>hi</div>;
+  return <div>writepage</div>;
 };
 
 export default PostWritePage;

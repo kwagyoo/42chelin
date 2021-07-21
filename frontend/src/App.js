@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostlistPage from './pages/PostlistPage';
-import PostWritePage from './pages/PostWritepage';
+import PostWritePage from './pages/PostWritePage';
 
 const App = () => {
   return (
