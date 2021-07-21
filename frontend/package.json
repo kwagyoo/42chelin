@@ -31,7 +31,8 @@
       "react/jsx-filename-extension": 0,
       "react/jsx-one-expression-per-line": 0,
       "react-in-jsx-scope": 0,
-      "arrow-body-style": 0
+      "arrow-body-style": 0,
+      "import/no-unresolved": 0
     },
     "env": {
       "browser": true
