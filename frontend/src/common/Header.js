@@ -57,7 +57,7 @@ const Header = () => {
             </Link>
           </div>
           <div className="right">
-            <Button />
+            <Button name="로그인"/>
           </div>
         </Wrapper>
       </HeaderBlock>

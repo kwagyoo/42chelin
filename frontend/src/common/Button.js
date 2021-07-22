@@ -1,6 +1,7 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledButton = styled.button`
   margin-right: 1rem;
@@ -22,8 +23,17 @@ const StyledButton = styled.button`
 //   ${StyledButton}
 // `;
 
-const Button = () => {
-  return <StyledButton>로그인</StyledButton>;
+const Button = ({name}) => {
+  return <StyledButton>{name}</StyledButton>;
 };
+
+Button.propTypes = {
+  name: PropTypes.string,
+};
+
+Button.defaultProps = {
+  name: "",
+};
+
 
 export default Button;
