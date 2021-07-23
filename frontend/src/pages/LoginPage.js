@@ -3,10 +3,10 @@ import Header from '../common/Header';
 
 const LoginPage = () => {
   return (
-    <>
-      <Header/>
+    <React.Fragment>
+      <Header />
       <div>login</div>
-    </>
+    </React.Fragment>
   );
 };
 
