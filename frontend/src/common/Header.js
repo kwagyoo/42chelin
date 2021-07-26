@@ -45,7 +45,7 @@ const Spacer = styled.div`
 
 const Header = () => {
   return (
-    <>
+    <React.Fragment>
       <HeaderBlock>
         <Wrapper>
           <div>
@@ -57,12 +57,12 @@ const Header = () => {
             </Link>
           </div>
           <div className="right">
-            <Button name="로그인"/>
+            <Button name="로그인" />
           </div>
         </Wrapper>
       </HeaderBlock>
       <Spacer />
-    </>
+    </React.Fragment>
   );
 };
 
