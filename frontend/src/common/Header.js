@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Button from './Button';
 
 const HeaderBlock = styled.div`
-  position: fixed;
   width: 100%;
   background: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
@@ -57,7 +56,7 @@ const Header = () => {
             </Link>
           </div>
           <div className="right">
-            <Button name="로그인" />
+            <Button to="/login" name="로그인" />
           </div>
         </Wrapper>
       </HeaderBlock>
