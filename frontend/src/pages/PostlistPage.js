@@ -23,7 +23,7 @@ const PostlistPage = () => {
       <Row>
         {images.map((image, index) => (
           <Col key={index} xs={24} md={8} lg={6}>
-            <PostBlock src={images[index].default} />
+            <PostBlock src={images[index]} />
           </Col>
         ))}
       </Row>
