@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 
 function importAll(r) {
   let images = [];
-  r.keys().map((item, index) => {
+  r.keys().forEach((item, index) => {
     images[index] = r(item);
   });
   return images;
@@ -15,7 +15,6 @@ function importAll(r) {
 const images = importAll(
   require.context('../image/', false, /\.(png|jpe?g|svg)$/),
 );
-const style = { background: '#0092ff', padding: '8px 0' };
 
 const PostlistPage = () => {
   return (
@@ -23,8 +22,8 @@ const PostlistPage = () => {
       <Header />
       <Row>
         {images.map((image, index) => (
-          <Col xs={24} md={8} lg={6}>
-            <PostBlock key={index} src={images[index]} />
+          <Col key={index} xs={24} md={8} lg={6}>
+            <PostBlock src={images[index].default} />
           </Col>
         ))}
       </Row>

@@ -12,7 +12,7 @@ const PostBlock = ({ src }) => {
   return (
     <React.Fragment>
       <Store>
-        <img src={src} />
+        <img src={src} alt="pokemon"/>
         <br />
         <span>이름 : 펄기아</span>
         <br />
