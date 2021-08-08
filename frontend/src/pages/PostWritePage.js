@@ -82,15 +82,20 @@ const PostWritePage = () => {
   }
 
   const onDrop = useCallback(acceptedFiles => {
-    setFiles(prevFiles=>
-      [...prevFiles,
-      acceptedFiles.map(file =>
+    const newArray = acceptedFiles.map((file, index) => //이 과정을 통해서 각 file객체 속성으로 썸네일 경로가 생성된다. 위에 콘솔을 입력해도 이 과정이 더 빠른건지 preview속성이 나온다.
         Object.assign(file, {
+          index : files.length + index,
           preview: URL.createObjectURL(file)
         })
-      )]
-    );
-  }, [])
+      );
+    setFiles(prevFiles => [...prevFiles, newArray].flat()); //newArray가 배열이라서 이중 배열이 되기 때문에 flat으로 1차원배열로 변환
+  }, [files])
+
+  const onDelete = (index) => {
+    console.log(files.splice(index, 1));
+    setFiles(files.splice(index, 1));
+  }
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   const InputProps = {
@@ -99,14 +104,14 @@ const PostWritePage = () => {
     accept: "image/gif, image/jpg, image/jpeg",
   };
 
-  const thumbs = files.map(file => ( //[[file],[file,file]...]와 같이 동시에 업로드한 파일들끼리 묶여있어서 이중 map을 사용해서 내부정보를 얻어온다.
-    file.map(detail=>(
-    <div style={thumb} key={detail.name}>
-      <div style={thumbInner}>
-        <img src={detail.preview} style={img} alt="thumbnail" />
+  const thumbs = files.map((file,index) => ( //[[file],[file,file]...]와 같이 동시에 업로드한 파일들끼리 묶여있어서 이중 map을 사용해서 내부정보를 얻어온다.
+    // file.map(detail=>(
+    <div style={thumb} key={index}>
+      <div style={thumbInner} onClick={()=>onDelete(index)}>
+        <img src={file.preview} style={img} alt="thumbnail" />
       </div>
     </div>
-  ))));
+  ));
 
   useEffect(()=>{
     SetTodayDate();  
@@ -116,7 +121,6 @@ const PostWritePage = () => {
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
       files.forEach(file => URL.revokeObjectURL(file.preview));
-      console.log(files);
     },
     [files]
   );
