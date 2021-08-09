@@ -9,11 +9,10 @@ const Store = styled.span`
 `;
 
 const PostBlock = ({ src }) => {
-  console.log(src);
   return (
     <React.Fragment>
       <Store>
-        <img src={src} alt="pokemon" />
+        <img src={src.default} alt="pokemon" />
         <br />
         <span>이름 : 펄기아</span>
         <br />
