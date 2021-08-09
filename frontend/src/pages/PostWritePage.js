@@ -19,9 +19,9 @@ const StyledDrop = styled.div`
   border-style : solid;
   border-width : 1px;
   width : 80%;
-  height : 150px;
+  height : 100px;
   .dropMsg {
-    margin-top : 63px;
+    margin-top : 40px;
     text-align : center;
   }
 `;
@@ -60,6 +60,7 @@ const thumbInner = {
 const PostWritePage = () => {
   const [date, setDate]= useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
+  const [count, setCount] = useState(0);
 
   const {
     register,
@@ -76,20 +77,20 @@ const PostWritePage = () => {
     return  year + '-' + month + '-' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
   }
 
-  const onDrop = useCallback(acceptedFiles => {
+  const onDrop = acceptedFiles => {
     const newArray = acceptedFiles.map((file, index) => //이 과정을 통해서 각 file객체 속성으로 썸네일 경로가 생성된다. 위에 콘솔을 입력해도 이 과정이 더 빠른건지 preview속성이 나온다.
         Object.assign(file, {
+          index : count + index,
           preview: URL.createObjectURL(file)
         })
       );
     setFiles(prevFiles => [...prevFiles, newArray].flat()); //newArray가 배열이라서 이중 배열이 되기 때문에 flat으로 1차원배열로 변환
-  },[files])
+    setCount(prevCount => prevCount+acceptedFiles.length);
+  } //files는 왜 의존 안해도 상관없는가... 값과 배열의 차이, usecallback 함수 재생성차이
 
   const onDelete = (index) => {
-	const array = files;
-	URL.revokeObjectURL(array.splice(index, 1)[0].preview);
-	console.log(files, array)
-    setFiles(array);
+	  URL.revokeObjectURL(files.find(x=>x.index === index).preview);
+    setFiles(prevFiles=>prevFiles.filter(x=>x.index !== index)); //splice의 경우 원래 함수를 잘라주는 함수라서 새로 배열을 생성하지 않아 갱신하지 않는것일 듯
   }
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
@@ -102,7 +103,7 @@ const PostWritePage = () => {
 
   const thumbs = files.map((file,index) => ( //[[file],[file,file]...]와 같이 동시에 업로드한 파일들끼리 묶여있어서 이중 map을 사용해서 내부정보를 얻어온다.
     <div style={thumb} id={file.name} key={index}>
-      <div style={thumbInner} onClick={()=>onDelete(index)}>
+      <div style={thumbInner} onClick={()=>onDelete(file.index)}>
         <img src={file.preview} style={img} alt="thumbnail" />
       </div>
     </div>
@@ -113,9 +114,9 @@ const PostWritePage = () => {
     setDate(getFormatDate(date)); 
   },[date]);
 
-  useEffect(() => {
-	console.log(files);
-  }, [files])
+  useEffect(()=>{
+    console.log(files)
+  },[files]);
 
   return (
     <React.Fragment>
