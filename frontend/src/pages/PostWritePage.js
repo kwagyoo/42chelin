@@ -76,24 +76,20 @@ const PostWritePage = () => {
     return  year + '-' + month + '-' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
   }
 
-  const SetTodayDate = () =>{
-    const date = new Date();
-    setDate(getFormatDate(date));
-  }
-
   const onDrop = useCallback(acceptedFiles => {
     const newArray = acceptedFiles.map((file, index) => //이 과정을 통해서 각 file객체 속성으로 썸네일 경로가 생성된다. 위에 콘솔을 입력해도 이 과정이 더 빠른건지 preview속성이 나온다.
         Object.assign(file, {
-          index : files.length + index,
           preview: URL.createObjectURL(file)
         })
       );
     setFiles(prevFiles => [...prevFiles, newArray].flat()); //newArray가 배열이라서 이중 배열이 되기 때문에 flat으로 1차원배열로 변환
-  }, [files])
+  },[files])
 
   const onDelete = (index) => {
-    console.log(files.splice(index, 1));
-    setFiles(files.splice(index, 1));
+	const array = files;
+	URL.revokeObjectURL(array.splice(index, 1)[0].preview);
+	console.log(files, array)
+    setFiles(array);
   }
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
@@ -105,8 +101,7 @@ const PostWritePage = () => {
   };
 
   const thumbs = files.map((file,index) => ( //[[file],[file,file]...]와 같이 동시에 업로드한 파일들끼리 묶여있어서 이중 map을 사용해서 내부정보를 얻어온다.
-    // file.map(detail=>(
-    <div style={thumb} key={index}>
+    <div style={thumb} id={file.name} key={index}>
       <div style={thumbInner} onClick={()=>onDelete(index)}>
         <img src={file.preview} style={img} alt="thumbnail" />
       </div>
@@ -114,16 +109,13 @@ const PostWritePage = () => {
   ));
 
   useEffect(()=>{
-    SetTodayDate();  
-  },[]);
-  
-  useEffect(
-    () => () => {
-      // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach(file => URL.revokeObjectURL(file.preview));
-    },
-    [files]
-  );
+    const date = new Date();
+    setDate(getFormatDate(date)); 
+  },[date]);
+
+  useEffect(() => {
+	console.log(files);
+  }, [files])
 
   return (
     <React.Fragment>
