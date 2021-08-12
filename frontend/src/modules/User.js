@@ -10,7 +10,7 @@ const initialState = {
 
 const user = handleActions(
   {
-    [GET_USER]: (state, action) => ({ name: state.name }),
+    [GET_USER]: (state, action) => ({ name: action.payload }),
   },
   initialState,
 );
