@@ -52,6 +52,8 @@ const thumbInner = {
 };
 
 const ImageUpload = ({ files, count, setFiles, setCount }) => {
+  const uploadButton = useRef(null);
+
   const onDrop = (acceptedFiles) => {
     const newArray = acceptedFiles.map(
       (
@@ -93,11 +95,16 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
     accept: 'image/gif, image/jpg, image/jpeg, image/png',
   };
 
+  useEffect(() => {
+    console.log(count);
+    if (count > 3) uploadButton.current.scrollIntoView();
+  }, [count]);
+
   return (
     <>
       <ThumbsContainer count={count}>
         {thumbs}
-        <StyledDrop {...getRootProps()} maxSize={100} multiple={false}>
+        <StyledDrop {...getRootProps()} ref={uploadButton} maxSize={100}>
           <input {...InputProps} />
           {isDragActive ? (
             <p class="dropMsg">이제 이미지를 놓아주세요</p>
