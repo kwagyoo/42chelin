@@ -1,11 +1,12 @@
-import react from 'react';
+import react, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
 const StyledDrop = styled.div`
+  display: inline-block;
   border-style: solid;
   border-width: 1px;
-  width: 80%;
+  width: 100px;
   height: 100px;
   .dropMsg {
     margin-top: 40px;
@@ -13,21 +14,25 @@ const StyledDrop = styled.div`
   }
 `;
 
-const img = {
-  display: 'block',
-  width: 'auto',
-  height: '100%',
-};
+const ThumbsContainer = styled.div`
+  width: ${({ count }) =>
+    count <= 4
+      ? '100%'
+      : 110 * (count + 1) +
+        'px'}; //밖에서 동적으로 조절하고 싶은 경우 파라미터로 값을 받아올 수 있다.
+  max-height: 100px;
+  display: inline-block;
+  margin-top: 5px;
+`;
 
-const thumbsContainer = {
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  marginTop: 16,
+const img = {
+  width: '100px',
+  height: '100px',
 };
 
 const thumb = {
-  display: 'inline-flex',
+  display: 'inline-block',
+  flex: '100px',
   borderRadius: 2,
   border: '1px solid #eaeaea',
   marginBottom: 8,
@@ -39,6 +44,8 @@ const thumb = {
 };
 
 const thumbInner = {
+  width: '100%',
+  height: '100%',
   display: 'flex',
   minWidth: 0,
   overflow: 'hidden',
@@ -82,31 +89,30 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
 
   const InputProps = {
     ...getInputProps(),
-    multiple: false,
-    accept: 'image/gif, image/jpg, image/jpeg',
+    multiple: true,
+    accept: 'image/gif, image/jpg, image/jpeg, image/png',
   };
 
   return (
     <>
-      <StyledDrop {...getRootProps()} maxSize={100} multiple={false}>
-        <input {...InputProps} />
-        {isDragActive ? (
-          <p class="dropMsg">이제 이미지를 놓아주세요</p>
-        ) : (
-          <div
-            style={{
-              alignItems: 'center',
-              height: '90%',
-            }}
-          >
-            <div style={{ fontSize: '3em', marginBottom: '5px' }}>
-              <i className="fas fa-file-upload"></i>
+      <ThumbsContainer count={count}>
+        {thumbs}
+        <StyledDrop {...getRootProps()} maxSize={100} multiple={false}>
+          <input {...InputProps} />
+          {isDragActive ? (
+            <p class="dropMsg">이제 이미지를 놓아주세요</p>
+          ) : (
+            <div
+              style={{
+                alignItems: 'center',
+                height: '90%',
+              }}
+            >
+              <div class="dropMsg">이미지 드랍 or 클릭</div>
             </div>
-            <div class="dropMsg">이미지 드랍 or 클릭</div>
-          </div>
-        )}
-      </StyledDrop>
-      <div style={thumbsContainer}>{thumbs}</div>
+          )}
+        </StyledDrop>
+      </ThumbsContainer>
     </>
   );
 };

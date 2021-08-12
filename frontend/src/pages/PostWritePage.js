@@ -6,7 +6,8 @@ import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 
 const StyledForm = styled.form`
-  margin-left: 10px;
+  margin: 10px auto 0px;
+  width: 600px;
   > * {
     margin-bottom: 10px;
   }
@@ -71,13 +72,13 @@ const PostWritePage = () => {
       <Header />
       <StyledForm>
         <div>
-          이름 : <input type="text" required></input>
+          가게명 : <input type="text" required></input>
         </div>
         <div>
           주소 : <input type="text" required></input>
         </div>
         <div>
-          등록일 :{' '}
+          등록일 :
           <input
             type="date"
             placeholder="yyyy-mm-dd"
@@ -86,21 +87,29 @@ const PostWritePage = () => {
           ></input>
         </div>
         <div>
-          리뷰
+          리뷰(1000자 미만)
           <br />
           <textarea
-            style={{ width: '80%', height: '200px' }}
+            style={{ width: '100%', height: '200px' }}
             value={review.value}
-            onChange={review.onChange}
+            maxLength={1000}
+            //onChange={review.onChange}
             required
           />
         </div>
-        <ImageUpload
-          files={files}
-          count={count}
-          setFiles={setFiles}
-          setCount={setCount}
-        />
+        <div
+          style={{
+            overflowX: 'auto',
+            overflowY: 'hidden',
+          }}
+        >
+          <ImageUpload
+            files={files}
+            count={count}
+            setFiles={setFiles}
+            setCount={setCount}
+          />
+        </div>
         <Button name="submit"></Button>
       </StyledForm>
     </React.Fragment>
