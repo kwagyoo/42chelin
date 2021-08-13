@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../common/Header';
 import queryString from 'query-string';
 import axios from 'axios';
@@ -25,8 +25,6 @@ const GetUsername = async (token, dispatch) => {
 const LoginRequest = async ({ location, dispatch }) => {
   const query = queryString.parse(location.search);
   const code = query.code;
-  //   const error = query.error == 'access_denied';
-  //   const usercode = queryString.parse(location.serch);
 
   await axios({
     method: 'post',
@@ -51,10 +49,11 @@ const LoginRequest = async ({ location, dispatch }) => {
 
 const LoginRequestEvent = ({ location }) => {
   const dispatch = useDispatch();
-  LoginRequest({ location, dispatch });
 
-  //   const error = query.error == 'access_denied';
-  //   const usercode = queryString.parse(location.serch);
+  useEffect(() => {
+    LoginRequest({ location, dispatch });
+  }, [dispatch, location]);
+
   return (
     <React.Fragment>
       <Header />
