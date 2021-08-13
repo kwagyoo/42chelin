@@ -16,12 +16,10 @@ const StyledDrop = styled.div`
 
 const ThumbsContainer = styled.div`
   width: ${({ count }) =>
-    count <= 4
-      ? '100%'
-      : 110 * (count + 1) +
-        'px'}; //밖에서 동적으로 조절하고 싶은 경우 파라미터로 값을 받아올 수 있다.
+    110 * (count + 1) +
+    'px'}; //밖에서 동적으로 조절하고 싶은 경우 파라미터로 값을 받아올 수 있다.
   max-height: 100px;
-  display: inline-block;
+  display: flex;
   margin-top: 5px;
 `;
 
@@ -72,6 +70,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
   const onDelete = (index) => {
     URL.revokeObjectURL(files.find((x) => x.index === index).preview);
     setFiles((prevFiles) => prevFiles.filter((x) => x.index !== index)); //splice의 경우 원래 함수를 잘라주는 함수라서 새로 배열을 생성하지 않아 갱신하지 않는것일 듯
+    setCount((prevCount) => prevCount - 1);
   };
 
   const thumbs = files.map(
@@ -112,10 +111,10 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
             <div
               style={{
                 alignItems: 'center',
-                height: '90%',
+                height: '40%',
               }}
             >
-              <div class="dropMsg">이미지 드랍 or 클릭</div>
+              <div class="dropMsg">이미지 드랍/클릭</div>
             </div>
           )}
         </StyledDrop>
