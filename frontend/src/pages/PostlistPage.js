@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../common/Header';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
@@ -12,23 +12,37 @@ function importAll(r) {
   return images;
 }
 
-const images = importAll(
-  require.context('../image/', false, /\.(png|jpe?g|svg)$/),
-);
-
-console.log(images);
-
 const PostlistPage = () => {
+  const [images, setImages] = useState([]);
+
+  const loadMoreImages = () => {
+    const copyImages = images.slice(0, 4);
+    setImages([...images, ...copyImages]);
+  };
+
+  useEffect(() => {
+    setImages(
+      importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
+    );
+  }, []);
+
   return (
     <React.Fragment>
       <Header />
       <Row>
-        {images.map((image, index) => (
-          <Col key={index} xs={24} md={8} lg={6}>
-            <PostBlock src={images[index]} />
-          </Col>
-        ))}
+        {images &&
+          images.map((image, index) => (
+            <Col key={index} xs={24} md={8} lg={6}>
+              <PostBlock src={images[index]} />
+            </Col>
+          ))}
       </Row>
+      <button
+        onClick={loadMoreImages}
+        style={{ marginLeft: 'auto', marginRight: 'auto' }}
+      >
+        로딩하기
+      </button>
     </React.Fragment>
   );
 };
