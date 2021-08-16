@@ -16,8 +16,6 @@ const images = importAll(
   require.context('../image/', false, /\.(png|jpe?g|svg)$/),
 );
 
-console.log(images);
-
 const PostlistPage = () => {
   return (
     <React.Fragment>
