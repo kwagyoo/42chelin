@@ -8,6 +8,7 @@ function importAll(r) {
   let images = [];
   r.keys().forEach((item, index) => {
     images[index] = r(item);
+    images[index].delay = 150 * index;
   });
   return images;
 }
@@ -17,6 +18,10 @@ const PostlistPage = () => {
 
   const loadMoreImages = () => {
     const copyImages = images.slice(0, 4);
+    copyImages.forEach((item, index) => {
+      //새로 추가한 이미지에는 별도의 딜레이를 새로 추가
+      copyImages[index].delay = 150 * index;
+    });
     setImages([...images, ...copyImages]);
   };
 
@@ -33,7 +38,7 @@ const PostlistPage = () => {
         {images &&
           images.map((image, index) => (
             <Col key={index} xs={24} md={8} lg={6}>
-              <PostBlock src={images[index]} />
+              <PostBlock src={images[index]} delay={image.delay} />
             </Col>
           ))}
       </Row>
