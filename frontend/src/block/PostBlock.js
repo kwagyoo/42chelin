@@ -2,7 +2,6 @@ import React from 'react';
 import { animated, useSpring } from 'react-spring';
 
 const PostBlock = ({ src, delay }) => {
-  console.log(delay);
   const fadein = useSpring({
     from: { y: '15px', opacity: 0 },
     to: { y: '0px', opacity: 1 },

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../common/Header';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
+import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
 function importAll(r) {
@@ -12,6 +13,23 @@ function importAll(r) {
   });
   return images;
 }
+
+const SearchInput = styled.div`
+  height: 100px;
+  width: 650px;
+  height: 50px;
+  margin: 30px auto 0 auto;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 1.5px solid #550055;
+  input {
+    margin-left: 30px;
+    margin-top: 5px;
+    height: 40px;
+    width: 550px;
+    border-style: none;
+  }
+`;
 
 const PostlistPage = () => {
   const [images, setImages] = useState([]);
@@ -33,11 +51,14 @@ const PostlistPage = () => {
 
   return (
     <React.Fragment>
-      <Header/>
+      <Header />
+      <SearchInput>
+        <input type="text" placeholder="가게를 검색해주세요." />
+      </SearchInput>
       <Row>
         {images &&
           images.map((image, index) => (
-            <Col key={index} xs={24} md={8} lg={6}>
+            <Col key={index} xs={12} md={8} lg={6} xl={4}>
               <PostBlock src={images[index]} delay={image.delay} />
             </Col>
           ))}
