@@ -4,8 +4,8 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import store from './modules';
 import { Provider } from 'react-redux';
+import store from './module/store';
 
 ReactDOM.render(
   <Provider store={store}>
