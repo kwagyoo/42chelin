@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import Header from '../common/Header';
 import queryString from 'query-string';
 import { useDispatch } from 'react-redux';
-import { getUserName } from '../modules/User';
 import { Redirect } from 'react-router-dom';
 import { getToken, getUser } from '../lib/api/auth';
+import { getUserName } from '../module/users';
 
 const GetUsername = async (token, dispatch) => {
   getUser(token)
