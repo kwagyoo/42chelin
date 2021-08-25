@@ -6,11 +6,12 @@ const StyledDrop = styled.div`
   display: inline-block;
   border-style: solid;
   border-width: 1px;
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   .dropMsg {
     margin-top: 40px;
     text-align: center;
+    font-size: 12px;
   }
 `;
 
@@ -18,7 +19,7 @@ const ThumbsContainer = styled.div`
   width: ${({ count }) =>
     110 * (count + 1) +
     'px'}; //밖에서 동적으로 조절하고 싶은 경우 파라미터로 값을 받아올 수 있다.
-  max-height: 100px;
+  max-height: 110px;
   display: flex;
   margin-top: 5px;
 `;
@@ -30,13 +31,13 @@ const img = {
 
 const thumb = {
   display: 'inline-block',
-  flex: '100px',
+  flex: '110px',
   borderRadius: 2,
   border: '1px solid #eaeaea',
   marginBottom: 8,
   marginRight: 8,
-  width: 100,
-  height: 100,
+  width: 110,
+  height: 110,
   padding: 4,
   boxSizing: 'border-box',
 };
@@ -95,7 +96,6 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
   };
 
   useEffect(() => {
-    console.log(count);
     if (count > 3) uploadButton.current.scrollIntoView();
   }, [count]);
 
@@ -106,7 +106,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
         <StyledDrop {...getRootProps()} ref={uploadButton} maxSize={100}>
           <input {...InputProps} />
           {isDragActive ? (
-            <p class="dropMsg">이제 이미지를 놓아주세요</p>
+            <p className="dropMsg">이제 이미지를 놓아주세요</p>
           ) : (
             <div
               style={{
@@ -114,7 +114,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
                 height: '40%',
               }}
             >
-              <div class="dropMsg">이미지 드랍/클릭</div>
+              <div className="dropMsg">이미지 드랍/클릭</div>
             </div>
           )}
         </StyledDrop>

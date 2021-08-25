@@ -5,6 +5,12 @@ import styled from 'styled-components';
 const StoreCompactInfo = styled.div`
   border: 2px solid black;
   border-radius: 5px;
+  .storeThumb {
+    width: 100%;
+  }
+  .storeInfo {
+    width: 100%;
+  }
 `;
 
 const PostBlock = ({ src, delay }) => {
@@ -16,15 +22,16 @@ const PostBlock = ({ src, delay }) => {
   });
   return (
     <StoreCompactInfo>
-      <animated.div style={fadein}>
-        <img src={src.default} alt="pokemon" />
-        <br />
-        <span>이름 : 펄기아</span>
-        <br />
-        <span>출현 : 관동</span>
-        <br />
-        <span>타입 : 불꽃</span>
-      </animated.div>
+      <animated.article style={fadein}>
+        <img className="storeThumb" src={src.default} alt="Store Thumbnail" />
+        <div className="storeInfo">
+          <span>출현 : 관동</span>
+          <br />
+          <span>출현 : 관동</span>
+          <br />
+          <span>타입 : 불꽃</span>
+        </div>
+      </animated.article>
     </StoreCompactInfo>
   );
 };
