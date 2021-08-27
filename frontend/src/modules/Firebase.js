@@ -1,5 +1,13 @@
-import firebase from 'firebase/app';
-import 'firebase/database';
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+} from 'firebase/firestore';
+import { async } from '@firebase/util';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBdIC0kho0PQUIrS6QHAEIJ4bYuJELJlj0',
@@ -9,36 +17,34 @@ const firebaseConfig = {
   projectId: 'chelin-e8ee3',
   storageBucket: 'chelin-e8ee3.appspot.com',
   messagingSenderId: '45691459916',
-  appId: '1:45691459916:web:bb4a483ab566aacfa157e9',
-  measurementId: 'G-HJWTE6REBM',
+  appId: '1:45691459916:web:1868aa2d9c7d2d66a157e9',
+  measurementId: 'G-CK4H0NQTJ2',
 };
 
 let database;
 
-const fire = () => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+const getDatabase = () => {
+  if (!database) {
+    initializeApp(firebaseConfig);
+    database = getFirestore();
+    getAnalytics();
   }
-  database = firebase.database();
+  return database;
   // Get a reference to our posts
 };
 
 /*Send data to Database(Rewrite data)*/
-const writeUserData = ({ name, address, userName, date, reviewText }) => {
-  database
-    .ref('store')
-    .orderByKey()
-    .equalTo(name)
-    .once('value', (snapshot) => {
-      if (!snapshot.val()) {
-        console.log('dd');
-        database.ref('store').child(name).set({
-          store_address: address,
-          store_reviews: {},
-        });
-      }
-      console.log(snapshot.val());
+const writeUserData = async ({ name, address, userName, date, reviewText }) => {
+  if (!database) return new Error('Database is not initialized!');
+  try {
+    const docRef = doc(database, 'store', name);
+    setDoc(docRef, {
+      store_address: address,
     });
+    console.log('complete', docRef);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
 };
 
-export { fire, writeUserData };
+export { getDatabase, writeUserData };
