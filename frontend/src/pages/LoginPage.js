@@ -4,29 +4,34 @@ import queryString from 'query-string';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getToken, getUser } from '../lib/api/auth';
-import { getUserName } from '../module/users';
+import { getUserName, setAccessToken } from '../module/users';
 
 const GetUsername = async (token, dispatch) => {
-  getUser(token)
-    .then((res) => {
-      const username = res.data.login;
-      console.log('username save success');
-      dispatch(getUserName(username));
-    })
-    .catch((error) => console.log(error));
+  try {
+    const res = await getUser(token);
+    const username = res.data.login;
+    console.log('username save success');
+    dispatch(getUserName(username));
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const LoginRequest = async ({ location, dispatch }) => {
   const query = queryString.parse(location.search);
   const code = query.code;
 
-  getToken(code)
-    .then((res) => {
-      const token = res.data.access_token;
-      console.log('token success');
-      GetUsername(token, dispatch);
-    })
-    .catch((error) => console.log(error));
+  try {
+    const res = await getToken(code);
+    const token = res.data.access_token;
+    console.log('token success');
+    localStorage.setItem('token', token);
+    dispatch(setAccessToken());
+    GetUsername(token, dispatch);
+  } catch (e) {
+    console.log(e);
+    alert('로그인에 실패했습니다.');
+  }
 };
 
 const LoginRequestEvent = ({ location }) => {
