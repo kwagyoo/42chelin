@@ -2,24 +2,37 @@ import React from 'react';
 import { animated, useSpring } from 'react-spring';
 import styled from 'styled-components';
 
-const PostBlock = ({ src }) => {
+const StoreCompactInfo = styled.div`
+  border: 2px solid black;
+  border-radius: 5px;
+  .storeThumb {
+    width: 100%;
+  }
+  .storeInfo {
+    width: 100%;
+  }
+`;
+
+const PostBlock = ({ src, delay }) => {
   const fadein = useSpring({
-    from: { y: '15px', opacity: 0 },
+    from: { y: '10px', opacity: 0 },
     to: { y: '0px', opacity: 1 },
+    delay: delay,
     config: { duration: 2000 },
   });
   return (
-    <React.Fragment>
-      <animated.div style={fadein}>
-        <img src={src.default} alt="pokemon" />
-        <br />
-        <span>이름 : 펄기아</span>
-        <br />
-        <span>출현 : 관동</span>
-        <br />
-        <span>타입 : 불꽃</span>
-      </animated.div>
-    </React.Fragment>
+    <StoreCompactInfo>
+      <animated.article style={fadein}>
+        <img className="storeThumb" src={src.default} alt="Store Thumbnail" />
+        <div className="storeInfo">
+          <span>출현 : 관동</span>
+          <br />
+          <span>출현 : 관동</span>
+          <br />
+          <span>타입 : 불꽃</span>
+        </div>
+      </animated.article>
+    </StoreCompactInfo>
   );
 };
 
