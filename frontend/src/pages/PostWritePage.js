@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import addressList from '../variables/addressList';
-import { writeUserData } from '../modules/Firebase';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -110,7 +109,7 @@ const PostWritePage = () => {
   useEffect(() => {}, [selectedCity]);
 
   const handleSubmitBtn = (data) => {
-    writeUserData(data);
+    console.log(data);
   };
 
   return (
