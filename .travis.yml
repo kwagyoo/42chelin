@@ -21,8 +21,8 @@ notifications:
 
 deploy:
   provider: s3
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_KEY
+  access_key_id: $AWSACCESSKEY
+  secret_access_key: $AWSSECRETKEY
   bucket: 42chelin
   skip_cleanup: true
   acl: public_read
