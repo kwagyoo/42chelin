@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-- 14.16.0
+  - 14.16.0
 branches:
   only:
-  - master
+    - master
 cache:
   directories:
-  - node_modules
+    - node_modules
 
 before_install:
   - npm install -g yarn
@@ -17,6 +17,15 @@ script: yarn build
 notifications:
   email:
     recipients:
-    - kwag93@naver.com
+      - kwag93@naver.com
 
-before_install:
+deploy:
+  provider: s3
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: 42chelin
+  skip_cleanup: true
+  acl: public_read
+  region: ap-northeast-2
+  wait-until-deploy: true
+  local_dir: build
