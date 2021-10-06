@@ -20,7 +20,7 @@ export const getToken = (code) => {
     headers: { 'Content-Type': 'application/json' },
     code: code,
     data: JSON.stringify(data),
-    // redirect_uri: `${process.env.REACT_APP_REDIECT_URL}`,
+    redirect_uri: `${process.env.REACT_APP_REDIECT_URL}`,
   });
 };
 
