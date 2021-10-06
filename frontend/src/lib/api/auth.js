@@ -1,7 +1,7 @@
 import client from './client';
 
 export const login = (code) =>
-  client.get(` https://6f8h5a9hgl.execute-api.ap-northeast-2.amazonaws.com/default/save_data
+  client.get(`https://d2d5oodqrc.execute-api.ap-northeast-2.amazonaws.com/Stage/backend-42chelin-requestLoginTokenFunction-2BhPmnQv2c0U
 	`);
 
 export const getToken = (code) =>
