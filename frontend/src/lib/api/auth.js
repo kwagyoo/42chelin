@@ -1,8 +1,12 @@
 import client from './client';
 
 export const login = (code) =>
-  client.get(`https://d2d5oodqrc.execute-api.ap-northeast-2.amazonaws.com/Stage/backend-42chelin-requestLoginTokenFunction-2BhPmnQv2c0U
-	`);
+  client.post(
+    `https://d2d5oodqrc.execute-api.ap-northeast-2.amazonaws.com/Stage/requestlogintoken/`,
+    {
+      code: code,
+    },
+  );
 
 export const getToken = (code) =>
   client.post(`${process.env.REACT_APP_INTRA}oauth/token`, {
