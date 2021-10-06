@@ -26,7 +26,7 @@ const LoginRequest = async ({ location, dispatch }) => {
     console.log(res);
     console.log('----------------------res.data 확인');
     console.log(res.data);
-    const token = res.data.access_token;
+    const token = res.data.json().access_token;
     console.log('----------------------token 확인');
     console.log(token);
     console.log('token success');
