@@ -3,7 +3,7 @@ import Header from '../common/Header';
 import queryString from 'query-string';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { login, getUser } from '../lib/api/auth';
+import { login, getUser, getToken } from '../lib/api/auth';
 import { getUserName, setAccessToken } from '../module/users';
 
 const GetUsername = async (token, dispatch) => {
@@ -22,11 +22,17 @@ const LoginRequest = async ({ location, dispatch }) => {
   const code = query.code;
   console.log(code);
   try {
-    const res = await login(code);
+    const res = await getToken(code);
     console.log(res);
+    console.log('----------------------res.data 확인');
+    console.log(res.data);
     const token = res.data.access_token;
+    console.log('----------------------token 확인');
+    console.log(token);
     console.log('token success');
     localStorage.setItem('token', token);
+    console.log('----------------------localstorage 확인');
+    console.log(localStorage.getItem('token'));
     dispatch(setAccessToken());
     GetUsername(token, dispatch);
   } catch (e) {
