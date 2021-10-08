@@ -70,6 +70,21 @@ const PostlistPage = () => {
     setImages([...images, ...copyImages]);
   };
 
+  const testLambda = async () => {
+    const testURL =
+      'https://d2d5oodqrc.execute-api.ap-northeast-2.amazonaws.com/Stage/savestoredata';
+    await fetch(testURL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ storeName: 'yamsem', storeBranch: 'seoul' }),
+    })
+      .then((data) => data.json())
+      .then((result) => console.log(result))
+      .catch((e) => console.error(e));
+  };
+
   useEffect(() => {
     setImages(
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
@@ -110,6 +125,7 @@ const PostlistPage = () => {
         >
           로딩하기
         </button>
+        <button onClick={testLambda}>테스트</button>
       </div>
     </React.Fragment>
   );

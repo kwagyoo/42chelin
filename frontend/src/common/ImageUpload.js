@@ -21,7 +21,7 @@ const ThumbsContainer = styled.div`
     'px'}; //밖에서 동적으로 조절하고 싶은 경우 파라미터로 값을 받아올 수 있다.
   max-height: 110px;
   display: flex;
-  margin-top: 5px;
+  margin: 5px 0px;
 `;
 
 const img = {

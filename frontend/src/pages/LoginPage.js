@@ -33,6 +33,7 @@ const LoginRequestEvent = ({ location }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('hello');
     LoginRequest({ location, dispatch });
   }, [dispatch, location]);
 

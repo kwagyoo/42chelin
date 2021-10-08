@@ -4,7 +4,7 @@ import LoginPage from './pages/LoginPage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostlistPage from './pages/PostlistPage';
 import PostWritePage from './pages/PostWritePage';
-import { getDatabase } from './modules/Firebase';
+import { getDatabase } from './module/Firebase';
 
 const App = () => {
   getDatabase();

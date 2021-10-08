@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import addressList from '../variables/addressList';
-import { writeUserData } from '../modules/Firebase';
+import { writeStoreData } from '../module/Firebase';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -41,17 +41,11 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const PostWritePage = () => {
+const PostWritePage = ({ history }) => {
   const [date, setDate] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
-
-  const [city, setCity] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [district, setDistrict] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -73,6 +67,13 @@ const PostWritePage = () => {
   }
 
   //#region 가게 주소 select 관련 코드
+  const [city, setCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [district, setDistrict] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
+
   const changeCity = (e) => {
     setSelectedCity(e.target.value);
     setDistrict([
@@ -92,7 +93,6 @@ const PostWritePage = () => {
   };
 
   const changeNeighborhood = (e) => {
-    console.log(e.target);
     setSelectedNeighborhood(e.target.value);
   };
 
@@ -105,12 +105,25 @@ const PostWritePage = () => {
     const date = new Date();
     setDate(getFormatDate(date));
     setValue('date', getFormatDate(date));
+    setValue('userName', 'hyunyoo');
   }, [date]);
 
   useEffect(() => {}, [selectedCity]);
 
-  const handleSubmitBtn = (data) => {
-    writeUserData(data);
+  const handleSubmitBtn = async (data) => {
+    if (!loading) {
+      setLoading((loading) => !loading);
+      const testURL =
+        'https://d2d5oodqrc.execute-api.ap-northeast-2.amazonaws.com/Stage/savestoredata';
+      await fetch(testURL)
+        .then((data) => data.json())
+        .then((result) => history.push('/'))
+        .catch((e) => {
+          alert('문제가 생겼습니다. 다시 시도해주세요.');
+          console.error(e);
+        });
+      setLoading((loading) => !loading);
+    }
   };
 
   return (
@@ -195,6 +208,7 @@ const PostWritePage = () => {
             style={{
               overflowX: 'auto',
               overflowY: 'hidden',
+              border: '2px solid black',
             }}
           >
             <ImageUpload
@@ -204,7 +218,7 @@ const PostWritePage = () => {
               setCount={setCount}
             />
           </div>
-          <Button name="submit"></Button>
+          <Button name="submit" disabled={loading}></Button>
         </StyledForm>
       </main>
     </React.Fragment>

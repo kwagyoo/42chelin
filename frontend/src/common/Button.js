@@ -32,13 +32,19 @@ const StyledButton = styled.button`
   &:hover {
     background: #adb5bd;
   }
+  &:disabled {
+    background: gray;
+    cursor: wait;
+  }
 `;
 
 const Button = (props) => {
   return props.to ? (
     <StyledLink {...props}>{props.name}</StyledLink>
   ) : (
-    <StyledButton>{props.name}</StyledButton>
+    <StyledButton disabled={props.disabled ? props.disabled : false}>
+      {props.name}
+    </StyledButton>
   );
 };
 

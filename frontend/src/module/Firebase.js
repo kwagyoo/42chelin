@@ -6,6 +6,7 @@ import {
   doc,
   setDoc,
   addDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { async } from '@firebase/util';
 
@@ -34,17 +35,43 @@ const getDatabase = () => {
 };
 
 /*Send data to Database(Rewrite data)*/
-const writeUserData = async ({ name, address, userName, date, reviewText }) => {
-  if (!database) return new Error('Database is not initialized!');
-  try {
-    const docRef = doc(database, 'store', name);
-    setDoc(docRef, {
+const writeStoreData = async ({
+  name,
+  address,
+  userName,
+  date,
+  reviewText,
+}) => {
+  if (!database) return Promise.reject('Database is not initialized');
+  const storeRef = doc(database, 'store', name);
+  const storeSnapShot = await getDoc(storeRef);
+
+  if (!storeSnapShot.exists()) {
+    await setDoc(doc(database, 'store', name), {
       store_address: address,
     });
-    console.log('complete', docRef);
-  } catch (e) {
-    console.error('Error adding document: ', e);
+  }
+  const storeReviewCollection = collection(
+    database,
+    `store/${name}/store_reviews`,
+  );
+  await addDoc(storeReviewCollection, {
+    user_name: userName,
+    published_date: date,
+    review_text: reviewText,
+  });
+  return Promise.resolve('success');
+};
+
+const getStoreData = async (storeName) => {
+  const storeRef = doc(database, 'store', storeName);
+  const storeSnapShot = await getDoc(storeRef);
+
+  if (storeSnapShot.exists()) {
+    return storeSnapShot;
+  } else {
+    return null;
   }
 };
 
-export { getDatabase, writeUserData };
+export { getDatabase, getStoreData, writeStoreData };
