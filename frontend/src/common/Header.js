@@ -51,7 +51,6 @@ const Spacer = styled.div`
 
 const Header = () => {
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
-  console.log(URL);
   return (
     <React.Fragment>
       <HeaderBlock>

@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostlistPage from './pages/PostlistPage';
+import PostWritePage from './pages/PostWritePage';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <Route path="/" component={PostlistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={PostDetailPage} />
+      <Route path="/write" component={PostWritePage} />
     </div>
   );
 };

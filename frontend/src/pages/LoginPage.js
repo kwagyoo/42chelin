@@ -23,16 +23,11 @@ const LoginRequest = async ({ location, dispatch }) => {
   console.log(code);
   try {
     const res = await login(code);
-    console.log(res);
-    console.log('----------------------res.data 확인');
-    console.log(res.data);
     const data = JSON.parse(res.data.body);
     const token = data.access_token;
-    console.log('----------------------token 확인');
     console.log(token);
     console.log('token success');
     localStorage.setItem('token', token);
-    console.log('----------------------localstorage 확인');
     console.log(localStorage.getItem('token'));
     dispatch(setAccessToken());
     GetUsername(token, dispatch);

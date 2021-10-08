@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import addressList from '../variables/addressList';
-import { writeStoreData } from '../module/Firebase';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -47,13 +46,7 @@ const PostWritePage = ({ history }) => {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    unregister,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
 
   const review = useInput('', (value) => value.length < 300);
 
@@ -106,7 +99,7 @@ const PostWritePage = ({ history }) => {
     setDate(getFormatDate(date));
     setValue('date', getFormatDate(date));
     setValue('userName', 'hyunyoo');
-  }, [date]);
+  }, [date, setValue]);
 
   useEffect(() => {}, [selectedCity]);
 

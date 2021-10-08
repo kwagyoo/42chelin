@@ -4,9 +4,7 @@ const postDetailModal = () => {
   return (
     <div>
       <div className="store_informations">
-        <div className="store_images">
-          <img></img>
-        </div>
+        <div className="store_images"></div>
         <div className="store_details">
           <div className="store_name"></div>
           <div className="store_address"></div>
