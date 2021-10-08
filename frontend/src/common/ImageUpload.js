@@ -1,4 +1,4 @@
-import react, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
