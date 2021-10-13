@@ -22,10 +22,12 @@ const LoginRequest = async ({ location, dispatch }) => {
   const code = query.code;
   try {
     const res = await getToken(code);
+    console.log('getToken 성공')
     const data = JSON.parse(res.data.body);
     const token = data.access_token;
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
+    console.log('token dispatch 성공')
     GetUsername(token, dispatch);
   } catch (e) {
     console.log(e);
