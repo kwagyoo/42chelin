@@ -3,7 +3,7 @@ import Header from '../common/Header';
 import queryString from 'query-string';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getToken, getUser } from '../lib/api/auth';
+import { getUser, test } from '../lib/api/auth';
 import { getUserName, setAccessToken } from '../module/users';
 
 const GetUsername = async (token, dispatch) => {
@@ -21,7 +21,7 @@ const LoginRequest = async ({ location, dispatch }) => {
   const query = queryString.parse(location.search);
   const code = query.code;
   try {
-    const res = await getToken(code);
+    const res = await test(code);
     console.log('getToken 성공');
     console.log(res);
     const data = JSON.parse(res.data);
@@ -30,7 +30,7 @@ const LoginRequest = async ({ location, dispatch }) => {
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
     console.log('token dispatch 성공');
-    GetUsername(token, dispatch);
+    //GetUsername(token, dispatch);
   } catch (e) {
     console.log(e);
     alert('로그인에 실패했습니다.');
@@ -41,7 +41,6 @@ const LoginRequestEvent = ({ location }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('hello');
     LoginRequest({ location, dispatch });
   }, [dispatch, location]);
 
