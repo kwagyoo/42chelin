@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import addressList from '../variables/addressList';
+import axios from 'axios';
+import { saveStoreData } from '../lib/api/auth';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -106,15 +108,7 @@ const PostWritePage = ({ history }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
-      const testURL =
-        'https://d2d5oodqrc.execute-api.ap-northeast-2.amazonaws.com/Stage/savestoredata';
-      await fetch(testURL)
-        .then((data) => data.json())
-        .then((result) => history.push('/'))
-        .catch((e) => {
-          alert('문제가 생겼습니다. 다시 시도해주세요.');
-          console.error(e);
-        });
+      saveStoreData(data);
       setLoading((loading) => !loading);
     }
   };
