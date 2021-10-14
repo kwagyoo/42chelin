@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import addressList from '../variables/addressList';
-import axios from 'axios';
 import { saveStoreData } from '../lib/api/auth';
 
 const StyledForm = styled.form`
