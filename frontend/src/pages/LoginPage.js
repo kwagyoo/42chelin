@@ -24,7 +24,9 @@ const LoginRequest = async ({ location, dispatch }) => {
     console.log(process.env.REACT_APP_BACKEND_ENDPOINT_URL);
     const res = await getToken(code);
     console.log('getToken 성공');
+    console.log(res);
     const data = JSON.parse(res.data);
+    console.log(data);
     const token = data.access_token;
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
