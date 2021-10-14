@@ -21,7 +21,7 @@ const LoginRequest = async ({ location, dispatch }) => {
   const query = queryString.parse(location.search);
   const code = query.code;
   try {
-    console.log(process.env.REACT_APP_BACKEND_ENDPOINT_URL);
+    console.log(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}`);
     const res = await getToken(code);
     console.log('getToken 성공');
     console.log(res);
