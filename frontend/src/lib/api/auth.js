@@ -17,5 +17,6 @@ export const saveStoreData = (request) => {
   console.log(request);
   client.post(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/save-store-data`, {
     token: userToken,
+    ...request,
   });
 };
