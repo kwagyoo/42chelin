@@ -11,6 +11,7 @@ export const getUser = (token) =>
   });
 
 export const saveStoreData = (request) => {
+  console.log('start');
   const userToken = localStorage.getItem('token');
   if (!userToken) return null;
   console.log(request);
