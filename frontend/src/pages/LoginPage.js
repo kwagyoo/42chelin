@@ -23,7 +23,9 @@ const LoginRequest = async ({ location, dispatch }) => {
   try {
     const res = await getToken(code);
     console.log('getToken 성공');
+    console.log(res);
     const data = JSON.parse(res.data);
+    console.log(data);
     const token = data.access_token;
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
