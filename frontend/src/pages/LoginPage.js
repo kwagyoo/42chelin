@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getToken, getUser } from '../lib/api/auth';
 import { getUserName, setAccessToken } from '../module/users';
+import * as Sentry from '@sentry/react';
 
 const GetUsername = async (token, dispatch) => {
   try {
@@ -13,6 +14,7 @@ const GetUsername = async (token, dispatch) => {
     console.log('username save success');
     dispatch(getUserName(username));
   } catch (e) {
+    Sentry.captureException(e);
     console.log(e);
   }
 };
@@ -33,6 +35,7 @@ const LoginRequest = async ({ location, dispatch }) => {
     console.log('token dispatch 성공');
     GetUsername(token, dispatch);
   } catch (e) {
+    Sentry.captureException(e);
     console.log(e);
     alert('로그인에 실패했습니다.');
   }
