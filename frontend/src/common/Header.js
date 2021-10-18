@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
-
+import { users } from '../module/users';
 const HeaderBlock = styled.header`
   position: fixed;
   top: 0;
@@ -50,7 +51,20 @@ const Spacer = styled.div`
 `;
 
 const Header = () => {
+  //   const { user } = useSelector({ users }) => ({users: state.access_token});
+  //   console.log(user)
+  const [isLogin, setisLogin] = useState('');
+  useEffect(() => {
+    if (!isLogin) setisLogin(localStorage.getItem('token'));
+  }, [isLogin]);
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+  //   const {username} = useSelector({user}=>user.name)
+  const onLogout = () => {
+    if (isLogin) {
+      localStorage.removeItem('token');
+      setisLogin('');
+    }
+  };
   return (
     <React.Fragment>
       <HeaderBlock>
@@ -70,9 +84,13 @@ const Header = () => {
             <Link to="/write">
               <Button name="리뷰 작성" />
             </Link>
-            <a href={URL}>
-              <Button name="로그인" />
-            </a>
+            {isLogin ? (
+              <Button name="로그아웃" onClick={onLogout} />
+            ) : (
+              <a href={URL}>
+                <Button name="로그인" />
+              </a>
+            )}
           </div>
         </Wrapper>
       </HeaderBlock>

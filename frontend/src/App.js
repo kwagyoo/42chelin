@@ -7,12 +7,12 @@ import PostWritePage from './pages/PostWritePage';
 
 const App = () => {
   return (
-    <div>
+    <>
       <Route path="/" component={PostlistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={PostDetailPage} />
-      <Route path="/write" component={PostWritePage} />
-    </div>
+      <PostWritePage path="/write" component={PostWritePage} />
+    </>
   );
 };
 
