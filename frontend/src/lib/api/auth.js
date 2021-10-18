@@ -7,7 +7,9 @@ export const getToken = (code) =>
 
 export const getUser = (token) =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/get-user`, {
-    token: token,
+    params: {
+      token: token,
+    },
   });
 
 export const saveStoreData = (request) => {
