@@ -12,12 +12,12 @@ export const getUser = (token) =>
     },
   });
 
-export const saveStoreData = (request) => {
+export const saveStoreData = async (request) => {
   console.log('start');
   const userToken = localStorage.getItem('token');
   if (!userToken) return null;
   console.log(request);
-  const res = client.post(
+  const res = await client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/save-store-data`,
     {
       token: userToken,
