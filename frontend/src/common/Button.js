@@ -42,7 +42,10 @@ const Button = (props) => {
   return props.to ? (
     <StyledLink {...props}>{props.name}</StyledLink>
   ) : (
-    <StyledButton disabled={props.disabled ? props.disabled : false}>
+    <StyledButton
+      disabled={props.disabled ? props.disabled : false}
+      onClick={props.onClick}
+    >
       {props.name}
     </StyledButton>
   );

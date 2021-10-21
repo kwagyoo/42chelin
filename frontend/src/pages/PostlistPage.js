@@ -84,6 +84,9 @@ const PostlistPage = () => {
       .then((result) => console.log(result))
       .catch((e) => console.error(e));
   };
+  const onClick = () => {
+    console.log(1);
+  };
 
   useEffect(() => {
     setImages(
@@ -114,7 +117,7 @@ const PostlistPage = () => {
         <Row gutter={[16, 16]}>
           {images &&
             images.map((image, index) => (
-              <Col key={index} xs={12} md={8} lg={6} xl={4}>
+              <Col key={index} xs={12} md={8} lg={6} xl={4} onClick={onClick}>
                 <PostBlock src={images[index]} delay={image.delay} />
               </Col>
             ))}
