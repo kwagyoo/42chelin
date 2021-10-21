@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
-import { users } from '../module/users';
 const HeaderBlock = styled.header`
   position: fixed;
   top: 0;
@@ -43,22 +42,25 @@ const Wrapper = styled.div`
   }
   .right {
     align-items: center;
+    display: flex;
   }
 `;
 
+const UserName = styled.div`
+  font-weight: 800;
+  margin-right: 1rem;
+`;
 const Spacer = styled.div`
   height: 70px;
 `;
 
 const Header = () => {
-  //   const { user } = useSelector({ users }) => ({users: state.access_token});
-  //   console.log(user)
+  const { name } = useSelector((state) => state.users);
   const [isLogin, setisLogin] = useState('');
   useEffect(() => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
   }, [isLogin]);
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
-  //   const {username} = useSelector({user}=>user.name)
   const onLogout = () => {
     if (isLogin) {
       localStorage.removeItem('token');
@@ -80,18 +82,21 @@ const Header = () => {
               오늘의 식당 추천
             </Link>
           </div>
-          <div className="right">
-            <Link to="/write">
-              <Button name="리뷰 작성" />
-            </Link>
-            {isLogin ? (
+          {isLogin ? (
+            <div className="right">
+              <UserName>{name}</UserName>
+              <Link to="/write">
+                <Button name="리뷰 작성" />
+              </Link>
               <Button name="로그아웃" onClick={onLogout} />
-            ) : (
+            </div>
+          ) : (
+            <div className="right">
               <a href={URL}>
                 <Button name="로그인" />
               </a>
-            )}
-          </div>
+            </div>
+          )}
         </Wrapper>
       </HeaderBlock>
       <Spacer />

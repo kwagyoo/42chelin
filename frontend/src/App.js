@@ -11,7 +11,7 @@ const App = () => {
       <Route path="/" component={PostlistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={PostDetailPage} />
-      <PostWritePage path="/write" component={PostWritePage} />
+      <Route path="/write" component={PostWritePage} />
     </>
   );
 };
