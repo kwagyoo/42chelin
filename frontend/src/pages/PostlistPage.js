@@ -4,6 +4,7 @@ import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
+import { getStoreDetailData } from '../lib/api/store';
 
 function importAll(r) {
   let images = [];
@@ -92,6 +93,10 @@ const PostlistPage = () => {
     setImages(
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
+    getStoreDetailData({
+      storeName: 'asdf',
+      storeBranch: { city: '27', district: '200', neighborhood: '540' },
+    });
   }, []);
 
   return (
