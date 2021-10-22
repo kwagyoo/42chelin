@@ -72,19 +72,20 @@ const getAllStoreData = async ({ dispatch }) => {
   }
 };
 
-const SearchData = async () => {
-  const storeName = 'asdf';
-  try {
-    const res = await searchStoreData(storeName);
-    console.log(res);
-  } catch (e) {
-    console.error(e);
-  }
-};
+// const SearchData = async () => {
+//   const storeName = 'asdf';
+//   try {
+//     const res = await searchStoreData(storeName);
+//     console.log(res);
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
   const dispatch = useDispatch();
+  // usememo
   const loadMoreImages = () => {
     const copyImages = images.slice(0, 4);
     copyImages.forEach((item, index) => {
@@ -99,7 +100,7 @@ const PostlistPage = ({ history }) => {
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
     getAllStoreData({ dispatch });
-    SearchData();
+    // SearchData();
   }, [dispatch]);
 
   return (

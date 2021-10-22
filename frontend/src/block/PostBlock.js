@@ -13,6 +13,7 @@ const StoreCompactInfo = styled.div`
   }
 `;
 
+// 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
 const PostBlock = ({ src, delay, store }) => {
   const fadein = useSpring({
     from: { y: '10px', opacity: 0 },
@@ -25,7 +26,7 @@ const PostBlock = ({ src, delay, store }) => {
       <animated.article style={fadein}>
         <img className="storeThumb" src={src.default} alt="Store Thumbnail" />
         <div className="storeInfo">
-          <span>1</span>
+          <span>{store?.storeName}</span>
           <br />
           <span>2</span>
         </div>

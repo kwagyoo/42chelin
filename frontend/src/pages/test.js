@@ -2,12 +2,12 @@ import { Col, Row } from 'antd';
 import { useSelector } from 'react-redux';
 import PostBlock from '../block/PostBlock';
 
+// 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
 const Test = ({ images, history }) => {
-  const storeList = useSelector((state) => state.posts);
+  const { storeList } = useSelector((state) => state.posts);
   const onClick = (history) => {
     history.push('/detail');
   };
-  console.log(storeList.storeList[0]);
 
   return (
     <Row gutter={[16, 16]}>
@@ -23,9 +23,9 @@ const Test = ({ images, history }) => {
             onClick={() => onClick(history)}
           >
             <PostBlock
-              src={images[index]}
+              src={image}
               delay={image.delay}
-              store={storeList.storeList[index]}
+              store={storeList[index]}
             />
           </Col>
         ))}
