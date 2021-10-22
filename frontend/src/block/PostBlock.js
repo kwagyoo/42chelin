@@ -13,7 +13,7 @@ const StoreCompactInfo = styled.div`
   }
 `;
 
-const PostBlock = ({ src, delay }) => {
+const PostBlock = ({ src, delay, store }) => {
   const fadein = useSpring({
     from: { y: '10px', opacity: 0 },
     to: { y: '0px', opacity: 1 },
@@ -25,11 +25,9 @@ const PostBlock = ({ src, delay }) => {
       <animated.article style={fadein}>
         <img className="storeThumb" src={src.default} alt="Store Thumbnail" />
         <div className="storeInfo">
-          <span>출현 : 관동</span>
+          <span>1</span>
           <br />
-          <span>출현 : 관동</span>
-          <br />
-          <span>타입 : 불꽃</span>
+          <span>2</span>
         </div>
       </animated.article>
     </StoreCompactInfo>

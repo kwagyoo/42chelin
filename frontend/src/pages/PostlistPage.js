@@ -5,6 +5,9 @@ import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
 import { loadAllStoreData, searchStoreData } from '../lib/api/store';
+import { getList } from '../module/posts';
+import { useDispatch, useSelector } from 'react-redux';
+import Test from './test';
 
 function importAll(r) {
   let images = [];
@@ -59,10 +62,11 @@ const OptionList = styled.div`
   }
 `;
 
-const getAllStoreData = async () => {
+const getAllStoreData = async ({ dispatch }) => {
   try {
     const res = await loadAllStoreData();
-    console.log(res.data.body[0]);
+    const data = res.data.body;
+    dispatch(getList(data));
   } catch (e) {
     console.log(e);
   }
@@ -80,7 +84,7 @@ const SearchData = async () => {
 
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
-
+  const dispatch = useDispatch();
   const loadMoreImages = () => {
     const copyImages = images.slice(0, 4);
     copyImages.forEach((item, index) => {
@@ -90,17 +94,13 @@ const PostlistPage = ({ history }) => {
     setImages([...images, ...copyImages]);
   };
 
-  const onClick = (history) => {
-    history.push('/detail');
-  };
-
   useEffect(() => {
     setImages(
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
-    getAllStoreData();
+    getAllStoreData({ dispatch });
     SearchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <React.Fragment>
@@ -122,8 +122,10 @@ const PostlistPage = ({ history }) => {
             </li>
           </ul>
         </OptionList>
-        <Row gutter={[16, 16]}>
+        <Test images={images} history={history} />
+        {/* <Row gutter={[16, 16]}>
           {images &&
+            storeList &&
             images.map((image, index) => (
               <Col
                 key={index}
@@ -133,10 +135,14 @@ const PostlistPage = ({ history }) => {
                 xl={4}
                 onClick={() => onClick(history)}
               >
-                <PostBlock src={images[index]} delay={image.delay} />
+                <PostBlock
+                  src={images[index]}
+                  delay={image.delay}
+                  store={storeList[index]}
+                />
               </Col>
             ))}
-        </Row>
+        </Row> */}
         <button
           onClick={loadMoreImages}
           style={{ marginLeft: 'auto', marginRight: 'auto' }}

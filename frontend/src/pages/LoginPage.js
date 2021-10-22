@@ -10,7 +10,6 @@ const GetUsername = async (token, dispatch) => {
   try {
     const res = await getUser(token);
     const username = JSON.parse(res.data.body).nickname;
-    console.log('username save success');
     dispatch(getUserName(username));
   } catch (e) {
     console.log(e);
@@ -22,14 +21,10 @@ const LoginRequest = async ({ location, dispatch, history }) => {
   const code = query.code;
   try {
     const res = await getToken(code);
-    console.log('getToken 성공');
-    console.log(res);
     const data = JSON.parse(res.data.body);
-    console.log(data);
     const token = data.access_token;
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
-    console.log('token dispatch 성공');
     await GetUsername(token, dispatch);
     history.push('/');
   } catch (e) {
