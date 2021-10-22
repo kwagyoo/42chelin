@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import addressList from '../variables/addressList';
-import { saveStoreData } from '../lib/api/auth';
+import { saveStoreData } from '../lib/api/store';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -39,6 +39,17 @@ const useInput = (initialValue, validator) => {
     }
   };
   return { value, onChange };
+};
+
+const SaveStore = async (data) => {
+  const userToken = localStorage.getItem('token');
+  if (!userToken) return null;
+  try {
+    const res = await saveStoreData({ token: userToken, ...data });
+    console.log(res);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 const PostWritePage = ({ history }) => {
@@ -107,7 +118,7 @@ const PostWritePage = ({ history }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
-      saveStoreData(data);
+      SaveStore(data);
       setLoading((loading) => !loading);
     }
   };
