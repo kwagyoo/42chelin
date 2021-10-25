@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../common/Header';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
-import addressList from '../variables/addressList';
+import { Link } from 'react-router-dom';
 import smile from '../image/smile.png';
 import { saveStoreData } from '../lib/api/auth';
 
@@ -35,13 +35,21 @@ const StyledForm = styled.form`
   }
 `;
 
+const TargetStoreSearch = styled.div`
+  width: 100%;
+  height: 70px;
+  border-bottom: solid;
+  display: flex;
+  justify-content: space-between;
+`;
+
 /* 글자수 제한 함수
    initialValue => textArea 초기 문자열
    validator => textArea의 문자열을 체크할 제한 함수
 */
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
-  const onChange = event => {
+  const onChange = (event) => {
     const value = event?.target?.value;
     let willUpdate = true;
     if (typeof validator === 'function') {
@@ -55,20 +63,20 @@ const useInput = (initialValue, validator) => {
 };
 
 const PostWritePage = ({ history }) => {
-  const [date, setDate] = useState(null);
+  const [store, setStore] = useState({ storeName: '얌샘2' });
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, setValue } = useForm();
 
-  const review = useInput('', value => value.length < 300);
+  const review = useInput('', (value) => value.length < 300);
 
-  const handleSubmitBtn = async data => {
+  const handleSubmitBtn = async (data) => {
     if (!loading) {
-      setLoading(loading => !loading);
+      setLoading((loading) => !loading);
       saveStoreData(data);
-      setLoading(loading => !loading);
+      setLoading((loading) => !loading);
     }
   };
 
@@ -76,11 +84,32 @@ const PostWritePage = ({ history }) => {
     <React.Fragment>
       <Header />
       <main>
-        <div className="write_page_header">
-          <h1>리뷰 작성</h1>
-        </div>
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
-          <div className="target_store_info"></div>
+          <div className="write_page_header">
+            <h1>리뷰 작성</h1>
+          </div>
+          <TargetStoreSearch>
+            <div className="target_store_info">
+              {store ? (
+                <>
+                  <div className="target_store_name">{store?.storeName}</div>
+                  <div className="target_store_address">서울>신길</div>
+                </>
+              ) : (
+                <div>가게를 검색해주세요.</div>
+              )}
+            </div>
+            <div className="store_search_button">
+              <Link to="/">
+                <img
+                  src={smile}
+                  className="store_search_button_image"
+                  style={{ width: '50px', height: '50px' }}
+                  alt="very good"
+                />
+              </Link>
+            </div>
+          </TargetStoreSearch>
           <fieldset className="store_like_dislike">
             <input type="radio" value="5" id="level_5" name="level" />
             <label htmlFor="level_5">
