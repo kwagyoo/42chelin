@@ -58,7 +58,7 @@ export const getStoreDetailData = async (request) => {
       },
     );
     console.log('search', res);
-    return JSON.parse(res.data.body);
+    return res.data.body;
   } catch (error) {
     console.error(error);
     return Promise.reject(error);

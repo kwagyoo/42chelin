@@ -1,7 +1,7 @@
 import client from './client';
 
 export const getToken = (code) =>
-  client.post(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/get-token`, {
+  client.post(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/get-token/test`, {
     code: code,
   });
 
