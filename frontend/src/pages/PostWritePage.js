@@ -21,6 +21,19 @@ const StyledForm = styled.form`
     width: 100px;
     margin-right: 10px;
   }
+  .store_like_dislike input{
+	  display : none;
+	}
+	.store_like_dislike label
+	{
+		margin-left : 5px;
+	}
+  .store_like_dislike input{
+		display : none;
+	}
+	.store_like_dislike input{
+		display : none;
+	}
 `;
 
 /* 글자수 제한 함수
@@ -183,7 +196,7 @@ const PostWritePage = ({ history }) => {
             ></input>
           </div>
           <fieldset className="store_like_dislike">
-            <input type="radio" value="5" id="level_5" name="level" />
+            <input type="radio" value="5" id="level_5" name="level"/>
             <label for="level_5">
               <img
                 src={smile}
@@ -192,7 +205,7 @@ const PostWritePage = ({ history }) => {
                 alt="very good"
               />
             </label>
-            <input type="radio" value="2" id="level_2" name="level" />
+            <input type="radio" value="2" id="level_2" name="level"/>
             <label for="level_2">
               <img
                 src={smile}
