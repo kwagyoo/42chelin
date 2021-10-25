@@ -7,7 +7,6 @@ import 'antd/dist/antd.css';
 import { loadAllStoreData, searchStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
-import Test from './test';
 
 function importAll(r) {
   let images = [];
@@ -62,6 +61,7 @@ const OptionList = styled.div`
   }
 `;
 
+// 재사용이 가능한 코드이므로 api로 따로 빼서 관리하면 좋다.
 const getAllStoreData = async ({ dispatch }) => {
   try {
     const res = await loadAllStoreData();
@@ -72,15 +72,15 @@ const getAllStoreData = async ({ dispatch }) => {
   }
 };
 
-// const SearchData = async () => {
-//   const storeName = 'asdf';
-//   try {
-//     const res = await searchStoreData(storeName);
-//     console.log(res);
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
+const SearchData = async () => {
+  const storeName = 'asdf';
+  try {
+    const res = await searchStoreData(storeName);
+    console.log(res);
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
@@ -100,9 +100,13 @@ const PostlistPage = ({ history }) => {
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
     getAllStoreData({ dispatch });
-    // SearchData();
+    SearchData();
   }, [dispatch]);
-
+  const { storeList } = useSelector((state) => state.posts);
+  const onClick = (history) => {
+    history.push('/detail');
+  };
+  // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
     <React.Fragment>
       <Header />
@@ -123,8 +127,7 @@ const PostlistPage = ({ history }) => {
             </li>
           </ul>
         </OptionList>
-        <Test images={images} history={history} />
-        {/* <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]}>
           {images &&
             storeList &&
             images.map((image, index) => (
@@ -137,13 +140,13 @@ const PostlistPage = ({ history }) => {
                 onClick={() => onClick(history)}
               >
                 <PostBlock
-                  src={images[index]}
+                  src={image}
                   delay={image.delay}
                   store={storeList[index]}
                 />
               </Col>
             ))}
-        </Row> */}
+        </Row>
         <button
           onClick={loadMoreImages}
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
