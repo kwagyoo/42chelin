@@ -21,19 +21,18 @@ const StyledForm = styled.form`
     width: 100px;
     margin-right: 10px;
   }
-  .store_like_dislike input{
-	  display : none;
-	}
-	.store_like_dislike label
-	{
-		margin-left : 5px;
-	}
-  .store_like_dislike input{
-		display : none;
-	}
-	.store_like_dislike input{
-		display : none;
-	}
+  .store_like_dislike input {
+    display: none;
+  }
+  .store_like_dislike label {
+    margin-left: 5px;
+  }
+  .store_like_dislike input {
+    display: none;
+  }
+  input[type='radio']:checked + label img {
+    border: 1px solid black;
+  }
 `;
 
 /* 글자수 제한 함수
@@ -42,7 +41,7 @@ const StyledForm = styled.form`
 */
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
-  const onChange = (event) => {
+  const onChange = event => {
     const value = event?.target?.value;
     let willUpdate = true;
     if (typeof validator === 'function') {
@@ -63,66 +62,13 @@ const PostWritePage = ({ history }) => {
 
   const { register, handleSubmit, setValue } = useForm();
 
-  const review = useInput('', (value) => value.length < 300);
+  const review = useInput('', value => value.length < 300);
 
-  function getFormatDate(date) {
-    let year = date.getFullYear();
-    let month = 1 + date.getMonth();
-    month = month >= 10 ? month : '0' + month;
-    let day = date.getDate();
-    day = day >= 10 ? day : '0' + day;
-    return year + '-' + month + '-' + day;
-  }
-
-  //#region 가게 주소 select 관련 코드
-  const [city, setCity] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [district, setDistrict] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
-
-  const changeCity = (e) => {
-    setSelectedCity(e.target.value);
-    setDistrict([
-      '',
-      ...addressList['sigugun'].filter((x) => x.sido === e.target.value),
-    ]);
-  };
-
-  const changeDistrict = (e) => {
-    setSelectedDistrict(e.target.value);
-    setNeighborhood([
-      '',
-      ...addressList['dong'].filter(
-        (x) => x.sido === selectedCity && x.sigugun === e.target.value,
-      ),
-    ]);
-  };
-
-  const changeNeighborhood = (e) => {
-    setSelectedNeighborhood(e.target.value);
-  };
-
-  useEffect(() => {
-    setCity(['', ...addressList['sido']]);
-  }, []);
-  //#endregion
-
-  useEffect(() => {
-    const date = new Date();
-    setDate(getFormatDate(date));
-    setValue('date', getFormatDate(date));
-    setValue('userName', 'hyunyoo');
-  }, [date, setValue]);
-
-  useEffect(() => {}, [selectedCity]);
-
-  const handleSubmitBtn = async (data) => {
+  const handleSubmitBtn = async data => {
     if (!loading) {
-      setLoading((loading) => !loading);
+      setLoading(loading => !loading);
       saveStoreData(data);
-      setLoading((loading) => !loading);
+      setLoading(loading => !loading);
     }
   };
 
@@ -130,74 +76,14 @@ const PostWritePage = ({ history }) => {
     <React.Fragment>
       <Header />
       <main>
-        <div>
-          <p></p>
+        <div className="write_page_header">
+          <h1>리뷰 작성</h1>
         </div>
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
-          <div>
-            가게명 : <input type="text" {...register('name')} required></input>
-          </div>
-          <div>
-            주소 :{' '}
-            <select
-              title="select_city"
-              className="address_option"
-              {...register('address.city')}
-              onChange={changeCity}
-              value={selectedCity}
-            >
-              {city &&
-                city.map((x, index) => {
-                  return (
-                    <option key={'city_' + index} value={x.sido}>
-                      {x.codeNm}
-                    </option>
-                  );
-                })}
-            </select>
-            <select
-              className="address_option"
-              {...register('address.district')}
-              onChange={changeDistrict}
-              value={selectedDistrict}
-            >
-              {district &&
-                district.map((x, index) => {
-                  return (
-                    <option key={'district_' + index} value={x.sigugun}>
-                      {x.codeNm}
-                    </option>
-                  );
-                })}
-            </select>
-            <select
-              className="address_option"
-              {...register('address.neighborhood')}
-              onChange={changeNeighborhood}
-              value={selectedNeighborhood}
-            >
-              {neighborhood &&
-                neighborhood.map((x, index) => {
-                  return (
-                    <option key={'neighbor_' + index} value={x.dong}>
-                      {x.codeNm}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
-          <div>
-            등록일 :
-            <input
-              type="date"
-              placeholder="yyyy-mm-dd"
-              defaultValue={date}
-              disabled
-            ></input>
-          </div>
+          <div className="target_store_info"></div>
           <fieldset className="store_like_dislike">
-            <input type="radio" value="5" id="level_5" name="level"/>
-            <label for="level_5">
+            <input type="radio" value="5" id="level_5" name="level" />
+            <label htmlFor="level_5">
               <img
                 src={smile}
                 className="emoji_for_like_dislike"
@@ -205,8 +91,8 @@ const PostWritePage = ({ history }) => {
                 alt="very good"
               />
             </label>
-            <input type="radio" value="2" id="level_2" name="level"/>
-            <label for="level_2">
+            <input type="radio" value="2" id="level_2" name="level" />
+            <label htmlFor="level_2">
               <img
                 src={smile}
                 className="emoji_for_like_dislike"
@@ -227,13 +113,7 @@ const PostWritePage = ({ history }) => {
               required
             />
           </div>
-          <div
-            style={{
-              overflowX: 'auto',
-              overflowY: 'hidden',
-              border: '2px solid black',
-            }}
-          >
+          <div>
             <ImageUpload
               files={files}
               count={count}
@@ -242,6 +122,11 @@ const PostWritePage = ({ history }) => {
             />
           </div>
           <Button name="submit" disabled={loading}></Button>
+          <Button
+            name="cancel"
+            disabled={loading}
+            onClick={() => history.goBack()}
+          ></Button>
         </StyledForm>
       </main>
     </React.Fragment>
