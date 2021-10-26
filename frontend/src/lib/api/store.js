@@ -34,3 +34,24 @@ export const getStoreDetailData = async (request) => {
     return Promise.reject(error);
   }
 };
+
+
+export const GetStoreInfoKakao = async (request) => {
+  try {
+    console.log(request);
+    const res = await client.get(
+      `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/getstorekakao`,
+      {
+        params: {
+          id: request.id,
+          storeName: request.placeName,
+        },
+      },
+    );
+    console.log('search', res);
+    return res.data.body;
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+};

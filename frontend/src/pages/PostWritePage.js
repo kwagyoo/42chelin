@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../common/Header';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -6,7 +6,8 @@ import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
 import smile from '../image/smile.png';
-import { saveStoreData } from '../lib/api/auth';
+import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
+import querystring from 'query-string';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -41,6 +42,15 @@ const TargetStoreSearch = styled.div`
   border-bottom: solid;
   display: flex;
   justify-content: space-between;
+  .target_store_info {
+    height: 100%;
+    display: flex;
+    flex-direction: ${(props) => (props.store ? 'column' : 'row')};
+    align-items: ${(props) => (props.store ? 'space-between' : 'center')};
+  }
+  .target_store_info div p {
+    font-size: 15px;
+  }
 `;
 
 /* 글자수 제한 함수
@@ -73,8 +83,8 @@ const SaveStore = async (data) => {
   }
 };
 
-const PostWritePage = ({ history }) => {
-  const [store, setStore] = useState({ storeName: '얌샘2' });
+const PostWritePage = ({ history, location }) => {
+  const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -99,6 +109,18 @@ const PostWritePage = ({ history }) => {
   //       console.log(e);
   //     }
   //   };
+  useEffect(() => {
+    const query = querystring.parse(location.search);
+    if (Object.keys(query).length !== 0) {
+      GetStoreInfoKakao(query).then((res) => {
+        console.log(res);
+        setStore({
+          placeName: res.place_name,
+          address: res.road_address_name?.split(' ')[0],
+        });
+      });
+    }
+  }, [location.search]);
 
   return (
     <React.Fragment>
@@ -108,15 +130,21 @@ const PostWritePage = ({ history }) => {
           <div className="write_page_header">
             <h1>리뷰 작성</h1>
           </div>
-          <TargetStoreSearch>
+          <TargetStoreSearch store={store}>
             <div className="target_store_info">
               {store ? (
                 <>
-                  <div className="target_store_name">{store?.storeName}</div>
-                  <div className="target_store_address">서울>신길</div>
+                  <div className="target_store_name">
+                    <p>{store?.placeName}</p>
+                  </div>
+                  <div className="target_store_address">
+                    <p>{store?.address}</p>
+                  </div>
                 </>
               ) : (
-                <div>가게를 검색해주세요.</div>
+                <div className="request_target_store">
+                  <p>가게를 검색해주세요.</p>
+                </div>
               )}
             </div>
             <div className="store_search_button">
