@@ -16,10 +16,21 @@ export const searchStoreData = (storeName) =>
     },
   });
 
-export const getStoreDetailData = (request) =>
-  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`, {
-    params: {
-      storeName: request.storeName,
-      storeBranch: JSON.stringify(request.storeBranch),
-    },
-  });
+export const getStoreDetailData = async (request) => {
+  try {
+    const res = await client.get(
+      `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`,
+      {
+        params: {
+          storeName: request.storeName,
+          storeBranch: JSON.stringify(request.storeBranch),
+        },
+      },
+    );
+    console.log('search', res);
+    return res.data.body;
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+};
