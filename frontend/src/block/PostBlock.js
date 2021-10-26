@@ -12,8 +12,8 @@ const StoreCompactInfo = styled.div`
     width: 100%;
   }
 `;
-
-const PostBlock = ({ src, delay }) => {
+// 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
+const PostBlock = ({ src, delay, store }) => {
   const fadein = useSpring({
     from: { y: '10px', opacity: 0 },
     to: { y: '0px', opacity: 1 },
@@ -25,11 +25,9 @@ const PostBlock = ({ src, delay }) => {
       <animated.article style={fadein}>
         <img className="storeThumb" src={src.default} alt="Store Thumbnail" />
         <div className="storeInfo">
-          <span>출현 : 관동</span>
+          <span>{store?.storeName}</span>
           <br />
-          <span>출현 : 관동</span>
-          <br />
-          <span>타입 : 불꽃</span>
+          <span>2</span>
         </div>
       </animated.article>
     </StoreCompactInfo>

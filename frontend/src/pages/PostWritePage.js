@@ -62,6 +62,17 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
+const SaveStore = async (data) => {
+  const userToken = localStorage.getItem('token');
+  if (!userToken) return null;
+  try {
+    const res = await saveStoreData({ token: userToken, ...data });
+    console.log(res);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 const PostWritePage = ({ history }) => {
   const [store, setStore] = useState({ storeName: '얌샘2' });
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
@@ -75,10 +86,19 @@ const PostWritePage = ({ history }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
-      saveStoreData(data);
+      SaveStore(data);
       setLoading((loading) => !loading);
     }
   };
+
+  //async await 가 promise 를 처리해줌. <찾아보기
+  //   const onClick = async () => {
+  //     try {
+  //       console.log(res.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
 
   return (
     <React.Fragment>
