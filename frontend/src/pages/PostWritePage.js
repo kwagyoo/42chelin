@@ -123,6 +123,15 @@ const PostWritePage = ({ history }) => {
     }
   };
 
+  //async await 가 promise 를 처리해줌. <찾아보기
+  //   const onClick = async () => {
+  //     try {
+  //       console.log(res.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+
   return (
     <React.Fragment>
       <Header />
@@ -131,6 +140,7 @@ const PostWritePage = ({ history }) => {
           <div>
             가게명 : <input type="text" {...register('name')} required></input>
           </div>
+          {/* <div onClick={onClick}>카카오 api 설정</div> */}
           <div>
             주소 :{' '}
             <select

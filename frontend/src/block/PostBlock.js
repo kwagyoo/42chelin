@@ -12,7 +12,6 @@ const StoreCompactInfo = styled.div`
     width: 100%;
   }
 `;
-
 // 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
 const PostBlock = ({ src, delay, store }) => {
   const fadein = useSpring({
