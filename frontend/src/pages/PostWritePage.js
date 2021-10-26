@@ -34,6 +34,9 @@ const StyledForm = styled.form`
   input[type='radio']:checked + label img {
     border: 1px solid black;
   }
+  .write_page_header {
+    text-align: center;
+  }
 `;
 
 const TargetStoreSearch = styled.div`
@@ -48,8 +51,11 @@ const TargetStoreSearch = styled.div`
     flex-direction: ${(props) => (props.store ? 'column' : 'row')};
     align-items: ${(props) => (props.store ? 'space-between' : 'center')};
   }
+  .target_store_info div {
+    height: 40%;
+  }
   .target_store_info div p {
-    font-size: 15px;
+    font-size: 20px;
   }
 `;
 
@@ -148,7 +154,7 @@ const PostWritePage = ({ history, location }) => {
               )}
             </div>
             <div className="store_search_button">
-              <Link to="/">
+              <Link to="/search">
                 <img
                   src={smile}
                   className="store_search_button_image"
