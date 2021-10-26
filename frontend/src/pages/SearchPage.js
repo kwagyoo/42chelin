@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import StoreInfo from '../common/StoreInfo';
 import { SearchKakao } from '../lib/api/kakao';
-import { getStoreList } from '../module/storeinfo';
 
 const SearchInput = styled.div`
   position: relative;
@@ -22,27 +21,34 @@ const SearchInput = styled.div`
 `;
 
 const SearchPage = () => {
-  const dispatch = useDispatch();
+  const history = useHistory();
   const [text, setText] = useState('');
+  const [searchstoreList, setSearchstoreList] = useState([]);
 
   const onChange = (e) => {
     setText(e.target.value);
   };
 
-  const onClick = async () => {
+  const SearchStoreEvent = async () => {
     const searchText = text;
     try {
       const res = await SearchKakao(searchText);
       const data = res.data.body;
       console.log(res);
-      dispatch(getStoreList(data));
+      setSearchstoreList(data);
       setText('');
     } catch (e) {
       console.log(e);
     }
   };
-  const { searchstoreList } = useSelector((state) => state.storeinfo);
-  console.log(searchstoreList);
+
+  const SubmitStoreData = (placeName, id) => {
+    history.push({
+      pathname: '/write',
+      search: `?placeName=${placeName}&id=${id}`,
+    });
+  };
+  // Todo : onchange 될때마다 계속 실행됌 아마 컴포넌트의 업데이트를 감지해서 그런듯??
 
   return (
     <>
@@ -53,10 +59,11 @@ const SearchPage = () => {
           onChange={onChange}
           value={text}
         />
-        <button onClick={onClick}>send</button>
+        <button onClick={SearchStoreEvent}>send</button>
       </SearchInput>
       {searchstoreList.map((store, idx) => (
         <StoreInfo
+          onClick={() => SubmitStoreData(store.place_name, store.id)}
           address={store.address_name}
           placeName={store.place_name}
           categoryName={store.category_name}

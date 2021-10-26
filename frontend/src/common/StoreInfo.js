@@ -1,7 +1,7 @@
-const StoreInfo = ({ address, placeName, categoryName }) => {
+const StoreInfo = ({ onClick, address, placeName, categoryName }) => {
   const img = 'img';
   return (
-    <>
+    <div onClick={onClick}>
       <h2>{placeName}</h2>
       <div>
         <div>{img}</div>
@@ -9,7 +9,7 @@ const StoreInfo = ({ address, placeName, categoryName }) => {
         <div>{address}</div>
         <div>{categoryName}</div>
       </div>
-    </>
+    </div>
   );
 };
 
