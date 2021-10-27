@@ -3,6 +3,8 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import StoreInfo from '../common/StoreInfo';
 import { SearchKakao } from '../lib/api/kakao';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const SearchInput = styled.div`
   position: relative;
@@ -11,13 +13,30 @@ const SearchInput = styled.div`
   display: block;
   background-color: #ffffff;
   border-bottom: 1px solid;
+  justify-content: space-between;
+
   input {
     margin-left: 30px;
     margin-top: 5px;
     height: 40px;
-    width: 550px;
+    width: 80%;
     border-style: none;
   }
+  input:focus {
+    outline: none;
+  }
+
+  .FontAwesomeIcon {
+    justify-content: space-between;
+  }
+`;
+
+const StoreInfoWarp = styled.div`
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  display: block;
 `;
 
 const SearchPage = () => {
@@ -29,14 +48,19 @@ const SearchPage = () => {
     setText(e.target.value);
   };
 
+  const onKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      SearchStoreEvent();
+    }
+  };
+
   const SearchStoreEvent = async () => {
     const searchText = text;
     try {
       const res = await SearchKakao(searchText);
       const data = res.data.body;
-      console.log(res);
       setSearchstoreList(data);
-      setText('');
+      console.log(data);
     } catch (e) {
       console.log(e);
     }
@@ -52,24 +76,33 @@ const SearchPage = () => {
 
   return (
     <>
-      <SearchInput>
+      <SearchInput onKeyPress={onKeyPress}>
         <input
           type="text"
           placeholder="가게를 검색해주세요."
           onChange={onChange}
           value={text}
         />
-        <button onClick={SearchStoreEvent}>send</button>
-      </SearchInput>
-      {searchstoreList.map((store, idx) => (
-        <StoreInfo
-          onClick={() => SubmitStoreData(store.place_name, store.id)}
-          address={store.address_name}
-          placeName={store.place_name}
-          categoryName={store.category_name}
-          key={idx}
+        <FontAwesomeIcon
+          icon={faSearch}
+          style={{ color: 'black' }}
+          size="lg"
+          className="search"
+          onClick={SearchStoreEvent}
         />
-      ))}
+      </SearchInput>
+      <StoreInfoWarp>
+        {searchstoreList &&
+          searchstoreList.map((store, idx) => (
+            <StoreInfo
+              onClick={() => SubmitStoreData(store.place_name, store.id)}
+              address={store.address_name}
+              placeName={store.place_name}
+              categoryName={store.category_name}
+              key={idx}
+            />
+          ))}
+      </StoreInfoWarp>
     </>
   );
 };

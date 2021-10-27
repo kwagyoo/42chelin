@@ -32,6 +32,10 @@ const SearchInput = styled.div`
     width: 550px;
     border-style: none;
   }
+  input:focus {
+    outline: none;
+  }
+
 `;
 
 const OptionList = styled.div`
@@ -67,6 +71,7 @@ const getAllStoreData = async ({ dispatch }) => {
     const res = await loadAllStoreData();
     const data = res.data.body;
     dispatch(getList(data));
+	console.log(res)
   } catch (e) {
     console.log(e);
   }
@@ -104,7 +109,8 @@ const PostlistPage = ({ history }) => {
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
   const onClick = (history) => {
-    history.push('/detail');
+    alert('준비중');
+    // history.push('/detail');
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
@@ -156,6 +162,6 @@ const PostlistPage = ({ history }) => {
       </div>
     </React.Fragment>
   );
-};
+};;
 
 export default PostlistPage;

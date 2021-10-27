@@ -5,9 +5,10 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
-import smile from '../image/smile.png';
 import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
 import querystring from 'query-string';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -56,6 +57,10 @@ const TargetStoreSearch = styled.div`
   }
   .target_store_info div p {
     font-size: 20px;
+  }
+  .store_search_button {
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -155,35 +160,15 @@ const PostWritePage = ({ history, location }) => {
             </div>
             <div className="store_search_button">
               <Link to="/search">
-                <img
-                  src={smile}
-                  className="store_search_button_image"
-                  style={{ width: '50px', height: '50px' }}
-                  alt="very good"
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  style={{ color: 'blue' }}
+                  size="lg"
+                  className="search"
                 />
               </Link>
             </div>
           </TargetStoreSearch>
-          <fieldset className="store_like_dislike">
-            <input type="radio" value="5" id="level_5" name="level" />
-            <label htmlFor="level_5">
-              <img
-                src={smile}
-                className="emoji_for_like_dislike"
-                style={{ width: '50px', height: '50px' }}
-                alt="very good"
-              />
-            </label>
-            <input type="radio" value="2" id="level_2" name="level" />
-            <label htmlFor="level_2">
-              <img
-                src={smile}
-                className="emoji_for_like_dislike"
-                style={{ width: '50px', height: '50px' }}
-                alt="very good"
-              />
-            </label>
-          </fieldset>
           <div>
             리뷰(1000자 미만)
             <br />

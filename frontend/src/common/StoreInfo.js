@@ -1,15 +1,36 @@
+import styled from 'styled-components';
+import testImg from '../image/15935670615efbe7551de0b.jpg';
+const StyledInfo = styled.div`
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid;
+  padding: 0 20px;
+  overflow: hidden;
+`;
+
+const StyledImg = styled.img`
+  padding: 10px;
+`;
+
+const StyledContent = styled.div`
+  padding-top: 20px;
+`;
+
 const StoreInfo = ({ onClick, address, placeName, categoryName }) => {
-  const img = 'img';
   return (
-    <div onClick={onClick}>
-      <h2>{placeName}</h2>
+    <StyledInfo onClick={onClick}>
       <div>
-        <div>{img}</div>
-        <div>{placeName}</div>
-        <div>{address}</div>
-        <div>{categoryName}</div>
+        <StyledImg src={testImg} alt="tmp" />
       </div>
-    </div>
+      <StyledContent>
+        <h2>{placeName}</h2>
+        <div>
+          <div>{placeName}</div>
+          <div>{address}</div>
+          <div>{categoryName}</div>
+        </div>
+      </StyledContent>
+    </StyledInfo>
   );
 };
 
