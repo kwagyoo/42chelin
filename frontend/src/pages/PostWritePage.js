@@ -48,8 +48,8 @@ const TargetStoreSearch = styled.div`
   .target_store_info {
     height: 100%;
     display: flex;
-    flex-direction: ${(props) => (props.store ? 'column' : 'row')};
-    align-items: ${(props) => (props.store ? 'space-between' : 'center')};
+    flex-direction: ${props => (props.store ? 'column' : 'row')};
+    align-items: ${props => (props.store ? 'space-between' : 'center')};
   }
   .target_store_info div {
     height: 40%;
@@ -65,7 +65,7 @@ const TargetStoreSearch = styled.div`
 */
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
-  const onChange = (event) => {
+  const onChange = event => {
     const value = event?.target?.value;
     let willUpdate = true;
     if (typeof validator === 'function') {
@@ -78,7 +78,7 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const SaveStore = async (data) => {
+const SaveStore = async data => {
   const userToken = localStorage.getItem('token');
   if (!userToken) return null;
   try {
@@ -97,13 +97,14 @@ const PostWritePage = ({ history, location }) => {
 
   const { register, handleSubmit, setValue } = useForm();
 
-  const review = useInput('', (value) => value.length < 300);
+  const review = useInput('', value => value.length < 300);
 
-  const handleSubmitBtn = async (data) => {
+  const handleSubmitBtn = async data => {
     if (!loading) {
-      setLoading((loading) => !loading);
+      setLoading(loading => !loading);
+      console.log(data);
       SaveStore(data);
-      setLoading((loading) => !loading);
+      setLoading(loading => !loading);
     }
   };
 
@@ -118,11 +119,14 @@ const PostWritePage = ({ history, location }) => {
   useEffect(() => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
-      GetStoreInfoKakao(query).then((res) => {
-        console.log(res);
+      GetStoreInfoKakao(query).then(res => {
         setStore({
           placeName: res.place_name,
-          address: res.road_address_name?.split(' ')[0],
+          address: res.road_address_name
+            ?.split(' ')
+            .slice(0, 2)
+            .join(' '),
+          id: res.id,
         });
       });
     }
@@ -146,6 +150,17 @@ const PostWritePage = ({ history, location }) => {
                   <div className="target_store_address">
                     <p>{store?.address}</p>
                   </div>
+                  <input
+                    type="hidden"
+                    value={store?.placeName}
+                    {...register('storeName')}
+                  />
+                  <input type="hidden" value={store?.id} {...register('id')} />
+                  <input
+                    type="hidden"
+                    value={store?.address}
+                    {...register('address')}
+                  />
                 </>
               ) : (
                 <div className="request_target_store">
@@ -164,7 +179,7 @@ const PostWritePage = ({ history, location }) => {
               </Link>
             </div>
           </TargetStoreSearch>
-          <fieldset className="store_like_dislike">
+          {/* <fieldset className="store_like_dislike">
             <input type="radio" value="5" id="level_5" name="level" />
             <label htmlFor="level_5">
               <img
@@ -183,7 +198,7 @@ const PostWritePage = ({ history, location }) => {
                 alt="very good"
               />
             </label>
-          </fieldset>
+          </fieldset> */}
           <div>
             리뷰(1000자 미만)
             <br />
@@ -208,7 +223,7 @@ const PostWritePage = ({ history, location }) => {
           <Button
             name="cancel"
             disabled={loading}
-            onClick={() => history.goBack()}
+            onClick={() => history.push('/')}
           ></Button>
         </StyledForm>
       </main>
