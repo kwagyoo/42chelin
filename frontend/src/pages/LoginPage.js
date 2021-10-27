@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { getToken, getUser } from '../lib/api/auth';
 import { getUserName, setAccessToken } from '../module/users';
 import Loading from '../common/Loading';
+import * as Sentry from '@sentry/react';
 
 const GetUsername = async (token, dispatch) => {
   try {
@@ -12,6 +13,7 @@ const GetUsername = async (token, dispatch) => {
     const username = JSON.parse(res.data.body).nickname;
     dispatch(getUserName(username));
   } catch (e) {
+    Sentry.captureException(e);
     console.log(e);
   }
 };
@@ -28,6 +30,7 @@ const LoginRequest = async ({ location, dispatch, history }) => {
     await GetUsername(token, dispatch);
     history.push('/');
   } catch (e) {
+    Sentry.captureException(e);
     console.log(e);
     alert('로그인에 실패했습니다.');
   }
