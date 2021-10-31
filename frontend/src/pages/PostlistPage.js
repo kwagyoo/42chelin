@@ -81,9 +81,10 @@ const SearchData = async () => {
   const storeName = 'asdf';
   try {
     const res = await searchStoreData(storeName);
-    console.log(res);
+    if (res.data.hasOwnProperty('errorType')) throw new Error(res.errorMessage);
   } catch (e) {
     console.error(e);
+    alert('가게 정보를 불러올 수 없습니다.');
   }
 };
 
@@ -107,10 +108,17 @@ const PostlistPage = ({ history }) => {
     getAllStoreData({ dispatch });
     SearchData();
   }, [dispatch]);
+<<<<<<< HEAD
   const { storeList } = useSelector((state) => state.posts);
   const onClick = (history) => {
     alert('준비중');
     // history.push('/detail');
+=======
+
+  const { storeList } = useSelector(state => state.posts);
+  const onClick = history => {
+    history.push('/detail');
+>>>>>>> test2
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
