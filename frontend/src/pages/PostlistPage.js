@@ -108,17 +108,10 @@ const PostlistPage = ({ history }) => {
     getAllStoreData({ dispatch });
     SearchData();
   }, [dispatch]);
-<<<<<<< HEAD
   const { storeList } = useSelector((state) => state.posts);
   const onClick = (history) => {
     alert('준비중');
     // history.push('/detail');
-=======
-
-  const { storeList } = useSelector(state => state.posts);
-  const onClick = history => {
-    history.push('/detail');
->>>>>>> test2
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (

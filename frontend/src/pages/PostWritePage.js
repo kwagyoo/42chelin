@@ -192,29 +192,6 @@ const PostWritePage = ({ history, location }) => {
               </Link>
             </div>
           </TargetStoreSearch>
-<<<<<<< HEAD
-=======
-          {/* <fieldset className="store_like_dislike">
-            <input type="radio" value="5" id="level_5" name="level" />
-            <label htmlFor="level_5">
-              <img
-                src={smile}
-                className="emoji_for_like_dislike"
-                style={{ width: '50px', height: '50px' }}
-                alt="very good"
-              />
-            </label>
-            <input type="radio" value="2" id="level_2" name="level" />
-            <label htmlFor="level_2">
-              <img
-                src={smile}
-                className="emoji_for_like_dislike"
-                style={{ width: '50px', height: '50px' }}
-                alt="very good"
-              />
-            </label>
-          </fieldset> */}
->>>>>>> test2
           <div>
             리뷰(1000자 미만)
             <br />
