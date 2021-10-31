@@ -89,6 +89,18 @@ const SaveStore = async data => {
   }
 };
 
+function formatDate(date) {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 const PostWritePage = ({ history, location }) => {
   const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
@@ -97,14 +109,17 @@ const PostWritePage = ({ history, location }) => {
 
   const { register, handleSubmit, setValue } = useForm();
 
-  const review = useInput('', value => value.length < 300);
+  const review = useInput('', (value) => value.length < 300);
 
-  const handleSubmitBtn = async data => {
+  const handleSubmitBtn = async (data) => {
     if (!loading) {
-      setLoading(loading => !loading);
-      console.log(data);
-      SaveStore(data);
-      setLoading(loading => !loading);
+      setLoading((loading) => !loading);
+      if (store) {
+        console.log(data);
+        await SaveStore(data);
+        history.push('/');
+      }
+      setLoading((loading) => !loading);
     }
   };
 
@@ -119,18 +134,22 @@ const PostWritePage = ({ history, location }) => {
   useEffect(() => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
-      GetStoreInfoKakao(query).then(res => {
+      GetStoreInfoKakao(query).then((res) => {
         setStore({
           placeName: res.place_name,
-          address: res.road_address_name
-            ?.split(' ')
-            .slice(0, 2)
-            .join(' '),
+          address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
           id: res.id,
         });
       });
     }
   }, [location.search]);
+
+  useEffect(() => {
+    setValue('userName', 'hyunyoo');
+    setValue('storeName', store?.placeName);
+    setValue('storeAddress', store?.address);
+    setValue('reviewDate', formatDate(Date.now()));
+  }, [store, setValue]);
 
   return (
     <React.Fragment>
@@ -150,17 +169,6 @@ const PostWritePage = ({ history, location }) => {
                   <div className="target_store_address">
                     <p>{store?.address}</p>
                   </div>
-                  <input
-                    type="hidden"
-                    value={store?.placeName}
-                    {...register('storeName')}
-                  />
-                  <input type="hidden" value={store?.id} {...register('id')} />
-                  <input
-                    type="hidden"
-                    value={store?.address}
-                    {...register('address')}
-                  />
                 </>
               ) : (
                 <div className="request_target_store">

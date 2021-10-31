@@ -65,7 +65,6 @@ const OptionList = styled.div`
 const getAllStoreData = async ({ dispatch }) => {
   try {
     const res = await loadAllStoreData();
-    console.log(res.data);
     const data = res.data.body;
     dispatch(getList(data));
   } catch (e) {
@@ -77,7 +76,6 @@ const SearchData = async () => {
   const storeName = 'asdf';
   try {
     const res = await searchStoreData(storeName);
-    console.log(res);
     if (res.data.hasOwnProperty('errorType')) throw new Error(res.errorMessage);
   } catch (e) {
     console.error(e);
