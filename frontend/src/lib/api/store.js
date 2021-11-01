@@ -36,7 +36,6 @@ export const GetStoreInfoKakao = async (request) => {
         },
       },
     );
-    console.log('search', res);
     return res.data.body;
   } catch (error) {
     console.error(error);

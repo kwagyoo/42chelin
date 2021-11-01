@@ -4,7 +4,7 @@ import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
-import { loadAllStoreData } from '../lib/api/store';
+import { loadAllStoreData, searchStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -75,49 +75,46 @@ const getAllStoreData = async ({ dispatch }) => {
   }
 };
 
-// const SearchData = async () => {
-//   const storeName = 'asdf';
-//   try {
-//     const res = await searchStoreData(storeName);
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
 
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
   const dispatch = useDispatch();
-  // usememo
-  //   const loadMoreImages = () => {
-  //     const copyImages = images.slice(0, 4);
-  //     copyImages.forEach((item, index) => {
-  //       //새로 추가한 이미지에는 별도의 딜레이를 새로 추가
-  //       copyImages[index].delay = 150 * index;
-  //     });
-  //     setImages([...images, ...copyImages]);
-  //   };
 
   useEffect(() => {
     setImages(
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
     getAllStoreData({ dispatch });
-    // SearchData();
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
-
-  const onClick = (storeList) => {
+  console.log(storeList)
+  const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(
       `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
     );
   };
+
+  const SearchData = async () => {
+	const storeName = '얌샘';
+	try {
+	  const res = await searchStoreData(storeName);
+	  console.log(res);
+	} catch (e) {
+	  console.error(e);
+	  alert('가게 정보를 불러올 수 없습니다.');
+	}
+  };
+
+  const Search = () =>{
+	  console.log('click');
+  }
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
     <>
       <Header />
       <SearchInput>
-        <input type="text" placeholder="가게를 검색해주세요." />
+        <input type="text" placeholder="가게를 검색해주세요." onClick={Search} />
       </SearchInput>
       <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
         <OptionList>
@@ -143,7 +140,7 @@ const PostlistPage = ({ history }) => {
                 md={8}
                 lg={6}
                 xl={4}
-                onClick={() => onClick(storeList[index])}
+                onClick={() => goDetail(storeList[index])}
               >
                 <PostBlock
                   src={image}

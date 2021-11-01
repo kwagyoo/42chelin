@@ -49,8 +49,8 @@ const TargetStoreSearch = styled.div`
   .target_store_info {
     height: 100%;
     display: flex;
-    flex-direction: ${(props) => (props.store ? 'column' : 'row')};
-    align-items: ${(props) => (props.store ? 'space-between' : 'center')};
+    flex-direction: ${props => (props.store ? 'column' : 'row')};
+    align-items: ${props => (props.store ? 'space-between' : 'center')};
   }
   .target_store_info div {
     height: 40%;
@@ -70,7 +70,7 @@ const TargetStoreSearch = styled.div`
 */
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
-  const onChange = (event) => {
+  const onChange = event => {
     const value = event?.target?.value;
     let willUpdate = true;
     if (typeof validator === 'function') {
@@ -83,7 +83,7 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const SaveStore = async (data) => {
+const SaveStore = async data => {
   const userToken = localStorage.getItem('token');
   if (!userToken) return null;
   try {
@@ -94,20 +94,36 @@ const SaveStore = async (data) => {
   }
 };
 
+function formatDate(date) {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 const PostWritePage = ({ history, location }) => {
   const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
 
   const review = useInput('', (value) => value.length < 300);
 
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
-      SaveStore(data);
+      if (store) {
+        console.log(data);
+        await SaveStore(data);
+        history.push('/');
+      }
       setLoading((loading) => !loading);
     }
   };
@@ -124,14 +140,21 @@ const PostWritePage = ({ history, location }) => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
-        console.log(res);
         setStore({
           placeName: res.place_name,
-          address: res.road_address_name?.split(' ')[0],
+          address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+          id: res.id,
         });
       });
     }
   }, [location.search]);
+
+  useEffect(() => {
+    setValue('userName', 'hyunyoo');
+    setValue('storeName', store?.placeName);
+    setValue('storeAddress', store?.address);
+    setValue('reviewDate', formatDate(Date.now()));
+  }, [store, setValue]);
 
   return (
     <React.Fragment>
@@ -193,7 +216,7 @@ const PostWritePage = ({ history, location }) => {
           <Button
             name="cancel"
             disabled={loading}
-            onClick={() => history.goBack()}
+            onClick={() => history.push('/')}
           ></Button>
         </StyledForm>
       </main>

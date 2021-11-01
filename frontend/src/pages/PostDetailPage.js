@@ -50,15 +50,17 @@ const PostDetailPage = ({ location }) => {
   return (
     <>
       <Header />
-      <ContentsWrapper>
-        <StoreListBlock>
-          <ImgWapper>
-            <ImgBlock src={testImg} alt="tmp" />
-          </ImgWapper>
-          <StoreReviewDetail storeList={storeList} />
-        </StoreListBlock>
-        <StoreReviewList storeReviews={storeList.storeReviews} />
-      </ContentsWrapper>
+      {storeList && (
+        <ContentsWrapper>
+          <StoreListBlock>
+            <ImgWapper>
+              <ImgBlock src={testImg} alt="tmp" />
+            </ImgWapper>
+            <StoreReviewDetail storeList={storeList} />
+          </StoreListBlock>
+          <StoreReviewList storeReviews={storeList.storeReviews} />
+        </ContentsWrapper>
+      )}
     </>
   );
 };

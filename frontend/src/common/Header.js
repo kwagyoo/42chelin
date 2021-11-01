@@ -60,12 +60,14 @@ const Header = () => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
   }, [isLogin]);
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+
   const onLogout = () => {
     if (isLogin) {
       localStorage.removeItem('username');
 
       localStorage.removeItem('token');
       setisLogin('');
+      alert('로그아웃 되었습니다.');
     }
   };
   return (
