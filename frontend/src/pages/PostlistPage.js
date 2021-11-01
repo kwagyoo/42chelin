@@ -4,7 +4,7 @@ import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
-import { loadAllStoreData, searchStoreData } from '../lib/api/store';
+import { loadAllStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -35,7 +35,6 @@ const SearchInput = styled.div`
   input:focus {
     outline: none;
   }
-
 `;
 
 const OptionList = styled.div`
@@ -71,55 +70,56 @@ const getAllStoreData = async ({ dispatch }) => {
     const res = await loadAllStoreData();
     const data = res.data.body;
     dispatch(getList(data));
-	console.log(res)
   } catch (e) {
     console.log(e);
   }
 };
 
-const SearchData = async () => {
-  const storeName = 'asdf';
-  try {
-    const res = await searchStoreData(storeName);
-    console.log(res);
-  } catch (e) {
-    console.error(e);
-  }
-};
+// const SearchData = async () => {
+//   const storeName = 'asdf';
+//   try {
+//     const res = await searchStoreData(storeName);
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
   const dispatch = useDispatch();
   // usememo
-  const loadMoreImages = () => {
-    const copyImages = images.slice(0, 4);
-    copyImages.forEach((item, index) => {
-      //새로 추가한 이미지에는 별도의 딜레이를 새로 추가
-      copyImages[index].delay = 150 * index;
-    });
-    setImages([...images, ...copyImages]);
-  };
+  //   const loadMoreImages = () => {
+  //     const copyImages = images.slice(0, 4);
+  //     copyImages.forEach((item, index) => {
+  //       //새로 추가한 이미지에는 별도의 딜레이를 새로 추가
+  //       copyImages[index].delay = 150 * index;
+  //     });
+  //     setImages([...images, ...copyImages]);
+  //   };
 
   useEffect(() => {
     setImages(
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
     getAllStoreData({ dispatch });
-    SearchData();
+    // SearchData();
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
-  const onClick = (history) => {
-    alert('준비중');
-    // history.push('/detail');
+
+  const onClick = (storeList) => {
+    if (!storeList) return;
+    history.push(
+      `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
+    );
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
-    <React.Fragment>
+    <>
       <Header />
       <SearchInput>
         <input type="text" placeholder="가게를 검색해주세요." />
       </SearchInput>
-      <div className="main-body">
+      <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
         <OptionList>
           <ul className="option-list-ul">
             <li>
@@ -143,7 +143,7 @@ const PostlistPage = ({ history }) => {
                 md={8}
                 lg={6}
                 xl={4}
-                onClick={() => onClick(history)}
+                onClick={() => onClick(storeList[index])}
               >
                 <PostBlock
                   src={image}
@@ -153,14 +153,8 @@ const PostlistPage = ({ history }) => {
               </Col>
             ))}
         </Row>
-        <button
-          onClick={loadMoreImages}
-          style={{ marginLeft: 'auto', marginRight: 'auto' }}
-        >
-          로딩하기
-        </button>
       </div>
-    </React.Fragment>
+    </>
   );
 };;
 

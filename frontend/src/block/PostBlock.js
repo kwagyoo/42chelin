@@ -27,7 +27,7 @@ const PostBlock = ({ src, delay, store }) => {
         <div className="storeInfo">
           <span>{store?.storeName}</span>
           <br />
-          <span>{store?.address}</span>
+          <span>{store?.storeAddress}</span>
         </div>
       </animated.article>
     </StoreCompactInfo>

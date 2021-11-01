@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -55,7 +54,7 @@ const Spacer = styled.div`
 `;
 
 const Header = () => {
-  const { name } = useSelector((state) => state.users);
+  const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
   useEffect(() => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
@@ -63,6 +62,8 @@ const Header = () => {
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
   const onLogout = () => {
     if (isLogin) {
+      localStorage.removeItem('username');
+
       localStorage.removeItem('token');
       setisLogin('');
     }

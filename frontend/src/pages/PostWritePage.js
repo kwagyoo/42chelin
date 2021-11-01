@@ -100,7 +100,7 @@ const PostWritePage = ({ history, location }) => {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const review = useInput('', (value) => value.length < 300);
 

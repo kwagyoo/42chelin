@@ -11,8 +11,7 @@ const SearchInput = styled.div`
   overflow: hidden;
   height: 58px;
   display: block;
-  background-color: #ffffff;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid #bcbcbc;
   justify-content: space-between;
 
   input {
