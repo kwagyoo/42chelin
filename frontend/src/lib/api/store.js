@@ -16,25 +16,13 @@ export const searchStoreData = (storeName) =>
     },
   });
 
-export const getStoreDetailData = async (request) => {
-  try {
-    const res = await client.get(
-      `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`,
-      {
-        params: {
-          storeName: request.storeName,
-          storeBranch: JSON.stringify(request.storeBranch),
-        },
-      },
-    );
-    console.log('search', res);
-    return res.data.body;
-  } catch (error) {
-    console.error(error);
-    return Promise.reject(error);
-  }
-};
-
+export const getStoreDetailData = (request) =>
+  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`, {
+    params: {
+      storeName: request.storeName,
+      storeAddress: request.storeAddress,
+    },
+  });
 
 export const GetStoreInfoKakao = async (request) => {
   try {

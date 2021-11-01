@@ -3,7 +3,7 @@ import testImg from '../image/15935670615efbe7551de0b.jpg';
 const StyledInfo = styled.div`
   display: flex;
   width: 100%;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid #bcbcbc;
   padding: 0 20px;
   overflow: hidden;
 `;

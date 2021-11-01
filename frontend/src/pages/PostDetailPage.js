@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import RestaurantDetail from '../common/RestaurantReviewDetail';
-import RestaurantReviewList from '../common/RestaurantReviewList';
+import StoreReviewDetail from '../common/StoreReviewDetail';
+import StoreReviewList from '../common/StoreReviewList';
 import { getStoreDetailData } from '../lib/api/store';
+import testImg from '../image/15935670615efbe7551de0b.jpg';
+import qs from 'qs';
 
 const StoreListBlock = styled.div`
   margin-top: 3rem;
@@ -13,39 +15,52 @@ const StoreListBlock = styled.div`
   display: flex;
 `;
 
-const ImgBlock = styled.div``;
+const ImgBlock = styled.img``;
 
 const ImgWapper = styled.div``;
 
-const detail = async () => {
-  const data = {
-    storeName: 'asdfdf',
-    storeBranch: { city: '11', district: '170', neighborhood: '520' },
-  };
-  try {
-    const res = await getStoreDetailData(data);
-    console.log(res.data.body.storeName);
-  } catch (e) {
-    console.log(e);
-  }
-};
+const ContentsWrapper = styled.div`
+  padding-left: 10%;
+  padding-right: 10%;
+`;
 
-const PostDetailPage = () => {
-  useEffect(() => {
-    detail();
+const PostDetailPage = ({ location }) => {
+  const [storeList, setstoreList] = useState('');
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
   });
+
+  const getStore = async () => {
+    try {
+      const res = await getStoreDetailData(query);
+      setstoreList(res.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getStore();
+    return () => {
+      setstoreList('');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Header />
-      <div>
-        <StoreListBlock>
-          <ImgWapper>
-            <ImgBlock>img</ImgBlock>
-          </ImgWapper>
-          <RestaurantDetail />
-          <RestaurantReviewList />
-        </StoreListBlock>
-      </div>
+      {storeList && (
+        <ContentsWrapper>
+          <StoreListBlock>
+            <ImgWapper>
+              <ImgBlock src={testImg} alt="tmp" />
+            </ImgWapper>
+            <StoreReviewDetail storeList={storeList} />
+          </StoreListBlock>
+          <StoreReviewList storeReviews={storeList.storeReviews} />
+        </ContentsWrapper>
+      )}
     </>
   );
 };

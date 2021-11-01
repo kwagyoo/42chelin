@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -113,6 +112,8 @@ const Header = () => {
 
   const onLogout = () => {
     if (isLogin) {
+      localStorage.removeItem('username');
+
       localStorage.removeItem('token');
       setisLogin('');
       alert('로그아웃 되었습니다.');

@@ -35,7 +35,6 @@ const SearchInput = styled.div`
   input:focus {
     outline: none;
   }
-
 `;
 
 const OptionList = styled.div`
@@ -71,56 +70,53 @@ const getAllStoreData = async ({ dispatch }) => {
     const res = await loadAllStoreData();
     const data = res.data.body;
     dispatch(getList(data));
-	console.log(res)
   } catch (e) {
     console.log(e);
   }
 };
 
-const SearchData = async () => {
-  const storeName = 'asdf';
-  try {
-    const res = await searchStoreData(storeName);
-    if (res.data.hasOwnProperty('errorType')) throw new Error(res.errorMessage);
-  } catch (e) {
-    console.error(e);
-    alert('가게 정보를 불러올 수 없습니다.');
-  }
-};
 
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
   const dispatch = useDispatch();
-  // usememo
-  const loadMoreImages = () => {
-    const copyImages = images.slice(0, 4);
-    copyImages.forEach((item, index) => {
-      //새로 추가한 이미지에는 별도의 딜레이를 새로 추가
-      copyImages[index].delay = 150 * index;
-    });
-    setImages([...images, ...copyImages]);
-  };
 
   useEffect(() => {
     setImages(
       importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
     );
     getAllStoreData({ dispatch });
-    SearchData();
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
-  const onClick = (history) => {
-    alert('준비중');
-    // history.push('/detail');
+  console.log(storeList)
+  const goDetail = (storeList) => {
+    if (!storeList) return;
+    history.push(
+      `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
+    );
   };
+
+  const SearchData = async () => {
+	const storeName = '얌샘';
+	try {
+	  const res = await searchStoreData(storeName);
+	  console.log(res);
+	} catch (e) {
+	  console.error(e);
+	  alert('가게 정보를 불러올 수 없습니다.');
+	}
+  };
+
+  const Search = () =>{
+	  console.log('click');
+  }
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
-    <React.Fragment>
+    <>
       <Header />
       <SearchInput>
-        <input type="text" placeholder="가게를 검색해주세요." />
+        <input type="text" placeholder="가게를 검색해주세요." onClick={Search} />
       </SearchInput>
-      <div className="main-body">
+      <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
         <OptionList>
           <ul className="option-list-ul">
             <li>
@@ -144,7 +140,7 @@ const PostlistPage = ({ history }) => {
                 md={8}
                 lg={6}
                 xl={4}
-                onClick={() => onClick(history)}
+                onClick={() => goDetail(storeList[index])}
               >
                 <PostBlock
                   src={image}
@@ -154,14 +150,8 @@ const PostlistPage = ({ history }) => {
               </Col>
             ))}
         </Row>
-        <button
-          onClick={loadMoreImages}
-          style={{ marginLeft: 'auto', marginRight: 'auto' }}
-        >
-          로딩하기
-        </button>
       </div>
-    </React.Fragment>
+    </>
   );
 };;
 

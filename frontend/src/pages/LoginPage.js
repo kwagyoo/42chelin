@@ -11,6 +11,7 @@ const GetUsername = async (token, dispatch) => {
   try {
     const res = await getUser(token);
     const username = JSON.parse(res.data.body).nickname;
+	localStorage.setItem('username', username);
     dispatch(getUserName(username));
   } catch (e) {
     Sentry.captureException(e);
