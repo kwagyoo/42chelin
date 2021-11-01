@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledLink = styled(Link)`
-  margin-right: 1rem;
+  height: 40px;
+  margin: auto 10px;
+  padding: 10px 10px;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: bold;
-  padding: 0.25rem 1rem;
+  text-align: center;
   color: white;
   outline: none;
   cursor: pointer;
@@ -19,12 +21,13 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledButton = styled.button`
-  margin-right: 1rem;
+  height: 40px;
+  margin: auto 10px;
+  padding: 10px 10px;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
   font-weight: bold;
-  padding: 0.25rem 1rem;
   color: white;
   outline: none;
   cursor: pointer;

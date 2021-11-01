@@ -3,8 +3,8 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import StoreInfo from '../common/StoreInfo';
 import { SearchKakao } from '../lib/api/kakao';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const SearchInput = styled.div`
   position: relative;
@@ -83,13 +83,13 @@ const SearchPage = () => {
           onChange={onChange}
           value={text}
         />
-        <FontAwesomeIcon
+        {/* <FontAwesomeIcon
           icon={faSearch}
           style={{ color: 'black' }}
           size="lg"
           className="search"
           onClick={SearchStoreEvent}
-        />
+        /> */}
       </SearchInput>
       <StoreInfoWarp>
         {searchstoreList &&

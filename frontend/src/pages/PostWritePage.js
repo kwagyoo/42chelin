@@ -7,8 +7,8 @@ import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
 import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
 import querystring from 'query-string';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -183,12 +183,12 @@ const PostWritePage = ({ history, location }) => {
             </div>
             <div className="store_search_button">
               <Link to="/search">
-                <FontAwesomeIcon
+                {/* <FontAwesomeIcon
                   icon={faSearch}
                   style={{ color: 'blue' }}
                   size="lg"
                   className="search"
-                />
+                /> */}
               </Link>
             </div>
           </TargetStoreSearch>
