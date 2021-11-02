@@ -269,7 +269,10 @@ const Header = (props) => {
                 <Button name="로그아웃" onClick={onLogout} />
               </>
             ) : (
-              <Button name="로그인" onClick={() => history.push(URL)} />
+              <Button
+                name="로그인"
+                onClick={() => window.location.replace(URL)}
+              />
             )}
           </div>
         </Wrapper>

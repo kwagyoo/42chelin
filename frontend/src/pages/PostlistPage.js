@@ -18,8 +18,7 @@ function importAll(r) {
 }
 
 const SearchInput = styled.div`
-  height: 100px;
-  width: 650px;
+  width: 90%;
   height: 50px;
   margin: 30px auto 0 auto;
   background-color: #ffffff;

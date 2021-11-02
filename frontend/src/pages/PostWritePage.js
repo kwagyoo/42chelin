@@ -9,6 +9,7 @@ import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { uploadImagesToS3 } from '../lib/api/aws';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -87,8 +88,14 @@ const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   if (!userToken) return null;
   try {
-    const res = await saveStoreData({ token: userToken, ...data });
-    console.log(res);
+    console.log(data);
+    const imageNames = uploadImagesToS3(data.images);
+    const res = await saveStoreData({
+      ...data,
+      token: userToken,
+      images: imageNames,
+    });
+    //console.log(res);
   } catch (e) {
     console.error(e);
   }
@@ -120,9 +127,7 @@ const PostWritePage = ({ history, location }) => {
     if (!loading) {
       setLoading((loading) => !loading);
       if (store) {
-        console.log(data);
-        await SaveStore(data);
-        history.push('/');
+        await SaveStore({ ...data, images: files });
       }
       setLoading((loading) => !loading);
     }
@@ -205,11 +210,13 @@ const PostWritePage = ({ history, location }) => {
             />
           </div>
           <div>
+            x
             <ImageUpload
               files={files}
               count={count}
               setFiles={setFiles}
               setCount={setCount}
+              setValue={setValue}
             />
           </div>
           <Button name="submit" disabled={loading}></Button>

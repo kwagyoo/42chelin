@@ -5,8 +5,16 @@ import PostDetailPage from './pages/PostDetailPage';
 import PostlistPage from './pages/PostlistPage';
 import PostWritePage from './pages/PostWritePage';
 import SearchPage from './pages/SearchPage';
+import AWS from 'aws-sdk';
 
 const App = () => {
+  AWS.config.update({
+    region: 'ap-northeast-2', // 버킷이 존재하는 리전을 문자열로 입력합니다. (Ex. "ap-northeast-2")
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: 'ap-northeast-2:9449a853-9bf7-437d-8205-a66cfc556ecd', // cognito 인증 풀에서 받아온 키를 문자열로 입력합니다. (Ex. "ap-northeast-2...")
+    }),
+  });
+
   return (
     <>
       <Route path="/" component={PostlistPage} exact />

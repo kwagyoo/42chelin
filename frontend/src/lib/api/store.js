@@ -1,10 +1,11 @@
 import client from './client';
 
-export const saveStoreData = (request) =>
+export const saveStoreData = (request) => {
   client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/save-store-data`,
     request,
   );
+};
 
 export const loadAllStoreData = () =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores`);
