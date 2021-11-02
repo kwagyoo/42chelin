@@ -4,8 +4,11 @@ import Header from '../common/Header';
 import StoreReviewDetail from '../common/StoreReviewDetail';
 import StoreReviewList from '../common/StoreReviewList';
 import { getStoreDetailData } from '../lib/api/store';
-import testImg from '../image/15935670615efbe7551de0b.jpg';
 import qs from 'qs';
+import ImageGallery from 'react-image-gallery';
+import test from '../image/15199842115a991e53d3ee3.jpg';
+import test2 from '../image/15463011825c2aaefec93d1.jpg';
+import test3 from '../image/15513421885c779a6cbde26.jpg';
 
 const StoreListBlock = styled.div`
   margin-top: 3rem;
@@ -47,6 +50,22 @@ const PostDetailPage = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const images = [
+    {
+      original: `${test}`,
+      thumbnail: `${test}`,
+      sizes: '5600px',
+    },
+    {
+      original: `${test2}`,
+      thumbnail: `${test2}`,
+    },
+    {
+      original: `${test3}`,
+      thumbnail: `${test3}`,
+    },
+  ];
+
   return (
     <>
       <Header />
@@ -54,7 +73,8 @@ const PostDetailPage = ({ location }) => {
         <ContentsWrapper>
           <StoreListBlock>
             <ImgWapper>
-              <ImgBlock src={testImg} alt="tmp" />
+              <ImageGallery items={images} />
+              {/* <ImgBlock src={testImg} alt="tmp" /> */}
             </ImgWapper>
             <StoreReviewDetail storeList={storeList} />
           </StoreListBlock>

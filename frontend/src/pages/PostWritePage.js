@@ -182,7 +182,7 @@ const PostWritePage = ({ history, location }) => {
               )}
             </div>
             <div className="store_search_button">
-              <Link to="/search">
+              <Link to="/storeSearch">
                 <FontAwesomeIcon
                   icon={faSearch}
                   style={{ color: 'black' }}

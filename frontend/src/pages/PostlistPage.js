@@ -4,7 +4,7 @@ import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
-import { loadAllStoreData, searchStoreData } from '../lib/api/store';
+import { loadAllStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -75,10 +75,23 @@ const getAllStoreData = async ({ dispatch }) => {
   }
 };
 
-
 const PostlistPage = ({ history }) => {
   const [images, setImages] = useState([]);
+  const [text, setText] = useState('');
   const dispatch = useDispatch();
+
+  const onChange = (e) => {
+    setText(e.target.value);
+  };
+
+  const onKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      history.push({
+        pathname: '/search',
+        search: `?storeName=${text}`,
+      });
+    }
+  };
 
   useEffect(() => {
     setImages(
@@ -87,7 +100,7 @@ const PostlistPage = ({ history }) => {
     getAllStoreData({ dispatch });
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
-  console.log(storeList)
+
   const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(
@@ -95,26 +108,17 @@ const PostlistPage = ({ history }) => {
     );
   };
 
-  const SearchData = async () => {
-	const storeName = '얌샘';
-	try {
-	  const res = await searchStoreData(storeName);
-	  console.log(res);
-	} catch (e) {
-	  console.error(e);
-	  alert('가게 정보를 불러올 수 없습니다.');
-	}
-  };
-
-  const Search = () =>{
-	  console.log('click');
-  }
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
     <>
       <Header />
-      <SearchInput>
-        <input type="text" placeholder="가게를 검색해주세요." onClick={Search} />
+      <SearchInput onKeyPress={onKeyPress}>
+        <input
+          type="text"
+          placeholder="가게를 검색해주세요."
+          onChange={onChange}
+          value={text}
+        />
       </SearchInput>
       <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
         <OptionList>
