@@ -7,8 +7,8 @@ import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
 import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
 import querystring from 'query-string';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -49,8 +49,8 @@ const TargetStoreSearch = styled.div`
   .target_store_info {
     height: 100%;
     display: flex;
-    flex-direction: ${props => (props.store ? 'column' : 'row')};
-    align-items: ${props => (props.store ? 'space-between' : 'center')};
+    flex-direction: ${(props) => (props.store ? 'column' : 'row')};
+    align-items: ${(props) => (props.store ? 'space-between' : 'center')};
   }
   .target_store_info div {
     height: 40%;
@@ -70,7 +70,7 @@ const TargetStoreSearch = styled.div`
 */
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
-  const onChange = event => {
+  const onChange = (event) => {
     const value = event?.target?.value;
     let willUpdate = true;
     if (typeof validator === 'function') {
@@ -83,7 +83,7 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const SaveStore = async data => {
+const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   if (!userToken) return null;
   try {
@@ -183,12 +183,12 @@ const PostWritePage = ({ history, location }) => {
             </div>
             <div className="store_search_button">
               <Link to="/search">
-                {/* <FontAwesomeIcon
+                <FontAwesomeIcon
                   icon={faSearch}
-                  style={{ color: 'blue' }}
+                  style={{ color: 'black' }}
                   size="lg"
                   className="search"
-                /> */}
+                />
               </Link>
             </div>
           </TargetStoreSearch>
