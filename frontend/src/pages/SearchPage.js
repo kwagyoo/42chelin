@@ -1,45 +1,70 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import Header from '../common/Header';
+import { Col, Row } from 'antd';
+import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
-import StoreInfo from '../common/StoreInfo';
-import { SearchKakao } from '../lib/api/kakao';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import 'antd/dist/antd.css';
+import { searchStoreData } from '../lib/api/store';
+import qs from 'qs';
+
+function importAll(r) {
+  let images = [];
+  r.keys().forEach((item, index) => {
+    images[index] = r(item);
+    images[index].delay = 150 * index;
+  });
+  return images;
+}
 
 const SearchInput = styled.div`
-  position: relative;
-  overflow: hidden;
-  height: 58px;
-  display: block;
-  border-bottom: 1px solid #bcbcbc;
-  justify-content: space-between;
-
+  height: 100px;
+  width: 650px;
+  height: 50px;
+  margin: 30px auto 0 auto;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 1.5px solid #550055;
   input {
     margin-left: 30px;
     margin-top: 5px;
     height: 40px;
-    width: 80%;
+    width: 550px;
     border-style: none;
   }
   input:focus {
     outline: none;
   }
+`;
 
-  .FontAwesomeIcon {
-    justify-content: space-between;
+const OptionList = styled.div`
+  width: 100%;
+  height: 30px;
+  margin-top: 5px;
+  ul {
+    float: right;
+    list-style-type: none;
+    width: 250px;
+    height: 24px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: 0px;
+  }
+  ul > li {
+    float: left;
+    padding-left: 5px;
+  }
+  ul > li > button {
+    border: none;
+    background-color: white;
+  }
+
+  ul > li > button:active {
+    color: blue;
   }
 `;
 
-const StoreInfoWarp = styled.div`
-  margin-bottom: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  display: block;
-`;
-
-const SearchPage = () => {
-  const history = useHistory();
+const SearchPage = ({ history, location }) => {
+  const [images, setImages] = useState([]);
   const [text, setText] = useState('');
   const [searchstoreList, setSearchstoreList] = useState([]);
 
@@ -49,32 +74,50 @@ const SearchPage = () => {
 
   const onKeyPress = (e) => {
     if (e.key === 'Enter') {
-      SearchStoreEvent();
+      history.push({
+        pathname: '/search',
+        search: `?storeName=${text}`,
+      });
     }
   };
 
-  const SearchStoreEvent = async () => {
-    const searchText = text;
+  const SearchData = async (query) => {
+    console.log(query);
     try {
-      const res = await SearchKakao(searchText);
-      const data = res.data.body;
-      setSearchstoreList(data);
-      console.log(data);
+      const res = await searchStoreData(query.storeName);
+      console.log(res);
+      setSearchstoreList(res.data.body);
     } catch (e) {
-      console.log(e);
+      console.error(e);
+      alert('가게 정보를 불러올 수 없습니다.');
     }
   };
 
-  const SubmitStoreData = (placeName, id) => {
-    history.push({
-      pathname: '/write',
-      search: `?placeName=${placeName}&id=${id}`,
+  useEffect(() => {
+    setImages(
+      importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
+    );
+    const query = qs.parse(location.search, {
+      ignoreQueryPrefix: true,
     });
-  };
-  // Todo : onchange 될때마다 계속 실행됌 아마 컴포넌트의 업데이트를 감지해서 그런듯??
+    SearchData(query);
+    return () => {
+      setSearchstoreList('');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
+  const goDetail = (storeList) => {
+    if (!storeList) return;
+    history.push(
+      `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
+    );
+  };
+
+  // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
     <>
+      <Header />
       <SearchInput onKeyPress={onKeyPress}>
         <input
           type="text"
@@ -82,26 +125,42 @@ const SearchPage = () => {
           onChange={onChange}
           value={text}
         />
-        <FontAwesomeIcon
-          icon={faSearch}
-          style={{ color: 'black' }}
-          size="lg"
-          className="search"
-          onClick={SearchStoreEvent}
-        />
       </SearchInput>
-      <StoreInfoWarp>
-        {searchstoreList &&
-          searchstoreList.map((store, idx) => (
-            <StoreInfo
-              onClick={() => SubmitStoreData(store.place_name, store.id)}
-              address={store.address_name}
-              placeName={store.place_name}
-              categoryName={store.category_name}
-              key={idx}
-            />
-          ))}
-      </StoreInfoWarp>
+      <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
+        <OptionList>
+          <ul className="option-list-ul">
+            <li>
+              <button>최신순</button>
+            </li>
+            <li>
+              <button>리뷰갯수순</button>
+            </li>
+            <li>
+              <button>이름순</button>
+            </li>
+          </ul>
+        </OptionList>
+        <Row gutter={[16, 16]}>
+          {images &&
+            searchstoreList &&
+            images.map((image, index) => (
+              <Col
+                key={index}
+                xs={12}
+                md={8}
+                lg={6}
+                xl={4}
+                onClick={() => goDetail(searchstoreList[index])}
+              >
+                <PostBlock
+                  src={image}
+                  delay={image.delay}
+                  store={searchstoreList[index]}
+                />
+              </Col>
+            ))}
+        </Row>
+      </div>
     </>
   );
 };

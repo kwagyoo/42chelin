@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostlistPage from './pages/PostlistPage';
 import PostWritePage from './pages/PostWritePage';
+import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
 
@@ -22,6 +23,7 @@ const App = () => {
       <Route path="/detail" component={PostDetailPage} />
       <Route path="/write" component={PostWritePage} />
       <Route path="/search" component={SearchPage} />
+      <Route path="/storeSearch" component={KakaoSearchPage} />
     </>
   );
 };
