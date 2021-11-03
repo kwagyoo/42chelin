@@ -133,31 +133,40 @@ const PostWritePage = ({ history, location }) => {
     }
   };
 
-  //async await 가 promise 를 처리해줌. <찾아보기
-  //   const onClick = async () => {
-  //     try {
-  //       console.log(res.data);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
+  //useEffect안에서 async await 사용 x
+  //https://velog.io/@he0_077/useEffect-%ED%9B%85%EC%97%90%EC%84%9C-async-await-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+  const getStoreInfoAsync = async (query) => {
+    try {
+      if (Object.keys(query).length !== 0) {
+        const storeInfo = await GetStoreInfoKakao(query);
+        console.log(storeInfo);
+        setStore({
+          placeName: storeInfo.place_name,
+          address: storeInfo.road_address_name
+            ?.split(' ')
+            .slice(0, 2)
+            .join(' '),
+          x: storeInfo.x,
+          y: storeInfo.y,
+          id: storeInfo.id,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     const query = querystring.parse(location.search);
-    if (Object.keys(query).length !== 0) {
-      GetStoreInfoKakao(query).then((res) => {
-        setStore({
-          placeName: res.place_name,
-          address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
-          id: res.id,
-        });
-      });
-    }
+    getStoreInfoAsync(query);
   }, [location.search]);
 
   useEffect(() => {
     setValue('userName', 'hyunyoo');
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
+    setValue('x', store?.x);
+    setValue('y', store?.y);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 

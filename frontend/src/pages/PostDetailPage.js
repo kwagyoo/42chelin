@@ -36,6 +36,7 @@ const PostDetailPage = ({ location }) => {
   const getStore = async () => {
     try {
       const res = await getStoreDetailData(query);
+      console.log(res);
       setstoreList(res.data.body);
     } catch (e) {
       console.error(e);

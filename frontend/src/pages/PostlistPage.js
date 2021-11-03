@@ -68,6 +68,7 @@ const getAllStoreData = async ({ dispatch }) => {
   try {
     const res = await loadAllStoreData();
     const data = res.data.body;
+    console.log(data);
     dispatch(getList(data));
   } catch (e) {
     console.log(e);
