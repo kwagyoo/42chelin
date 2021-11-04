@@ -100,7 +100,6 @@ const PostlistPage = ({ history }) => {
     getAllStoreData({ dispatch });
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
-
   const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(

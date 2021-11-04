@@ -1,3 +1,5 @@
+/* global kakao */
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
@@ -23,8 +25,18 @@ const ImgBlock = styled.img``;
 const ImgWapper = styled.div``;
 
 const ContentsWrapper = styled.div`
+  width: 100%;
   padding-left: 10%;
   padding-right: 10%;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  #map {
+    width: 500px;
+    height: 400px;
+  }
 `;
 
 const PostDetailPage = ({ location }) => {
@@ -54,7 +66,6 @@ const PostDetailPage = ({ location }) => {
     {
       original: `${test}`,
       thumbnail: `${test}`,
-      sizes: '5600px',
     },
     {
       original: `${test2}`,
@@ -66,21 +77,40 @@ const PostDetailPage = ({ location }) => {
     },
   ];
 
+  useEffect(() => {
+    var container = document.getElementById('map');
+    var options = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      level: 3,
+    };
+    var map = new kakao.maps.Map(container, options);
+    var markerPosition = new kakao.maps.LatLng(
+      37.365264512305174,
+      127.10676860117488,
+    );
+    var marker = new kakao.maps.Marker({
+      position: markerPosition,
+    });
+    marker.setMap(map);
+  }, []);
   return (
     <>
       <Header />
-      {storeList && (
-        <ContentsWrapper>
-          <StoreListBlock>
-            <ImgWapper>
-              <ImageGallery items={images} />
-              {/* <ImgBlock src={testImg} alt="tmp" /> */}
-            </ImgWapper>
-            <StoreReviewDetail storeList={storeList} />
-          </StoreListBlock>
-          <StoreReviewList storeReviews={storeList.storeReviews} />
-        </ContentsWrapper>
-      )}
+      <Wrapper>
+        {storeList && (
+          <ContentsWrapper>
+            <StoreListBlock>
+              <ImgWapper>
+                <ImageGallery items={images} />
+                {/* <ImgBlock src={testImg} alt="tmp" /> */}
+              </ImgWapper>
+              <StoreReviewDetail storeList={storeList} />
+            </StoreListBlock>
+            <StoreReviewList storeReviews={storeList.storeReviews} />
+          </ContentsWrapper>
+        )}
+        <div id="map">test</div>
+      </Wrapper>
     </>
   );
 };
