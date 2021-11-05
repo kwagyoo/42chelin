@@ -4,12 +4,21 @@ import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
-import { loadAllStoreData } from '../lib/api/store';
-import { getList } from '../module/posts';
-import { useDispatch, useSelector } from 'react-redux';
+import { searchStoreData } from '../lib/api/store';
+import qs from 'qs';
+
+function importAll(r) {
+  let images = [];
+  r.keys().forEach((item, index) => {
+    images[index] = r(item);
+    images[index].delay = 150 * index;
+  });
+  return images;
+}
 
 const SearchInput = styled.div`
-  width: 90%;
+  height: 100px;
+  width: 650px;
   height: 50px;
   margin: 30px auto 0 auto;
   background-color: #ffffff;
@@ -54,20 +63,10 @@ const OptionList = styled.div`
   }
 `;
 
-// 재사용이 가능한 코드이므로 api로 따로 빼서 관리하면 좋다.
-const getAllStoreData = async ({ dispatch }) => {
-  try {
-    const res = await loadAllStoreData();
-    const data = res.data.body;
-    dispatch(getList(data));
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-const PostlistPage = ({ history }) => {
+const SearchPage = ({ history, location }) => {
+  const [images, setImages] = useState([]);
   const [text, setText] = useState('');
-  const dispatch = useDispatch();
+  const [searchstoreList, setSearchstoreList] = useState([]);
 
   const onChange = (e) => {
     setText(e.target.value);
@@ -82,10 +81,32 @@ const PostlistPage = ({ history }) => {
     }
   };
 
+  const SearchData = async (query) => {
+    console.log(query);
+    try {
+      const res = await searchStoreData(query.storeName);
+      console.log(res);
+      setSearchstoreList(res.data.body);
+    } catch (e) {
+      console.error(e);
+      alert('가게 정보를 불러올 수 없습니다.');
+    }
+  };
+
   useEffect(() => {
-    getAllStoreData({ dispatch });
-  }, [dispatch]);
-  const { storeList } = useSelector((state) => state.posts);
+    setImages(
+      importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
+    );
+    const query = qs.parse(location.search, {
+      ignoreQueryPrefix: true,
+    });
+    SearchData(query);
+    return () => {
+      setSearchstoreList('');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
   const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(
@@ -120,20 +141,21 @@ const PostlistPage = ({ history }) => {
           </ul>
         </OptionList>
         <Row gutter={[16, 16]}>
-          {storeList &&
-            storeList.map((store, index) => (
+          {images &&
+            searchstoreList &&
+            images.map((image, index) => (
               <Col
                 key={index}
                 xs={12}
                 md={8}
                 lg={6}
                 xl={4}
-                onClick={() => goDetail(storeList[index])}
+                onClick={() => goDetail(searchstoreList[index])}
               >
                 <PostBlock
-                  src={store.storeImage}
-                  delay={store.delay}
-                  store={storeList[index]}
+                  src={image}
+                  delay={image.delay}
+                  store={searchstoreList[index]}
                 />
               </Col>
             ))}
@@ -141,6 +163,6 @@ const PostlistPage = ({ history }) => {
       </div>
     </>
   );
-};;
+};
 
-export default PostlistPage;
+export default SearchPage;

@@ -5,14 +5,16 @@ import { useDispatch } from 'react-redux';
 import { getToken, getUser } from '../lib/api/auth';
 import { getUserName, setAccessToken } from '../module/users';
 import Loading from '../common/Loading';
+import * as Sentry from '@sentry/react';
 
 const GetUsername = async (token, dispatch) => {
   try {
     const res = await getUser(token);
     const username = JSON.parse(res.data.body).nickname;
-    console.log('username save success');
+	localStorage.setItem('username', username);
     dispatch(getUserName(username));
   } catch (e) {
+    Sentry.captureException(e);
     console.log(e);
   }
 };
@@ -22,17 +24,14 @@ const LoginRequest = async ({ location, dispatch, history }) => {
   const code = query.code;
   try {
     const res = await getToken(code);
-    console.log('getToken 성공');
-    console.log(res);
     const data = JSON.parse(res.data.body);
-    console.log(data);
     const token = data.access_token;
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
-    console.log('token dispatch 성공');
     await GetUsername(token, dispatch);
     history.push('/');
   } catch (e) {
+    Sentry.captureException(e);
     console.log(e);
     alert('로그인에 실패했습니다.');
   }

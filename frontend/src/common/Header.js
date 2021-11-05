@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSignInAlt,
+  faSignOutAlt,
+  faPencilAlt,
+  faBars,
+} from '@fortawesome/free-solid-svg-icons';
+
 const HeaderBlock = styled.header`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px;
+  overflow: auto;
   z-index: 999;
   background: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 `;
 
 const Wrapper = styled.div`
-  height: 4rem;
   display: flex;
+  overflow: auto;
   align-items: center;
-  justify-content: space-between; /* 자식 엘리먼트 사이에 여백을 최대로 설정 */
+
   .title {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    font-size: 1.125rem;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 30px;
     font-weight: 800;
     letter-spacing: 2px;
     text-decoration: none;
@@ -30,73 +37,216 @@ const Wrapper = styled.div`
   .title:visited {
     color: #000;
   }
+
   .header-menu-item {
-    margin-left: 5px;
-    margin-right: 25px;
-    display: left;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .header-menu-item:hover {
+    background-color: gray;
+  }
+
+  .header-menu-item a {
+    padding: 15px 25px;
+    font-size: 15px;
     letter-spacing: 2px;
     text-decoration: none;
   }
-  .header-menu-item:visited {
+
+  .header-menu-item a:visited {
     color: #000;
   }
-  .right {
+
+  .header-menu-item:hover a {
+    color: white;
+  }
+
+  .header-title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .header-menu {
+    flex-grow: 10;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .header-right {
+    flex-grow: 1;
     align-items: center;
     display: flex;
+    margin-right: 25px;
+  }
+  .title_header_smartphone {
+    display: none;
+  }
+
+  .title_header_smartphone button,
+  .title_header_smartphone a {
+    padding: 1px 6px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+
+    .title_header_smartphone {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-right: 5px;
+    }
+    .header-title {
+      margin: 5px auto;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .header-menu {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      overflow: auto;
+      display: none;
+    }
+
+    .header-menu.click {
+      display: flex;
+    }
+
+    .header-right {
+      display: none;
+    }
+    .header-menu-item {
+      border-top: 1px solid black;
+      justify-content: center;
+      margin: auto auto;
+      width: 100%;
+      z-index: 0;
+    }
+    .header-menu-item a {
+      padding: 10px 20px;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
   }
 `;
 
 const UserName = styled.div`
+  margin-right: 10px;
   font-weight: 800;
-  margin-right: 1rem;
-`;
-const Spacer = styled.div`
-  height: 70px;
+  display: flex;
+  align-items: center;
 `;
 
-const Header = () => {
-  const { name } = useSelector((state) => state.users);
+const Spacer = styled.div`
+  height: 50px;
+  @media screen and (max-width: 768px) {
+    height: 70px;
+  }
+`;
+
+const Header = (props) => {
+  const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
+  const [isMenuClick, setIsMenuClick] = useState(false);
+
   useEffect(() => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
   }, [isLogin]);
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+
   const onLogout = () => {
     if (isLogin) {
+      localStorage.removeItem('username');
+
       localStorage.removeItem('token');
       setisLogin('');
+      alert('로그아웃 되었습니다.');
     }
   };
   return (
     <React.Fragment>
       <HeaderBlock>
         <Wrapper>
-          <div>
+          <div className="header-title">
             <Link to="/" className="title">
               42Chelin
             </Link>
-            <Link to="/" className="header-menu-item">
-              식당 리뷰
-            </Link>
-            <Link to="/" className="header-menu-item">
-              오늘의 식당 추천
-            </Link>
+            <div className="title_header_smartphone">
+              {isLogin ? (
+                <>
+                  <UserName>{name}</UserName>
+                  <Link to="write">
+                    <FontAwesomeIcon
+                      icon={faPencilAlt}
+                      style={{ color: 'black', width: '30px', height: '30px' }}
+                      size="lg"
+                      className="search"
+                    />
+                  </Link>
+                  <button onClick={onLogout}>
+                    <FontAwesomeIcon
+                      icon={faSignOutAlt}
+                      style={{ color: 'black', width: '30px', height: '30px' }}
+                      size="lg"
+                      className="search"
+                    />
+                  </button>
+                </>
+              ) : (
+                <a href={URL}>
+                  <FontAwesomeIcon
+                    icon={faSignInAlt}
+                    style={{ color: 'black', width: '30px', height: '30px' }}
+                    size="lg"
+                    className="search"
+                  />
+                </a>
+              )}
+              <button onClick={() => setIsMenuClick(!isMenuClick)}>
+                <FontAwesomeIcon
+                  icon={faBars}
+                  style={{ color: 'black', width: '30px', height: '30px' }}
+                  size="lg"
+                  className="search"
+                />
+              </button>
+            </div>
           </div>
-          {isLogin ? (
-            <div className="right">
-              <UserName>{name}</UserName>
-              <Link to="/write">
-                <Button name="리뷰 작성" />
-              </Link>
-              <Button name="로그아웃" onClick={onLogout} />
+          <div className={isMenuClick ? 'header-menu click' : 'header-menu'}>
+            <div className="header-menu-item">
+              <Link to="/">식당 리뷰</Link>
             </div>
-          ) : (
-            <div className="right">
-              <a href={URL}>
-                <Button name="로그인" />
-              </a>
+            <div className="header-menu-item">
+              <Link to="/">오늘의 식당 추천</Link>
             </div>
-          )}
+          </div>
+          <div className="header-right">
+            {isLogin ? (
+              <>
+                <UserName>
+                  <p>{name}</p>
+                </UserName>
+                <Button name="리뷰 작성" to="/write" />
+                <Button name="로그아웃" onClick={onLogout} />
+              </>
+            ) : (
+              <Button
+                name="로그인"
+                onClick={() => window.location.replace(URL)}
+              />
+            )}
+          </div>
         </Wrapper>
       </HeaderBlock>
       <Spacer />

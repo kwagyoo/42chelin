@@ -1,19 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import styled from 'styled-components';
+import AWS from 'aws-sdk';
 
 const StoreCompactInfo = styled.div`
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 5px;
   .storeThumb {
     width: 100%;
+    height: 300px;
   }
   .storeInfo {
     width: 100%;
   }
 `;
+// 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
+const PostBlock = ({ src, delay, store }) => {
+  const [imgurl, setImgUrl] = useState('');
 
-const PostBlock = ({ src, delay }) => {
+  useEffect(() => {
+    const s3 = new AWS.S3();
+    s3.getSignedUrl(
+      'getObject',
+      {
+        Bucket: '42chelin',
+        Key: `img/${src}`, // ex) assets/
+      },
+      (err, url) => {
+        if (err) {
+          throw err;
+        }
+        setImgUrl(url);
+      },
+    );
+  }, [src]);
+
   const fadein = useSpring({
     from: { y: '10px', opacity: 0 },
     to: { y: '0px', opacity: 1 },
@@ -23,13 +44,11 @@ const PostBlock = ({ src, delay }) => {
   return (
     <StoreCompactInfo>
       <animated.article style={fadein}>
-        <img className="storeThumb" src={src.default} alt="Store Thumbnail" />
+        <img className="storeThumb" src={imgurl} alt="Store Thumbnail" />
         <div className="storeInfo">
-          <span>출현 : 관동</span>
+          <span>{store?.storeName}</span>
           <br />
-          <span>출현 : 관동</span>
-          <br />
-          <span>타입 : 불꽃</span>
+          <span>{store?.storeAddress}</span>
         </div>
       </animated.article>
     </StoreCompactInfo>

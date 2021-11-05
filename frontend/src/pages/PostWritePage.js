@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../common/Header';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
-import addressList from '../variables/addressList';
-import { saveStoreData } from '../lib/api/auth';
+import { Link } from 'react-router-dom';
+import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
+import querystring from 'query-string';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { uploadImagesToS3 } from '../lib/api/aws';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -19,6 +23,45 @@ const StyledForm = styled.form`
   .address_option {
     width: 100px;
     margin-right: 10px;
+  }
+  .store_like_dislike input {
+    display: none;
+  }
+  .store_like_dislike label {
+    margin-left: 5px;
+  }
+  .store_like_dislike input {
+    display: none;
+  }
+  input[type='radio']:checked + label img {
+    border: 1px solid black;
+  }
+  .write_page_header {
+    text-align: center;
+  }
+`;
+
+const TargetStoreSearch = styled.div`
+  width: 100%;
+  height: 70px;
+  border-bottom: solid;
+  display: flex;
+  justify-content: space-between;
+  .target_store_info {
+    height: 100%;
+    display: flex;
+    flex-direction: ${(props) => (props.store ? 'column' : 'row')};
+    align-items: ${(props) => (props.store ? 'space-between' : 'center')};
+  }
+  .target_store_info div {
+    height: 40%;
+  }
+  .target_store_info div p {
+    font-size: 20px;
+  }
+  .store_search_button {
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -41,8 +84,37 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const PostWritePage = ({ history }) => {
-  const [date, setDate] = useState(null);
+const SaveStore = async (data) => {
+  const userToken = localStorage.getItem('token');
+  if (!userToken) return null;
+  try {
+    console.log(data);
+    const imageNames = uploadImagesToS3(data.images);
+    const res = await saveStoreData({
+      ...data,
+      token: userToken,
+      images: imageNames,
+    });
+    console.log(res);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+function formatDate(date) {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
+const PostWritePage = ({ history, location }) => {
+  const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -51,133 +123,89 @@ const PostWritePage = ({ history }) => {
 
   const review = useInput('', (value) => value.length < 300);
 
-  function getFormatDate(date) {
-    let year = date.getFullYear();
-    let month = 1 + date.getMonth();
-    month = month >= 10 ? month : '0' + month;
-    let day = date.getDate();
-    day = day >= 10 ? day : '0' + day;
-    return year + '-' + month + '-' + day;
-  }
-
-  //#region 가게 주소 select 관련 코드
-  const [city, setCity] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [district, setDistrict] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
-
-  const changeCity = (e) => {
-    setSelectedCity(e.target.value);
-    setDistrict([
-      '',
-      ...addressList['sigugun'].filter((x) => x.sido === e.target.value),
-    ]);
-  };
-
-  const changeDistrict = (e) => {
-    setSelectedDistrict(e.target.value);
-    setNeighborhood([
-      '',
-      ...addressList['dong'].filter(
-        (x) => x.sido === selectedCity && x.sigugun === e.target.value,
-      ),
-    ]);
-  };
-
-  const changeNeighborhood = (e) => {
-    setSelectedNeighborhood(e.target.value);
-  };
-
-  useEffect(() => {
-    setCity(['', ...addressList['sido']]);
-  }, []);
-  //#endregion
-
-  useEffect(() => {
-    const date = new Date();
-    setDate(getFormatDate(date));
-    setValue('date', getFormatDate(date));
-    setValue('userName', 'hyunyoo');
-  }, [date, setValue]);
-
-  useEffect(() => {}, [selectedCity]);
-
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
-      saveStoreData(data);
+      if (store) {
+        await SaveStore({ ...data, images: files });
+      }
       setLoading((loading) => !loading);
     }
   };
+
+  //useEffect안에서 async await 사용 x
+  //https://velog.io/@he0_077/useEffect-%ED%9B%85%EC%97%90%EC%84%9C-async-await-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+  const getStoreInfoAsync = async (query) => {
+    try {
+      if (Object.keys(query).length !== 0) {
+        const storeInfo = await GetStoreInfoKakao(query);
+        console.log(storeInfo);
+        setStore({
+          placeName: storeInfo.place_name,
+          address: storeInfo.road_address_name
+            ?.split(' ')
+            .slice(0, 2)
+            .join(' '),
+          x: storeInfo.x,
+          y: storeInfo.y,
+          id: storeInfo.id,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    const query = querystring.parse(location.search);
+    getStoreInfoAsync(query);
+  }, [location.search]);
+
+  useEffect(() => {
+    setValue('userName', 'hyunyoo');
+    setValue('storeName', store?.placeName);
+    setValue('storeAddress', store?.address);
+    setValue('x', store?.x);
+    setValue('y', store?.y);
+    setValue('reviewDate', formatDate(Date.now()));
+  }, [store, setValue]);
 
   return (
     <React.Fragment>
       <Header />
       <main>
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
-          <div>
-            가게명 : <input type="text" {...register('name')} required></input>
+          <div className="write_page_header">
+            <h1>리뷰 작성</h1>
           </div>
-          <div>
-            주소 :{' '}
-            <select
-              title="select_city"
-              className="address_option"
-              {...register('address.city')}
-              onChange={changeCity}
-              value={selectedCity}
-            >
-              {city &&
-                city.map((x, index) => {
-                  return (
-                    <option key={'city_' + index} value={x.sido}>
-                      {x.codeNm}
-                    </option>
-                  );
-                })}
-            </select>
-            <select
-              className="address_option"
-              {...register('address.district')}
-              onChange={changeDistrict}
-              value={selectedDistrict}
-            >
-              {district &&
-                district.map((x, index) => {
-                  return (
-                    <option key={'district_' + index} value={x.sigugun}>
-                      {x.codeNm}
-                    </option>
-                  );
-                })}
-            </select>
-            <select
-              className="address_option"
-              {...register('address.neighborhood')}
-              onChange={changeNeighborhood}
-              value={selectedNeighborhood}
-            >
-              {neighborhood &&
-                neighborhood.map((x, index) => {
-                  return (
-                    <option key={'neighbor_' + index} value={x.dong}>
-                      {x.codeNm}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
-          <div>
-            등록일 :
-            <input
-              type="date"
-              placeholder="yyyy-mm-dd"
-              defaultValue={date}
-              disabled
-            ></input>
-          </div>
+          <TargetStoreSearch store={store}>
+            <div className="target_store_info">
+              {store ? (
+                <>
+                  <div className="target_store_name">
+                    <p>{store?.placeName}</p>
+                  </div>
+                  <div className="target_store_address">
+                    <p>{store?.address}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="request_target_store">
+                  <p>가게를 검색해주세요.</p>
+                </div>
+              )}
+            </div>
+            <div className="store_search_button">
+              <Link to="/storeSearch">
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  style={{ color: 'black' }}
+                  size="lg"
+                  className="search"
+                />
+              </Link>
+            </div>
+          </TargetStoreSearch>
           <div>
             리뷰(1000자 미만)
             <br />
@@ -190,21 +218,22 @@ const PostWritePage = ({ history }) => {
               required
             />
           </div>
-          <div
-            style={{
-              overflowX: 'auto',
-              overflowY: 'hidden',
-              border: '2px solid black',
-            }}
-          >
+          <div>
+            x
             <ImageUpload
               files={files}
               count={count}
               setFiles={setFiles}
               setCount={setCount}
+              setValue={setValue}
             />
           </div>
           <Button name="submit" disabled={loading}></Button>
+          <Button
+            name="cancel"
+            disabled={loading}
+            onClick={() => history.push('/')}
+          ></Button>
         </StyledForm>
       </main>
     </React.Fragment>
