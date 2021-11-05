@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import testImg from '../image/15935670615efbe7551de0b.jpg';
+import ReviewImgView from './ReviewImgView';
+
 const ReviewList = styled.div`
   display: flex;
   border-bottom: 1px solid #e9e9e9;
@@ -25,6 +26,15 @@ const ReviewDetail = styled.div`
   }
 `;
 
+const ImgWrapper = styled.div`
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const StoreReviewList = ({ storeReviews }) => {
   return (
     <>
@@ -39,7 +49,11 @@ const StoreReviewList = ({ storeReviews }) => {
             <ReviewDetail>
               <div className="Date">{review.reviewDate}</div>
               <div>{review.reviewText}</div>
-              <img src={testImg} alt="tmp" />
+              <ImgWrapper>
+                {JSON.parse(review.images).map((image, idx) => (
+                  <ReviewImgView image={image} key={idx} />
+                ))}
+              </ImgWrapper>
             </ReviewDetail>
           </ReviewList>
         ))}

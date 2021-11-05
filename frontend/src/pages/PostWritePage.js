@@ -95,7 +95,7 @@ const SaveStore = async (data) => {
       token: userToken,
       images: imageNames,
     });
-    //console.log(res);
+    console.log(res);
   } catch (e) {
     console.error(e);
   }

@@ -8,15 +8,6 @@ import { loadAllStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
 
-function importAll(r) {
-  let images = [];
-  r.keys().forEach((item, index) => {
-    images[index] = r(item);
-    images[index].delay = 150 * index;
-  });
-  return images;
-}
-
 const SearchInput = styled.div`
   width: 90%;
   height: 50px;
@@ -68,7 +59,6 @@ const getAllStoreData = async ({ dispatch }) => {
   try {
     const res = await loadAllStoreData();
     const data = res.data.body;
-    console.log(data);
     dispatch(getList(data));
   } catch (e) {
     console.log(e);
@@ -76,7 +66,6 @@ const getAllStoreData = async ({ dispatch }) => {
 };
 
 const PostlistPage = ({ history }) => {
-  const [images, setImages] = useState([]);
   const [text, setText] = useState('');
   const dispatch = useDispatch();
 
@@ -94,13 +83,9 @@ const PostlistPage = ({ history }) => {
   };
 
   useEffect(() => {
-    setImages(
-      importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
-    );
     getAllStoreData({ dispatch });
   }, [dispatch]);
   const { storeList } = useSelector((state) => state.posts);
-
   const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(
@@ -135,9 +120,8 @@ const PostlistPage = ({ history }) => {
           </ul>
         </OptionList>
         <Row gutter={[16, 16]}>
-          {images &&
-            storeList &&
-            images.map((image, index) => (
+          {storeList &&
+            storeList.map((store, index) => (
               <Col
                 key={index}
                 xs={12}
@@ -147,8 +131,8 @@ const PostlistPage = ({ history }) => {
                 onClick={() => goDetail(storeList[index])}
               >
                 <PostBlock
-                  src={image}
-                  delay={image.delay}
+                  src={store.storeImage}
+                  delay={store.delay}
                   store={storeList[index]}
                 />
               </Col>

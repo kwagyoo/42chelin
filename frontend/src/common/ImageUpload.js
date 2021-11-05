@@ -54,17 +54,6 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
   const uploadButton = useRef(null);
 
   const onDrop = (acceptedFiles) => {
-    const newArray = acceptedFiles.map(
-      (
-        file,
-        index, //이 과정을 통해서 각 file객체 속성으로 썸네일 경로가 생성된다. 위에 콘솔을 입력해도 이 과정이 더 빠른건지 preview속성이 나온다.
-      ) => {
-        return {
-          index: count + index,
-          preview: URL.createObjectURL(file),
-        };
-      },
-    );
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); //newArray가 배열이라서 이중 배열이 되기 때문에 flat으로 1차원배열로 변환
     setCount((prevCount) => prevCount + acceptedFiles.length);
   }; //files는 왜 의존 안해도 상관없는가... 값과 배열의 차이, usecallback 함수 재생성차이

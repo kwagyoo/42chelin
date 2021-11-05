@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import Button from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,32 +9,6 @@ import {
   faPencilAlt,
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
-
-const fadein = keyframes`
-  0%{
-    opacity : 0;
-    visibility : visible;
-  }
-  50%{
-    opacity : 0.5;
-  }
-  100%{
-    opacity : 1;
-  }
-`;
-
-const fadeout = keyframes`
-  0%{
-    opacity : 1;
-  }
-  50%{
-    opacity : 0.5;
-  }
-  100%{
-    opacity : 0;
-    visibility : hidden;
-  }
-`;
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -50,7 +23,7 @@ const HeaderBlock = styled.header`
 
 const Wrapper = styled.div`
   display: flex;
-  overflow : auto;
+  overflow: auto;
   align-items: center;
 
   .title {
@@ -64,21 +37,21 @@ const Wrapper = styled.div`
   .title:visited {
     color: #000;
   }
-  
+
   .header-menu-item {
-    height : 60px;
-    display : flex;
-    align-items : center;
-    justify-items : center;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
   }
 
   .header-menu-item:hover {
-    background-color : gray;
+    background-color: gray;
   }
 
-  .header-menu-item a{
-    padding : 15px 25px;
-    font-size : 15px;
+  .header-menu-item a {
+    padding: 15px 25px;
+    font-size: 15px;
     letter-spacing: 2px;
     text-decoration: none;
   }
@@ -86,82 +59,82 @@ const Wrapper = styled.div`
   .header-menu-item a:visited {
     color: #000;
   }
-  
-  .header-menu-item:hover a{
-    color : white;
+
+  .header-menu-item:hover a {
+    color: white;
   }
 
-  .header-title{
-    flex-grow : 1;
-    display : flex;
-    justify-content:center;
-    align-items:center;
+  .header-title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  .header-menu{
+  .header-menu {
     flex-grow: 10;
-    display : flex;
-    justify-content : flex-start;
+    display: flex;
+    justify-content: flex-start;
   }
   .header-right {
-    flex-grow : 1
+    flex-grow: 1;
     align-items: center;
     display: flex;
-    margin-right : 25px;
+    margin-right: 25px;
   }
   .title_header_smartphone {
     display: none;
   }
 
-  .title_header_smartphone button, .title_header_smartphone a{
-    padding : 1px 6px;
-    background-color : transparent;
-    border : none;
-    cursor : pointer;
+  .title_header_smartphone button,
+  .title_header_smartphone a {
+    padding: 1px 6px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
 
-  @media screen and (max-width : 768px)
-  {
-    flex-direction : column;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
 
-    .title_header_smartphone{
-      display : flex;
-      flex-direction : row;
-      justify-content : space-between;
-      align-items : center;
-      margin-right : 5px;
+    .title_header_smartphone {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-right: 5px;
     }
-    .header-title{
-      margin : 5px auto;
-      width : 100%;
-      display : flex;
-      flex-direction : row;
-      justify-content : space-between;
+    .header-title {
+      margin: 5px auto;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
-    .header-menu{
-      width : 100%;
-      flex-direction : column;
-      align-items : center;
-      overflow : auto;
-      display : none;
-    }
-    
-    .header-menu.click{
-      display : flex;
+    .header-menu {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      overflow: auto;
+      display: none;
     }
 
-    .header-right{
-      display : none;
+    .header-menu.click {
+      display: flex;
+    }
+
+    .header-right {
+      display: none;
     }
     .header-menu-item {
-      border-top : 1px solid black;
-      justify-content : center;
-      margin : auto auto;
-      width : 100%;
+      border-top: 1px solid black;
+      justify-content: center;
+      margin: auto auto;
+      width: 100%;
       z-index: 0;
     }
-    .header-menu-item a{
-      padding : 10px 20px;
-      font-size : 20px;
+    .header-menu-item a {
+      padding: 10px 20px;
+      font-size: 20px;
       letter-spacing: 2px;
       text-decoration: none;
     }
@@ -183,8 +156,7 @@ const Spacer = styled.div`
 `;
 
 const Header = (props) => {
-  const history = useHistory();
-  const { name } = useSelector((state) => state.users);
+  const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
 

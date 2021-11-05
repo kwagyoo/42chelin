@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const StoreItemBlock = styled.div`
   width: 100%;
-  padding-top: 2rem;
+  padding-top: 5rem;
 `;
 
 const StoreInfoBlock = styled.div`
