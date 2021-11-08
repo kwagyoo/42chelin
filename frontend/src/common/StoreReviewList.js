@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 import testImg from '../image/15935670615efbe7551de0b.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { deleteStoreData } from '../lib/api/store';
+
 const ReviewList = styled.div`
   display: flex;
   border-bottom: 1px solid #e9e9e9;
@@ -40,6 +44,16 @@ const StoreReviewList = ({ storeReviews }) => {
               <div className="Date">{review.reviewDate}</div>
               <div>{review.reviewText}</div>
               <img src={testImg} alt="tmp" />
+              <div>
+                <button onClick={() => deleteStoreData(review)}>
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ color: 'black' }}
+                    size="lg"
+                    className="search"
+                  />
+                </button>
+              </div>
             </ReviewDetail>
           </ReviewList>
         ))}

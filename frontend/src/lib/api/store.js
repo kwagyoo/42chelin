@@ -2,7 +2,21 @@ import client from './client';
 
 export const saveStoreData = (request) => {
   client.post(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/save-store-data`,
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/save`,
+    request,
+  );
+};
+
+export const updateStoreData = (request) => {
+  client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/update`,
+    request,
+  );
+};
+
+export const deleteStoreData = (request) => {
+  client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/delete`,
     request,
   );
 };

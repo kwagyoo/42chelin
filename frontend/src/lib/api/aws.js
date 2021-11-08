@@ -21,3 +21,5 @@ export const uploadImagesToS3 = (images) => {
     console.error(err);
   }
 };
+
+export const deleteImageFromS3 = (images) => {};
