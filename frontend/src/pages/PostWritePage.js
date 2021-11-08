@@ -86,7 +86,17 @@ const useInput = (initialValue, validator) => {
 const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   try {
+<<<<<<< HEAD
     const res = await saveStoreData({ token: userToken, ...data });
+=======
+    console.log(data);
+    const imageNames = uploadImagesToS3(data.images);
+    const res = await saveStoreData({
+      ...data,
+      token: userToken,
+      images: imageNames,
+    });
+>>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
     console.log(res);
   } catch (e) {
     console.error(e);

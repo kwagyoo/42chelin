@@ -1,8 +1,12 @@
 import styled from 'styled-components';
+<<<<<<< HEAD
 import testImg from '../image/15935670615efbe7551de0b.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { deleteStoreReview } from '../lib/api/store';
+=======
+import ReviewImgView from './ReviewImgView';
+>>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
 
 const ReviewList = styled.div`
   display: flex;
@@ -43,6 +47,7 @@ const ReviewDetail = styled.div`
   }
 `;
 
+<<<<<<< HEAD
 const StoreReviewList = ({ store, storeReviews }) => {
   const deleteReview = async (review) => {
     try {
@@ -62,6 +67,18 @@ const StoreReviewList = ({ store, storeReviews }) => {
     }
   };
 
+=======
+const ImgWrapper = styled.div`
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const StoreReviewList = ({ storeReviews }) => {
+>>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
   return (
     <>
       <ReviewListHeader>
@@ -73,6 +90,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
           <ReviewList key={idx}>
             <div className="review_user_name">{review.userName}</div>
             <ReviewDetail>
+<<<<<<< HEAD
               <div>
                 <div className="Date">{review.reviewDate}</div>
                 <div>{review.reviewText}</div>
@@ -88,6 +106,15 @@ const StoreReviewList = ({ store, storeReviews }) => {
                   />
                 </button>
               </div>
+=======
+              <div className="Date">{review.reviewDate}</div>
+              <div>{review.reviewText}</div>
+              <ImgWrapper>
+                {JSON.parse(review.images).map((image, idx) => (
+                  <ReviewImgView image={image} key={idx} />
+                ))}
+              </ImgWrapper>
+>>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
             </ReviewDetail>
           </ReviewList>
         ))}
