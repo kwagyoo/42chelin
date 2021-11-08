@@ -1,21 +1,21 @@
 import client from './client';
 
-export const saveStoreData = (request) => {
-  client.post(
+export const saveStoreData = async (request) => {
+  await client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/save`,
     request,
   );
 };
 
-export const updateStoreData = (request) => {
-  client.post(
+export const updateStoreReview = async (request) => {
+  await client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/update`,
     request,
   );
 };
 
-export const deleteStoreData = (request) => {
-  client.post(
+export const deleteStoreReview = async (request) => {
+  await client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/delete`,
     request,
   );

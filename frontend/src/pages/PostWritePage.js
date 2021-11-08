@@ -9,7 +9,6 @@ import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { uploadImagesToS3 } from '../lib/api/aws';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -84,6 +83,16 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
+const SaveStore = async (data) => {
+  const userToken = localStorage.getItem('token');
+  try {
+    const res = await saveStoreData({ token: userToken, ...data });
+    console.log(res);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 function formatDate(date) {
   let d = new Date(date),
     month = '' + (d.getMonth() + 1),
@@ -106,69 +115,42 @@ const PostWritePage = ({ history, location }) => {
 
   const review = useInput('', (value) => value.length < 300);
 
-  const SaveStore = async (data) => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return null;
-    try {
-      const imageNames = uploadImagesToS3(data.images);
-      const res = await saveStoreData({
-        ...data,
-        token: userToken,
-        images: imageNames,
-      });
-      setTimeout(() => {
-        history.push(
-          `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
-        );
-      }, 2000);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const handleSubmitBtn = async (data) => {
     if (!loading) {
-      setLoading((loading) => true);
+      setLoading((loading) => !loading);
       if (store) {
-        await SaveStore({ ...data, images: files });
+        await SaveStore(data);
+        history.push('/');
       }
-      setLoading((loading) => false);
+      setLoading((loading) => !loading);
     }
   };
 
-  //useEffect안에서 async await 사용 x
-  //https://velog.io/@he0_077/useEffect-%ED%9B%85%EC%97%90%EC%84%9C-async-await-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
-  const getStoreInfoAsync = async (query) => {
-    try {
-      if (Object.keys(query).length !== 0) {
-        const storeInfo = await GetStoreInfoKakao(query);
-        setStore({
-          placeName: storeInfo.place_name,
-          address: storeInfo.road_address_name
-            ?.split(' ')
-            .slice(0, 2)
-            .join(' '),
-          x: storeInfo.x,
-          y: storeInfo.y,
-          id: storeInfo.id,
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  //async await 가 promise 를 처리해줌. <찾아보기
+  //   const onClick = async () => {
+  //     try {
+  //       console.log(res.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
   useEffect(() => {
     const query = querystring.parse(location.search);
-    getStoreInfoAsync(query);
+    if (Object.keys(query).length !== 0) {
+      GetStoreInfoKakao(query).then((res) => {
+        setStore({
+          placeName: res.place_name,
+          address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+          id: res.id,
+        });
+      });
+    }
   }, [location.search]);
 
   useEffect(() => {
-    setValue('userName', localStorage.getItem('username'));
+    setValue('userName', 'hyunyoo');
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
-    setValue('x', store?.x);
-    setValue('y', store?.y);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
@@ -221,13 +203,11 @@ const PostWritePage = ({ history, location }) => {
             />
           </div>
           <div>
-            x
             <ImageUpload
               files={files}
               count={count}
               setFiles={setFiles}
               setCount={setCount}
-              setValue={setValue}
             />
           </div>
           <Button name="submit" disabled={loading}></Button>

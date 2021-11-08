@@ -78,7 +78,10 @@ const PostDetailPage = ({ location }) => {
             </ImgWapper>
             <StoreReviewDetail storeList={storeList} />
           </StoreListBlock>
-          <StoreReviewList storeReviews={storeList.storeReviews} />
+          <StoreReviewList
+            store={storeList}
+            storeReviews={storeList.storeReviews}
+          />
         </ContentsWrapper>
       )}
     </>
