@@ -1,5 +1,4 @@
 /* global kakao */
-
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
@@ -7,7 +6,6 @@ import StoreReviewDetail from '../common/StoreReviewDetail';
 import StoreReviewList from '../common/StoreReviewList';
 import { getStoreDetailData } from '../lib/api/store';
 import qs from 'qs';
-import ImageGallery from 'react-image-gallery';
 import Carousel from '../common/Carousel';
 
 const StoreListBlock = styled.div`

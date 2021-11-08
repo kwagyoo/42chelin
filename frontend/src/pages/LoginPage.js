@@ -26,6 +26,7 @@ const LoginRequest = async ({ location, dispatch, history }) => {
     const res = await getToken(code);
     const data = JSON.parse(res.data.body);
     const token = data.access_token;
+	console.log(data, token);
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
     await GetUsername(token, dispatch);
@@ -34,6 +35,7 @@ const LoginRequest = async ({ location, dispatch, history }) => {
     Sentry.captureException(e);
     console.log(e);
     alert('로그인에 실패했습니다.');
+	history.push('/');
   }
 };
 

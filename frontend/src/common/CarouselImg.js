@@ -28,7 +28,7 @@ const CarouselImg = ({ image }) => {
         setImgUrl(url);
       },
     );
-  }, []);
+  }, [image]);
 
   return (
     <CardBox>
