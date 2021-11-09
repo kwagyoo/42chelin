@@ -88,23 +88,6 @@ const PostDetailPage = ({ location }) => {
   return (
     <>
       <Header />
-<<<<<<< HEAD
-      {storeList && (
-        <ContentsWrapper>
-          <StoreListBlock>
-            <ImgWapper>
-              <ImageGallery items={images} />
-              {/* <ImgBlock src={testImg} alt="tmp" /> */}
-            </ImgWapper>
-            <StoreReviewDetail storeList={storeList} />
-          </StoreListBlock>
-          <StoreReviewList
-            store={storeList}
-            storeReviews={storeList.storeReviews}
-          />
-        </ContentsWrapper>
-      )}
-=======
       <Wrapper>
         {storeList && (
           <ContentsWrapper>
@@ -115,11 +98,13 @@ const PostDetailPage = ({ location }) => {
               </FlexWrapper>
               <StoreReviewDetail storeList={storeList} />
             </StoreListBlock>
-            <StoreReviewList storeReviews={storeList.storeReviews} />
+            <StoreReviewList
+              store={storeList}
+              storeReviews={storeList.storeReviews}
+            />
           </ContentsWrapper>
         )}
       </Wrapper>
->>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
     </>
   );
 };

@@ -6,6 +6,7 @@ import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
 import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
+import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -86,9 +87,6 @@ const useInput = (initialValue, validator) => {
 const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   try {
-<<<<<<< HEAD
-    const res = await saveStoreData({ token: userToken, ...data });
-=======
     console.log(data);
     const imageNames = uploadImagesToS3(data.images);
     const res = await saveStoreData({
@@ -96,7 +94,6 @@ const SaveStore = async (data) => {
       token: userToken,
       images: imageNames,
     });
->>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
     console.log(res);
   } catch (e) {
     console.error(e);
@@ -129,7 +126,7 @@ const PostWritePage = ({ history, location }) => {
     if (!loading) {
       setLoading((loading) => !loading);
       if (store) {
-        await SaveStore(data);
+        await SaveStore({ ...data, images: files });
         history.push('/');
       }
       setLoading((loading) => !loading);
@@ -158,7 +155,7 @@ const PostWritePage = ({ history, location }) => {
   }, [location.search]);
 
   useEffect(() => {
-    setValue('userName', 'hyunyoo');
+    setValue('userName', localStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('reviewDate', formatDate(Date.now()));

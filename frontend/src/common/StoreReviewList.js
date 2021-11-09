@@ -1,12 +1,10 @@
 import styled from 'styled-components';
-<<<<<<< HEAD
 import testImg from '../image/15935670615efbe7551de0b.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { deleteStoreReview } from '../lib/api/store';
-=======
 import ReviewImgView from './ReviewImgView';
->>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
+import { useHistory } from 'react-router';
 
 const ReviewList = styled.div`
   display: flex;
@@ -46,9 +44,20 @@ const ReviewDetail = styled.div`
     cursor: pointer;
   }
 `;
+const ImgWrapper = styled.div`
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
-<<<<<<< HEAD
 const StoreReviewList = ({ store, storeReviews }) => {
+  const history = useHistory();
+
+  console.log(storeReviews);
+
   const deleteReview = async (review) => {
     try {
       const userToken = localStorage.getItem('token');
@@ -60,25 +69,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
         reviewDate: review.reviewDate,
       };
       const res = await deleteStoreReview(deleteReviewData);
-      console.log('res', res);
+
+      history.go(0);
     } catch (error) {
       console.error(error);
       alert('에러가 발생했습니다. 잠시 뒤 다시 시도해주세요.');
     }
   };
 
-=======
-const ImgWrapper = styled.div`
-  display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const StoreReviewList = ({ storeReviews }) => {
->>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
   return (
     <>
       <ReviewListHeader>
@@ -90,11 +88,15 @@ const StoreReviewList = ({ storeReviews }) => {
           <ReviewList key={idx}>
             <div className="review_user_name">{review.userName}</div>
             <ReviewDetail>
-<<<<<<< HEAD
               <div>
                 <div className="Date">{review.reviewDate}</div>
                 <div>{review.reviewText}</div>
-                <img src={testImg} alt="tmp" />
+                <ImgWrapper>
+                  {review.images &&
+                    JSON.parse(review.images).map((image, idx) => (
+                      <ReviewImgView image={image} key={idx} />
+                    ))}
+                </ImgWrapper>
               </div>
               <div className="review_detail_buttons">
                 <button onClick={() => deleteReview(review)}>
@@ -106,15 +108,6 @@ const StoreReviewList = ({ storeReviews }) => {
                   />
                 </button>
               </div>
-=======
-              <div className="Date">{review.reviewDate}</div>
-              <div>{review.reviewText}</div>
-              <ImgWrapper>
-                {JSON.parse(review.images).map((image, idx) => (
-                  <ReviewImgView image={image} key={idx} />
-                ))}
-              </ImgWrapper>
->>>>>>> bfbda755f817a431a7b4935acfb0ef96e0b2c5f0
             </ReviewDetail>
           </ReviewList>
         ))}
