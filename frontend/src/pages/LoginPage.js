@@ -26,7 +26,6 @@ const LoginRequest = async ({ location, dispatch, history }) => {
     const res = await getToken(code);
     const data = JSON.parse(res.data.body);
     const token = data.access_token;
-	console.log(data, token);
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
     await GetUsername(token, dispatch);

@@ -35,10 +35,6 @@ const Wrapper = styled.div`
   }
 `;
 
-// const StyledSlider = styled.Slider`
-//   display: flex;
-// `;
-
 const PostDetailPage = ({ location }) => {
   const [storeList, setstoreList] = useState('');
 
@@ -61,6 +57,9 @@ const PostDetailPage = ({ location }) => {
         level: 3,
       };
       var map = new kakao.maps.Map(container, options);
+      var zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.TOPRIGHT);
+
       var markerPosition = new kakao.maps.LatLng(
         `${storeLocation[1]}`,
         `${storeLocation[0]}`,

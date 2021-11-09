@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import testImg from '../image/15935670615efbe7551de0b.jpg';
+import DefalutImg from '../image/defalut.png';
+
 const StyledInfo = styled.div`
   display: flex;
   width: 100%;
@@ -20,7 +21,7 @@ const StoreInfo = ({ onClick, address, placeName, categoryName }) => {
   return (
     <StyledInfo onClick={onClick}>
       <div>
-        <StyledImg src={testImg} alt="tmp" />
+        <StyledImg src={DefalutImg} alt="tmp" />
       </div>
       <StyledContent>
         <h2>{placeName}</h2>

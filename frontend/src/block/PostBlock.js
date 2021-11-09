@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import styled from 'styled-components';
 import AWS from 'aws-sdk';
+import DefalutImg from '../image/defalut.png';
 
 const StoreCompactInfo = styled.div`
   border: 1px solid black;
@@ -17,23 +18,31 @@ const StoreCompactInfo = styled.div`
 // 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
 const PostBlock = ({ src, delay, store }) => {
   const [imgurl, setImgUrl] = useState('');
-
   useEffect(() => {
     const s3 = new AWS.S3();
-    s3.getSignedUrl(
-      'getObject',
-      {
-        Bucket: '42chelin',
-        Key: `img/${src}`, // ex) assets/
-      },
-      (err, url) => {
-        if (err) {
-          throw err;
-        }
-        setImgUrl(url);
-      },
-    );
+    if (src) {
+      s3.getSignedUrl(
+        'getObject',
+        {
+          Bucket: '42chelin',
+          Key: `img/${src}`, // ex) assets/
+        },
+        (err, url) => {
+          if (err) {
+            console.log(err);
+          }
+          setImgUrl(url);
+        },
+      );
+    } else {
+      setImgUrl(DefalutImg);
+    }
   }, [src]);
+
+  //   const MissingImg = (e) => {
+  //     console.log(DefalutImg);
+  //     // e.target.src = { DefalutImg };
+  //   };
 
   const fadein = useSpring({
     from: { y: '10px', opacity: 0 },
@@ -44,7 +53,12 @@ const PostBlock = ({ src, delay, store }) => {
   return (
     <StoreCompactInfo>
       <animated.article style={fadein}>
-        <img className="storeThumb" src={imgurl} alt="Store Thumbnail" />
+        <img
+          className="storeThumb"
+          src={imgurl}
+          alt="Store Thumbnail"
+          //   onError={MissingImg}
+        />
         <div className="storeInfo">
           <span>{store?.storeName}</span>
           <br />

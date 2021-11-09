@@ -7,7 +7,6 @@ import PostWritePage from './pages/PostWritePage';
 import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
-import  Carouseltest  from './common/Carousel';
 
 const App = () => {
   AWS.config.update({
@@ -25,7 +24,6 @@ const App = () => {
       <Route path="/write" component={PostWritePage} />
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={KakaoSearchPage} />
-      <Route path="/test" component={Carouseltest} />
     </>
   );
 };
