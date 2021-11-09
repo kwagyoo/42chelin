@@ -155,7 +155,7 @@ const Spacer = styled.div`
   }
 `;
 
-const Header = (props) => {
+const Header = () => {
   const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
