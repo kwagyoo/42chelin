@@ -15,6 +15,20 @@ export const postSlice = createSlice({
   },
 });
 
-const { reducer, actions } = postSlice;
-export const { getList } = actions;
-export default reducer;
+export const reviewSlice = createSlice({
+  name: 'review',
+  initialState: {},
+  reducers: {
+    setReview: (state, action) => {
+      state.review = action.payload || null;
+    },
+  },
+});
+
+const { reducer: posts, actions: postActions } = postSlice;
+export const { getList } = postActions;
+
+const { reducer: review, actions: reviewActions } = reviewSlice;
+export const { setReview } = reviewActions;
+
+export { posts, review };

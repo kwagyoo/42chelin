@@ -4,12 +4,9 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
-import { Link } from 'react-router-dom';
 import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
-import querystring from 'query-string';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { uploadImagesToS3 } from '../lib/api/aws';
+import { loadImageFromS3, uploadImagesToS3 } from '../lib/api/aws';
+import { useSelector } from 'react-redux';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -84,27 +81,18 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-function formatDate(date) {
-  let d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-
-  return [year, month, day].join('-');
-}
-
 const PostWritePage = ({ history, location }) => {
-  const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { review } = useSelector((state) => state.review);
 
   const { register, handleSubmit, setValue } = useForm();
 
-  const review = useInput('', (value) => value.length < 300);
+  const reviewText = useInput(
+    review ? review.review.reviewText : '',
+    (value) => value.length < 1000,
+  );
 
   const SaveStore = async (data) => {
     const userToken = localStorage.getItem('token');
@@ -129,48 +117,26 @@ const PostWritePage = ({ history, location }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
-      if (store) {
-        await SaveStore({ ...data, images: files });
-      }
+      //await UpdateStoreReview({ ...data, images: files });
       setLoading((loading) => false);
     }
   };
 
-  //useEffect안에서 async await 사용 x
-  //https://velog.io/@he0_077/useEffect-%ED%9B%85%EC%97%90%EC%84%9C-async-await-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
-  const getStoreInfoAsync = async (query) => {
-    try {
-      if (Object.keys(query).length !== 0) {
-        const storeInfo = await GetStoreInfoKakao(query);
-        setStore({
-          placeName: storeInfo.place_name,
-          address: storeInfo.road_address_name
-            ?.split(' ')
-            .slice(0, 2)
-            .join(' '),
-          x: storeInfo.x,
-          y: storeInfo.y,
-          id: storeInfo.id,
-        });
-      }
-    } catch (err) {
-      console.error(err);
+  useEffect(() => {
+    console.log('reviewData', review);
+    if (review) {
+      setValue('userName', review.userName);
+      setValue('reviewDate', review.reviewDate);
+      setValue('storeName', review.storeName);
+      setValue('storeAddress', review.storeAddress);
+      review.storeImages?.forEach((image) =>
+        loadImageFromS3(image, (param) => setFiles(param)),
+      );
+    } else {
+      alert('수정할 리뷰 데이터가 없습니다. 이전 페이지로 돌아갑니다.');
+      history.goBack();
     }
-  };
-
-  useEffect(() => {
-    const query = querystring.parse(location.search);
-    getStoreInfoAsync(query);
-  }, [location.search]);
-
-  useEffect(() => {
-    setValue('userName', localStorage.getItem('username'));
-    setValue('storeName', store?.placeName);
-    setValue('storeAddress', store?.address);
-    setValue('x', store?.x);
-    setValue('y', store?.y);
-    setValue('reviewDate', formatDate(Date.now()));
-  }, [store, setValue]);
+  }, [review, setValue]);
 
   return (
     <React.Fragment>
@@ -180,32 +146,14 @@ const PostWritePage = ({ history, location }) => {
           <div className="write_page_header">
             <h1>리뷰 작성</h1>
           </div>
-          <TargetStoreSearch store={store}>
+          <TargetStoreSearch store={true}>
             <div className="target_store_info">
-              {store ? (
-                <>
-                  <div className="target_store_name">
-                    <p>{store?.placeName}</p>
-                  </div>
-                  <div className="target_store_address">
-                    <p>{store?.address}</p>
-                  </div>
-                </>
-              ) : (
-                <div className="request_target_store">
-                  <p>가게를 검색해주세요.</p>
-                </div>
-              )}
-            </div>
-            <div className="store_search_button">
-              <Link to="/storeSearch">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  style={{ color: 'black' }}
-                  size="lg"
-                  className="search"
-                />
-              </Link>
+              <div className="target_store_name">
+                <p>{review?.storeName}</p>
+              </div>
+              <div className="target_store_address">
+                <p>{review?.storeAddress}</p>
+              </div>
             </div>
           </TargetStoreSearch>
           <div>
@@ -214,14 +162,13 @@ const PostWritePage = ({ history, location }) => {
             <textarea
               style={{ width: '100%', height: '200px' }}
               {...register('reviewText')}
-              value={review.value}
+              value={reviewText.value}
               maxLength={1000}
-              onChange={review.onChange}
+              onChange={reviewText.onChange}
               required
             />
           </div>
           <div>
-            x
             <ImageUpload
               files={files}
               count={count}

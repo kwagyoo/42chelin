@@ -5,6 +5,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { deleteStoreReview } from '../lib/api/store';
 import ReviewImgView from './ReviewImgView';
 import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { setReview } from '../module/posts';
 
 const ReviewList = styled.div`
   display: flex;
@@ -55,8 +57,7 @@ const ImgWrapper = styled.div`
 
 const StoreReviewList = ({ store, storeReviews }) => {
   const history = useHistory();
-
-  console.log(storeReviews);
+  const dispatch = useDispatch();
 
   const deleteReview = async (review) => {
     try {
@@ -75,6 +76,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
       console.error(error);
       alert('에러가 발생했습니다. 잠시 뒤 다시 시도해주세요.');
     }
+  };
+
+  const goUpdatePage = (review) => {
+    const { storeName, storeAddress, userName, reviewDate } = store;
+    dispatch(
+      setReview({ storeName, storeAddress, userName, reviewDate, review }),
+    );
+    history.push('/edit');
   };
 
   return (
@@ -99,6 +108,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 </ImgWrapper>
               </div>
               <div className="review_detail_buttons">
+                <button onClick={() => goUpdatePage(review)}>
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ color: 'red' }}
+                    size="lg"
+                    className="search"
+                  />
+                </button>
                 <button onClick={() => deleteReview(review)}>
                   <FontAwesomeIcon
                     icon={faTimes}

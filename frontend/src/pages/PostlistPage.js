@@ -141,6 +141,6 @@ const PostlistPage = ({ history }) => {
       </div>
     </>
   );
-};;
+};
 
 export default PostlistPage;

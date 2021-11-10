@@ -133,14 +133,6 @@ const PostWritePage = ({ history, location }) => {
     }
   };
 
-  //async await 가 promise 를 처리해줌. <찾아보기
-  //   const onClick = async () => {
-  //     try {
-  //       console.log(res.data);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
   useEffect(() => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
@@ -158,6 +150,8 @@ const PostWritePage = ({ history, location }) => {
     setValue('userName', localStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
+    setValue('x', store?.x);
+    setValue('y', store?.y);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
@@ -221,7 +215,7 @@ const PostWritePage = ({ history, location }) => {
           <Button
             name="cancel"
             disabled={loading}
-            onClick={() => history.push('/')}
+            onClick={() => history.goBack()}
           ></Button>
         </StyledForm>
       </main>

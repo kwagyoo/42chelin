@@ -3,11 +3,12 @@ import { Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostlistPage from './pages/PostlistPage';
+import PostUpdatePage from './pages/PostUpdatePage';
 import PostWritePage from './pages/PostWritePage';
 import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
-import  Carouseltest  from './common/Carousel';
+import Carouseltest from './common/Carousel';
 
 const App = () => {
   AWS.config.update({
@@ -22,6 +23,7 @@ const App = () => {
       <Route path="/" component={PostlistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={PostDetailPage} />
+      <Route path="/edit" component={PostUpdatePage} />
       <Route path="/write" component={PostWritePage} />
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={KakaoSearchPage} />

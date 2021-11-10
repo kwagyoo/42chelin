@@ -23,4 +23,19 @@ export const uploadImagesToS3 = (images) => {
   }
 };
 
-export const deleteImageFromS3 = (images) => {};
+export const loadImageFromS3 = (image, callback) => {
+  const s3 = new AWS.S3();
+  s3.getSignedUrl(
+    'getObject',
+    {
+      Bucket: '42chelin',
+      Key: `img/${image}`, // ex) assets/
+    },
+    (err, url) => {
+      if (err) {
+        throw err;
+      }
+      callback(url);
+    },
+  );
+};
