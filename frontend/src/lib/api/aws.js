@@ -23,19 +23,18 @@ export const uploadImagesToS3 = (images) => {
   }
 };
 
-export const loadImageFromS3 = (image, callback) => {
+export const loadImageFromS3 = async (image) => {
   const s3 = new AWS.S3();
-  s3.getSignedUrl(
-    'getObject',
-    {
+  return new Promise((resolve, reject) => {
+    s3.getSignedUrlPromise('getObject', {
       Bucket: '42chelin',
       Key: `img/${image}`, // ex) assets/
-    },
-    (err, url) => {
-      if (err) {
-        throw err;
-      }
-      callback(url);
-    },
-  );
+    })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 };

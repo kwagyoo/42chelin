@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import testImg from '../image/15935670615efbe7551de0b.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { deleteStoreReview } from '../lib/api/store';
@@ -7,6 +6,8 @@ import ReviewImgView from './ReviewImgView';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
+import { loadImageFromS3 } from '../lib/api/aws';
+import { useEffect, useState } from 'react';
 
 const ReviewList = styled.div`
   display: flex;
@@ -58,6 +59,7 @@ const ImgWrapper = styled.div`
 const StoreReviewList = ({ store, storeReviews }) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [reviews, setReviews] = useState('');
 
   const deleteReview = async (review) => {
     try {
@@ -86,14 +88,33 @@ const StoreReviewList = ({ store, storeReviews }) => {
     history.push('/edit');
   };
 
+  const imageTest = async () => {
+    const FixedReview = await Promise.all(
+      storeReviews.map(async (review) => {
+        const parsedImages = JSON.parse(review.images);
+        const imageURLs = await Promise.all(
+          parsedImages.map(async (image) => {
+            return await loadImageFromS3(image);
+          }),
+        );
+        return { ...review, images: imageURLs };
+      }),
+    );
+    setReviews(FixedReview);
+  };
+  useEffect(() => {
+    imageTest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <ReviewListHeader>
         <div>리뷰</div>
         <div>좋아요 개수 출력</div>
       </ReviewListHeader>
-      {storeReviews &&
-        storeReviews.map((review, idx) => (
+      {reviews &&
+        reviews.map((review, idx) => (
           <ReviewList key={idx}>
             <div className="review_user_name">{review.userName}</div>
             <ReviewDetail>
@@ -102,7 +123,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div>{review.reviewText}</div>
                 <ImgWrapper>
                   {review.images &&
-                    JSON.parse(review.images).map((image, idx) => (
+                    review.images.map((image, idx) => (
                       <ReviewImgView image={image} key={idx} />
                     ))}
                 </ImgWrapper>

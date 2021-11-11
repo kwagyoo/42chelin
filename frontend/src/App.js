@@ -9,7 +9,6 @@ import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
 import Auth from './hoc/auth';
-import Carouseltest from './common/Carousel';
 
 const App = () => {
   AWS.config.update({
