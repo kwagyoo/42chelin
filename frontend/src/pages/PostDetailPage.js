@@ -95,7 +95,10 @@ const PostDetailPage = ({ location }) => {
               </FlexWrapper>
               <StoreReviewDetail storeList={storeList} />
             </StoreListBlock>
-            <StoreReviewList storeReviews={storeList.storeReviews} />
+            <StoreReviewList
+              store={storeList}
+              storeReviews={storeList.storeReviews}
+            />
           </ContentsWrapper>
         )}
       </Wrapper>
