@@ -82,7 +82,7 @@ const useInput = (initialValue, validator) => {
 };
 
 const PostWritePage = ({ history, location }) => {
-  const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
+  const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
@@ -99,11 +99,11 @@ const PostWritePage = ({ history, location }) => {
     if (!userToken) return null;
     try {
       const newImages = uploadImagesToS3(
-        data.images.filter((image) => typeof image !== 'string'),
+        data.images.filter((image) => image.imageURL === undefined),
       );
       console.log([
         ...newImages,
-        ...data.images.filter((image) => typeof image === 'string'),
+        ...data.images.filter((image) => image.imageURL),
       ]);
       // await updateStoreReview({
       //   ...data,

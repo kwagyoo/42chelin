@@ -72,7 +72,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
       <div style={thumb} id={file.name} key={index}>
         <div style={thumbInner} onClick={() => onDelete(file.index)}>
           <img
-            src={typeof file === 'string' ? file : URL.createObjectURL(file)}
+            src={file.imageURL ?? URL.createObjectURL(file)}
             style={img}
             alt="thumbnail"
           />
