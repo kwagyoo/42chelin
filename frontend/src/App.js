@@ -7,6 +7,7 @@ import PostWritePage from './pages/PostWritePage';
 import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
+import Auth from './hoc/auth';
 
 const App = () => {
   AWS.config.update({
@@ -21,9 +22,9 @@ const App = () => {
       <Route path="/" component={PostlistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={PostDetailPage} />
-      <Route path="/write" component={PostWritePage} />
+      <Route path="/write" component={Auth(PostWritePage, true)} />
       <Route path="/search" component={SearchPage} />
-      <Route path="/storeSearch" component={KakaoSearchPage} />
+      <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
     </>
   );
 };
