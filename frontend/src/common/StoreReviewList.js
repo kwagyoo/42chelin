@@ -81,14 +81,12 @@ const StoreReviewList = ({ store, storeReviews }) => {
   };
 
   const goUpdatePage = (review) => {
-    const { storeName, storeAddress, userName, reviewDate } = store;
-    dispatch(
-      setReview({ storeName, storeAddress, userName, reviewDate, review }),
-    );
-    history.push('/edit');
+    const { storeName, storeAddress, userName } = store;
+    dispatch(setReview({ storeName, storeAddress, userName, review }));
+    history.push('/update');
   };
 
-  const imageTest = async () => {
+  const getImageURLsFromS3 = async () => {
     const FixedReview = await Promise.all(
       storeReviews.map(async (review) => {
         const parsedImages = JSON.parse(review.images);
@@ -97,13 +95,13 @@ const StoreReviewList = ({ store, storeReviews }) => {
             return await loadImageFromS3(image);
           }),
         );
-        return { ...review, images: imageURLs };
+        return { ...review, imageNames: review.images, images: imageURLs };
       }),
     );
     setReviews(FixedReview);
   };
   useEffect(() => {
-    imageTest();
+    getImageURLsFromS3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
