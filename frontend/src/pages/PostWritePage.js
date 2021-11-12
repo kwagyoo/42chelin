@@ -87,7 +87,7 @@ const useInput = (initialValue, validator) => {
 const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   try {
-    console.log(data);
+    console.log('data', data);
     const imageNames = uploadImagesToS3(data.images);
     const res = await saveStoreData({
       ...data,
@@ -155,6 +155,7 @@ const PostWritePage = ({ history, location }) => {
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);
     setValue('y', store?.y);
+    setValue('storeID', store?.id);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
