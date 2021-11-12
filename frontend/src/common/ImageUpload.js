@@ -58,9 +58,14 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
     setCount((prevCount) => prevCount + acceptedFiles.length);
   }; //files는 왜 의존 안해도 상관없는가... 값과 배열의 차이, usecallback 함수 재생성차이
 
-  const onDelete = (index) => {
-    URL.revokeObjectURL(files.find((x) => x.index === index).preview);
-    setFiles((prevFiles) => prevFiles.filter((x) => x.index !== index)); //splice의 경우 원래 함수를 잘라주는 함수라서 새로 배열을 생성하지 않아 갱신하지 않는것일 듯
+  const onDelete = (name) => {
+    const selectedFile = files.find((x) => {
+      if (x.imageURL) return x.image === name;
+      return x.name === name;
+    });
+    console.log(name);
+    if (selectedFile?.preview) URL.revokeObjectURL(selectedFile.preview);
+    setFiles((prevFiles) => prevFiles.filter((x) => x !== selectedFile)); //splice의 경우 원래 함수를 잘라주는 함수라서 새로 배열을 생성하지 않아 갱신하지 않는것일 듯
     setCount((prevCount) => prevCount - 1);
   };
 
@@ -70,7 +75,10 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
       index, //[[file],[file,file]...]와 같이 동시에 업로드한 파일들끼리 묶여있어서 이중 map을 사용해서 내부정보를 얻어온다.
     ) => (
       <div style={thumb} id={file.name} key={index}>
-        <div style={thumbInner} onClick={() => onDelete(file.index)}>
+        <div
+          style={thumbInner}
+          onClick={() => onDelete(file.name ?? file.image)}
+        >
           <img
             src={file.imageURL ?? URL.createObjectURL(file)}
             style={img}

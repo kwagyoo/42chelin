@@ -99,6 +99,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
         return { ...review, imageNames: review.images, images: imageURLs };
       }),
     );
+    setReviews(FixedReview);
   };
   useEffect(() => {
     getImageURLsFromS3();
@@ -122,7 +123,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <ImgWrapper>
                   {review.images &&
                     review.images.map((image, idx) => (
-                      <ReviewImgView image={image} key={idx} />
+                      <ReviewImgView image={image.imageURL} key={idx} />
                     ))}
                 </ImgWrapper>
               </div>

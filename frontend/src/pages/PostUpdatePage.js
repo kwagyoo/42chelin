@@ -99,20 +99,18 @@ const PostWritePage = ({ history, location }) => {
     if (!userToken) return null;
     try {
       const newImages = uploadImagesToS3(
-        data.images.filter((image) => image.imageURL === undefined),
+        data.storeImages.filter((image) => image.imageURL === undefined),
       );
-      console.log([
-        ...newImages,
-        ...data.images.filter((image) => image.imageURL),
-      ]);
-      // await updateStoreReview({
-      //   ...data,
-      //   token: userToken,
-      //   images: [
-      //     ...newImages,
-      //     ...data.images.filter((image) => typeof image === 'string'),
-      //   ],
-      // });
+      await updateStoreReview({
+        ...data,
+        token: userToken,
+        reviewImages: [
+          ...data.storeImages
+            .filter((image) => image.imageURL)
+            .map((image) => image.image),
+          ...newImages,
+        ],
+      });
       setTimeout(() => {
         history.push(
           `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
@@ -126,20 +124,18 @@ const PostWritePage = ({ history, location }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
-      await UpdateStoreReview({ ...data, images: files });
+      await UpdateStoreReview({ ...data, storeImages: files });
       setLoading((loading) => false);
     }
   };
 
   useEffect(() => {
     if (review) {
-      setValue('userName', review.userName);
+      setValue('userName', review.review.userName);
       setValue('reviewDate', review.review.reviewDate);
       setValue('storeName', review.storeName);
       setValue('storeAddress', review.storeAddress);
-      review.review.images?.forEach((image) => {
-        setFiles([...files, image]);
-      });
+      setFiles(review.review.images);
     } else {
       alert('수정할 리뷰 데이터가 없습니다. 이전 페이지로 돌아갑니다.');
       history.goBack();

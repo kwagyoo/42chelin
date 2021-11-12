@@ -141,12 +141,15 @@ const PostWritePage = ({ history, location }) => {
           placeName: res.place_name,
           address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
           id: res.id,
+          x: res.x,
+          y: res.y,
         });
       });
     }
   }, [location.search]);
 
   useEffect(() => {
+    console.log(store);
     setValue('userName', localStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
