@@ -137,10 +137,12 @@ const PostWritePage = ({ history, location }) => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
+        console.log('kakao', res);
         setStore({
           placeName: res.place_name,
           address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
           id: res.id,
+          category: res.category_group_code,
           x: res.x,
           y: res.y,
         });
@@ -149,13 +151,13 @@ const PostWritePage = ({ history, location }) => {
   }, [location.search]);
 
   useEffect(() => {
-    console.log(store);
     setValue('userName', localStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);
     setValue('y', store?.y);
     setValue('storeID', store?.id);
+    setValue('storeCategory', store?.category);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
