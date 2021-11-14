@@ -87,7 +87,7 @@ const useInput = (initialValue, validator) => {
 const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   try {
-    console.log(data);
+    console.log('data', data);
     const imageNames = uploadImagesToS3(data.images);
     const res = await saveStoreData({
       ...data,
@@ -138,10 +138,14 @@ const PostWritePage = ({ history, location }) => {
     console.log(query);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
+        console.log('kakao', res);
         setStore({
           placeName: res.place_name,
           address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
           id: res.id,
+          category: res.category_group_code,
+          x: res.x,
+          y: res.y,
         });
       });
     }
@@ -153,6 +157,8 @@ const PostWritePage = ({ history, location }) => {
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);
     setValue('y', store?.y);
+    setValue('storeID', store?.id);
+    setValue('storeCategory', store?.category);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
