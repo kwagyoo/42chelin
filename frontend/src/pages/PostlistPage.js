@@ -4,7 +4,7 @@ import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
-import { loadAllStoreData } from '../lib/api/store';
+import { GetRandomStore, loadAllStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -93,6 +93,13 @@ const PostlistPage = ({ history }) => {
     );
   };
 
+  useEffect(() => {
+    GetRandomStore().then((data) =>
+      history.push(
+        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+      ),
+    );
+  }, []);
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
     <>
