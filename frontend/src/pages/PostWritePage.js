@@ -135,6 +135,7 @@ const PostWritePage = ({ history, location }) => {
 
   useEffect(() => {
     const query = querystring.parse(location.search);
+    console.log(query);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
         console.log('kakao', res);

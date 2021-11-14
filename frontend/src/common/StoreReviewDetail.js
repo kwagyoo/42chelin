@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 const StoreItemBlock = styled.div`
@@ -14,14 +15,29 @@ const StoreInfoBlock = styled.div`
 `;
 
 const StoreHedaer = styled.div`
+  display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid #e9e9e9;
+  button {
+    border: none;
+    background-color: white;
+    :hover {
+      color: #2f4f4f;
+      cursor: pointer;
+    }
+  }
 `;
 
 const StoreReviewDetail = ({ storeList }) => {
+  const history = useHistory();
+  const GoWritePage = () => {
+    history.push(`/write?storeName=${storeList.storeName}}`);
+  };
   return (
     <StoreItemBlock>
       <StoreHedaer>
         <h2>{storeList.storeName}</h2>
+        <button onClick={GoWritePage}>리뷰작성</button>
       </StoreHedaer>
       <StoreInfoBlock>
         <span>{storeList.storeAddress}</span>

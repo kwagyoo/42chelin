@@ -7,8 +7,10 @@ const CardBox = styled.div`
 `;
 
 const CardImg = styled.img`
-  width: 350px;
-  height: 190px;
+  width: 100%;
+  overflow-y: hidden;
+
+  height: 200px;
 `;
 const CarouselImg = ({ image }) => {
   const [imgurl, setImgUrl] = useState('');

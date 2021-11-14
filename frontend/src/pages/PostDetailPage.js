@@ -9,15 +9,21 @@ import qs from 'qs';
 import Carousel from '../common/Carousel';
 
 const StoreListBlock = styled.div`
-  margin-top: 3rem;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
   display: flex;
+  margin-top: 3rem;
+  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const FlexWrapper = styled.div`
   display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 500px) {
+    width: 300px;
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
 const ContentsWrapper = styled.div`
@@ -30,8 +36,15 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   #map {
-    width: 500px;
+    width: 300px;
     height: 200px;
+  }
+  @media (max-width: 500px) {
+    display: initial;
+    justify-content: center;
+    #map {
+      width: 100%;
+    }
   }
 `;
 
@@ -81,7 +94,6 @@ const PostDetailPage = ({ location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <>
       <Header />
@@ -89,7 +101,7 @@ const PostDetailPage = ({ location }) => {
         {storeList && (
           <ContentsWrapper>
             <StoreListBlock>
-              <FlexWrapper>
+              <FlexWrapper className="flexwrapper">
                 <Carousel images={storeList.storeImages} />
                 <div id="map" />
               </FlexWrapper>

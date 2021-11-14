@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import CarouselImg from './CarouselImg';
 
 const Container = styled.div`
-  margin-left: 5%;
-  margin-right: 5%;
+  width: 400px;
+
   .slick-dots {
     .slick-active {
       button::before {
@@ -14,16 +14,17 @@ const Container = styled.div`
       }
     }
     button::before {
-      color: #e9e9e9;
+      color: #708090;
     }
   }
 `;
 
 // 슬라이드 CSS
 const StyledSlider = styled(Slider)`
+  width: 100%;
+  height: 100%;
   .slick-list {
-    width: 500px;
-    height: 200px;
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -32,21 +33,46 @@ const StyledSlider = styled(Slider)`
   }
 
   .slick-dots {
-    bottom: -50px;
-    margin-top: -200px;
   }
 
   .slick-track {
     overflow-x: hidden;
+    overflow-y: hidden;
+  }
+  .slick-prev,
+  .slick-next {
+    color: green;
+  }
+  .slick-prev:before,
+  .slick-next:before {
+    color: #2f4f4f;
   }
 `;
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+  autoplay: true, // 자동 스크롤 사용 여부
+  autoplaySpeed: 10000, // 자동 스크롤 시 다음으로 넘어가는데 걸리는 시간 (ms)
+  draggable: true, //드래그 가능 여부
+  centerPadding: '0px',
+  //   nextArrow: <SampleNextArrow />,
+  //   prevArrow: <SamplePrevArrow />,
+};
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
   return (
     <div
       className={className}
-      style={{ ...style, display: 'block', background: 'black' }}
+      style={{
+        ...style,
+        display: 'block',
+        background: 'black',
+      }}
       onClick={onClick}
     />
   );
@@ -62,21 +88,10 @@ function SamplePrevArrow(props) {
     />
   );
 }
-const settings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  centerMode: true,
-  centerPadding: '0px',
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />,
-};
 
 const Carousel = ({ images }) => {
   return (
-    <Container>
+    <Container className="carousel">
       <StyledSlider {...settings}>
         {images.map((image, idx) => (
           <CarouselImg image={image} key={idx} />
