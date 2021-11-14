@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
-import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
-import { loadImageFromS3, uploadImagesToS3 } from '../lib/api/aws';
+import { updateStoreReview } from '../lib/api/store';
+import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
 
 const StyledForm = styled.form`
@@ -82,7 +82,7 @@ const useInput = (initialValue, validator) => {
 };
 
 const PostWritePage = ({ history, location }) => {
-  const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
+  const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
@@ -94,15 +94,22 @@ const PostWritePage = ({ history, location }) => {
     (value) => value.length < 1000,
   );
 
-  const SaveStore = async (data) => {
+  const UpdateStoreReview = async (data) => {
     const userToken = localStorage.getItem('token');
     if (!userToken) return null;
     try {
-      const imageNames = uploadImagesToS3(data.images);
-      const res = await saveStoreData({
+      const newImages = uploadImagesToS3(
+        data.storeImages.filter((image) => image.imageURL === undefined),
+      );
+      await updateStoreReview({
         ...data,
         token: userToken,
-        images: imageNames,
+        reviewImages: [
+          ...data.storeImages
+            .filter((image) => image.imageURL)
+            .map((image) => image.image),
+          ...newImages,
+        ],
       });
       setTimeout(() => {
         history.push(
@@ -117,21 +124,18 @@ const PostWritePage = ({ history, location }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
-      //await UpdateStoreReview({ ...data, images: files });
+      await UpdateStoreReview({ ...data, storeImages: files });
       setLoading((loading) => false);
     }
   };
 
   useEffect(() => {
-    console.log('reviewData', review);
     if (review) {
-      setValue('userName', review.userName);
-      setValue('reviewDate', review.reviewDate);
+      setValue('userName', review.review.userName);
+      setValue('reviewDate', review.review.reviewDate);
       setValue('storeName', review.storeName);
       setValue('storeAddress', review.storeAddress);
-      review.storeImages?.forEach((image) =>
-        loadImageFromS3(image, (param) => setFiles(param)),
-      );
+      setFiles(review.review.images);
     } else {
       alert('수정할 리뷰 데이터가 없습니다. 이전 페이지로 돌아갑니다.');
       history.goBack();

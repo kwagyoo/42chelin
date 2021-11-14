@@ -23,7 +23,7 @@ const App = () => {
       <Route path="/" component={PostlistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={PostDetailPage} />
-      <Route path="/edit" component={PostUpdatePage} />
+      <Route path="/update" component={PostUpdatePage} />
       <Route path="/write" component={PostWritePage} />
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />

@@ -81,29 +81,28 @@ const StoreReviewList = ({ store, storeReviews }) => {
   };
 
   const goUpdatePage = (review) => {
-    const { storeName, storeAddress, userName, reviewDate } = store;
-    dispatch(
-      setReview({ storeName, storeAddress, userName, reviewDate, review }),
-    );
-    history.push('/edit');
+    const { storeName, storeAddress, userName } = store;
+    dispatch(setReview({ storeName, storeAddress, userName, review }));
+    history.push('/update');
   };
 
-  const imageTest = async () => {
+  const getImageURLsFromS3 = async () => {
     const FixedReview = await Promise.all(
       storeReviews.map(async (review) => {
         const parsedImages = JSON.parse(review.images);
         const imageURLs = await Promise.all(
           parsedImages.map(async (image) => {
-            return await loadImageFromS3(image);
+            const imageURL = await loadImageFromS3(image);
+            return { image, imageURL };
           }),
         );
-        return { ...review, images: imageURLs };
+        return { ...review, imageNames: review.images, images: imageURLs };
       }),
     );
     setReviews(FixedReview);
   };
   useEffect(() => {
-    imageTest();
+    getImageURLsFromS3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -124,7 +123,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <ImgWrapper>
                   {review.images &&
                     review.images.map((image, idx) => (
-                      <ReviewImgView image={image} key={idx} />
+                      <ReviewImgView image={image.imageURL} key={idx} />
                     ))}
                 </ImgWrapper>
               </div>
