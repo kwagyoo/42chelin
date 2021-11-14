@@ -39,11 +39,6 @@ const PostBlock = ({ src, delay, store }) => {
     }
   }, [src]);
 
-  //   const MissingImg = (e) => {
-  //     console.log(DefalutImg);
-  //     // e.target.src = { DefalutImg };
-  //   };
-
   const fadein = useSpring({
     from: { y: '10px', opacity: 0 },
     to: { y: '0px', opacity: 1 },
@@ -63,6 +58,8 @@ const PostBlock = ({ src, delay, store }) => {
           <span>{store?.storeName}</span>
           <br />
           <span>{store?.storeAddress}</span>
+          <br />
+          <span>리뷰 ({store?.storeReviews})</span>
         </div>
       </animated.article>
     </StoreCompactInfo>

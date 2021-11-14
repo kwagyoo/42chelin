@@ -18,8 +18,8 @@ const SearchInput = styled.div`
   input {
     margin-left: 30px;
     margin-top: 5px;
-    height: 40px;
-    width: 550px;
+    height: 70%;
+    width: 70%;
     border-style: none;
   }
   input:focus {
@@ -28,6 +28,8 @@ const SearchInput = styled.div`
 `;
 
 const OptionList = styled.div`
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 30px;
   margin-top: 5px;
@@ -92,7 +94,6 @@ const PostlistPage = ({ history }) => {
       `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
     );
   };
-
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
     <>
@@ -107,6 +108,7 @@ const PostlistPage = ({ history }) => {
       </SearchInput>
       <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
         <OptionList>
+          <div>지금까지 등록된 가게 개수 : {storeList.length}</div>
           <ul className="option-list-ul">
             <li>
               <button>최신순</button>
