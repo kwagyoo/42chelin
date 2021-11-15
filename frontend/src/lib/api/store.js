@@ -58,14 +58,5 @@ export const GetStoreInfoKakao = async (request) => {
   }
 };
 
-export const GetRandomStore = async () => {
-  try {
-    const res = await client.get(
-      `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/random`,
-    );
-    return res.data.body;
-  } catch (error) {
-    console.error(error);
-    return Promise.reject(error);
-  }
-};
+export const GetRandomStore = () =>
+  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/random`);

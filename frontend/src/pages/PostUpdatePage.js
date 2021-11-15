@@ -140,7 +140,7 @@ const PostWritePage = ({ history, location }) => {
       alert('수정할 리뷰 데이터가 없습니다. 이전 페이지로 돌아갑니다.');
       history.goBack();
     }
-  }, [review, setValue]);
+  }, [history, review, setValue]);
 
   return (
     <React.Fragment>

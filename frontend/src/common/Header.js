@@ -9,6 +9,8 @@ import {
   faPencilAlt,
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
+import { GetRandomStore } from '../lib/api/store';
+import { useHistory } from 'react-router-dom';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -38,6 +40,15 @@ const Wrapper = styled.div`
     color: #000;
   }
 
+  .header-random-button {
+    border: none;
+    background-color: white;
+    :hover {
+      color: #2f4f4f;
+      cursor: pointer;
+    }
+  }
+
   .header-menu-item {
     height: 60px;
     display: flex;
@@ -46,7 +57,8 @@ const Wrapper = styled.div`
   }
 
   .header-menu-item:hover {
-    background-color: gray;
+    color: #2f4f4f;
+    cursor: pointer;
   }
 
   .header-menu-item a {
@@ -142,10 +154,10 @@ const Wrapper = styled.div`
 `;
 
 const UserName = styled.div`
+  height: 40px;
+  margin-top: 20px;
   margin-right: 10px;
   font-weight: 800;
-  display: flex;
-  align-items: center;
 `;
 
 const Spacer = styled.div`
@@ -159,6 +171,19 @@ const Header = () => {
   const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
+  const history = useHistory();
+
+  const RandomStore = async () => {
+    try {
+      const res = await GetRandomStore();
+      const { storeName, storeAddress } = res.data.body;
+      history.push(
+        `/detail?storeName=${storeName}&storeAddress=${storeAddress}`,
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
@@ -227,9 +252,9 @@ const Header = () => {
             <div className="header-menu-item">
               <Link to="/">식당 리뷰</Link>
             </div>
-            <div className="header-menu-item">
-              <Link to="/">오늘의 식당 추천</Link>
-            </div>
+            <button className="header-random-button" onClick={RandomStore}>
+              오늘의 식당 추천
+            </button>
           </div>
           <div className="header-right">
             {isLogin ? (

@@ -31,7 +31,9 @@ const StoreHedaer = styled.div`
 const StoreReviewDetail = ({ storeList }) => {
   const history = useHistory();
   const GoWritePage = () => {
-    history.push(`/write?storeName=${storeList.storeName}}`);
+    history.push(
+      `/write?placeName=${storeList.storeName}&id=${storeList.storeID}`,
+    );
   };
   return (
     <StoreItemBlock>

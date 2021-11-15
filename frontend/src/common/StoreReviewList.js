@@ -72,7 +72,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
         reviewDate: review.reviewDate,
       };
       const res = await deleteStoreReview(deleteReviewData);
-
+      console.log('deleteStoreReview', res);
       history.go(0);
     } catch (error) {
       console.error(error);
