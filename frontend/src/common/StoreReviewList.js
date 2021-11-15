@@ -51,6 +51,7 @@ const ReviewDetail = styled.div`
   }
 `;
 const ImgWrapper = styled.div`
+  width: 70%;
   display: flex;
   overflow-x: scroll;
   overflow-y: hidden;

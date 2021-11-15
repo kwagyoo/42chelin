@@ -155,8 +155,7 @@ const PostWritePage = ({ history, location }) => {
   }, [location.search]);
 
   useEffect(() => {
-    //setValue('userName', localStorage.getItem('username'));
-    setValue('userName', 'bkwag');
+    setValue('userName', localStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);
