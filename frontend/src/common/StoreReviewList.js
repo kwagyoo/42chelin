@@ -46,6 +46,9 @@ const ReviewDetail = styled.div`
   .review_detail_buttons button:hover {
     cursor: pointer;
   }
+  .hide {
+    display: none;
+  }
 `;
 const ImgWrapper = styled.div`
   display: flex;
@@ -128,7 +131,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 </ImgWrapper>
               </div>
               <div className="review_detail_buttons">
-                <button onClick={() => goUpdatePage(review)}>
+                <button
+                  onClick={() => goUpdatePage(review)}
+                  className={
+                    review.userName === localStorage.getItem('username')
+                      ? null
+                      : 'hide'
+                  }
+                >
                   <FontAwesomeIcon
                     icon={faTimes}
                     style={{ color: 'red' }}
@@ -136,7 +146,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
                     className="search"
                   />
                 </button>
-                <button onClick={() => deleteReview(review)}>
+                <button
+                  onClick={() => deleteReview(review)}
+                  className={
+                    review.userName === localStorage.getItem('username')
+                      ? null
+                      : 'hide'
+                  }
+                >
                   <FontAwesomeIcon
                     icon={faTimes}
                     style={{ color: 'black' }}

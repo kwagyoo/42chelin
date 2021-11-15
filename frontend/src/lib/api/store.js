@@ -1,11 +1,10 @@
 import client from './client';
 
-export const saveStoreData = async (request) => {
+export const saveStoreData = async (request) =>
   await client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/save`,
     request,
   );
-};
 
 export const updateStoreReview = async (request) => {
   await client.post(

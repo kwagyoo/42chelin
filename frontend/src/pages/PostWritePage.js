@@ -94,7 +94,6 @@ const SaveStore = async (data) => {
       token: userToken,
       images: imageNames,
     });
-    console.log(res);
   } catch (e) {
     console.error(e);
   }
@@ -126,8 +125,13 @@ const PostWritePage = ({ history, location }) => {
     if (!loading) {
       setLoading((loading) => !loading);
       if (store) {
-        await SaveStore({ ...data, images: files });
-        history.push('/');
+        try {
+          await SaveStore({ ...data, images: files });
+          history.push('/');
+        } catch (error) {
+          alert('문제가 발생하였습니다. 콘솔을 확인해주세요.');
+          console.error(error);
+        }
       }
       setLoading((loading) => !loading);
     }
@@ -138,7 +142,6 @@ const PostWritePage = ({ history, location }) => {
     console.log(query);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
-        console.log('kakao', res);
         setStore({
           placeName: res.place_name,
           address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
@@ -152,7 +155,8 @@ const PostWritePage = ({ history, location }) => {
   }, [location.search]);
 
   useEffect(() => {
-    setValue('userName', localStorage.getItem('username'));
+    //setValue('userName', localStorage.getItem('username'));
+    setValue('userName', 'bkwag');
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);
