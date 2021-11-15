@@ -9,7 +9,7 @@ const StoreCompactInfo = styled.div`
   border-radius: 5px;
   .storeThumb {
     width: 100%;
-    height: 300px;
+    height: 200px;
   }
   .storeInfo {
     width: 100%;
