@@ -4,7 +4,7 @@ const ReviewImgView = ({ image }) => {
       <img
         src={image}
         alt="reviewImg"
-        style={{ width: '200px', height: '200px', paddingRight: '5%' }}
+        style={{ width: '150px', height: '150px', paddingRight: '5%' }}
       />
     </>
   );

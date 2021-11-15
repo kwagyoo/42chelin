@@ -10,15 +10,16 @@ const StyledDrop = styled.div`
   height: 110px;
   .dropMsg {
     margin-top: 40px;
+    width: 110px;
+
     text-align: center;
     font-size: 12px;
   }
 `;
 
 const ThumbsContainer = styled.div`
-  width: ${({ count }) =>
-    110 * (count + 1) +
-    'px'}; //밖에서 동적으로 조절하고 싶은 경우 파라미터로 값을 받아올 수 있다.
+  overflow: auto;
+  width: 100%;
   max-height: 110px;
   display: flex;
   margin: 5px 0px;
@@ -29,18 +30,18 @@ const img = {
   height: '100px',
 };
 
-const thumb = {
-  display: 'inline-block',
-  flex: '110px',
+const Thumb = styled.div`
+  display: inline-block,
+  flex: 110px,
   borderRadius: 2,
-  border: '1px solid #eaeaea',
+  border: 1px solid #eaeaea,
   marginBottom: 8,
   marginRight: 8,
   width: 110,
   height: 110,
   padding: 4,
-  boxSizing: 'border-box',
-};
+  boxSizing: border-box,
+`;
 
 const thumbInner = {
   width: '100%',
@@ -74,7 +75,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
       file,
       index, //[[file],[file,file]...]와 같이 동시에 업로드한 파일들끼리 묶여있어서 이중 map을 사용해서 내부정보를 얻어온다.
     ) => (
-      <div style={thumb} id={file.name} key={index}>
+      <Thumb id={file.name} key={index}>
         <div
           style={thumbInner}
           onClick={() => onDelete(file.name ?? file.image)}
@@ -85,7 +86,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
             alt="thumbnail"
           />
         </div>
-      </div>
+      </Thumb>
     ),
   );
 
