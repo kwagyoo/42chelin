@@ -7,6 +7,10 @@ import 'antd/dist/antd.css';
 import { loadAllStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
+import { faThLarge } from '@fortawesome/free-solid-svg-icons';
+import StoreMap from '../common/StoreMap';
 
 const SearchInput = styled.div`
   width: 90%;
@@ -69,10 +73,17 @@ const getAllStoreData = async ({ dispatch }) => {
 
 const PostlistPage = ({ history }) => {
   const [text, setText] = useState('');
+  const [change, setChange] = useState(false);
+
   const dispatch = useDispatch();
 
   const onChange = (e) => {
     setText(e.target.value);
+  };
+
+  const ChangeList = (e) => {
+    if (e.target.id === 'btnradio1') setChange(true);
+    else setChange(false);
   };
 
   const onKeyPress = (e) => {
@@ -121,25 +132,56 @@ const PostlistPage = ({ history }) => {
             </li>
           </ul>
         </OptionList>
-        <Row gutter={[16, 16]}>
-          {storeList &&
-            storeList.map((store, index) => (
-              <Col
-                key={index}
-                xs={12}
-                md={8}
-                lg={6}
-                xl={4}
-                onClick={() => goDetail(storeList[index])}
-              >
-                <PostBlock
-                  src={store.storeImage}
-                  delay={store.delay}
-                  store={storeList[index]}
-                />
-              </Col>
-            ))}
-        </Row>
+        <div className="list-mode">
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Basic radio toggle button group"
+          >
+            <input
+              type="radio"
+              id="btnradio1"
+              name="btn-check"
+              onClick={ChangeList}
+            />
+            <label htmlFor="btnradio1">
+              <FontAwesomeIcon icon={faThLarge} />
+            </label>
+            <input
+              type="radio"
+              className="btn-check"
+              id="btnradio2"
+              name="btn-check"
+              onClick={ChangeList}
+            />
+            <label htmlFor="btnradio2">
+              <FontAwesomeIcon icon={faMap} />
+            </label>
+          </div>
+        </div>
+        {change === true ? (
+          <Row gutter={[16, 16]}>
+            {storeList &&
+              storeList.map((store, index) => (
+                <Col
+                  key={index}
+                  xs={12}
+                  md={8}
+                  lg={6}
+                  xl={4}
+                  onClick={() => goDetail(storeList[index])}
+                >
+                  <PostBlock
+                    src={store.storeImage}
+                    delay={store.delay}
+                    store={storeList[index]}
+                  />
+                </Col>
+              ))}
+          </Row>
+        ) : (
+          <StoreMap storeList={storeList} history={history} />
+        )}
       </div>
     </>
   );
