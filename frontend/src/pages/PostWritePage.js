@@ -38,6 +38,8 @@ const StyledForm = styled.form`
   }
   .write_page_header {
     text-align: center;
+    margin-top: 20px;
+    margin-bottom: 5px;
   }
 `;
 

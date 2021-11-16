@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { deleteStoreReview } from '../lib/api/store';
 import ReviewImgView from './ReviewImgView';
 import { useHistory } from 'react-router';
@@ -14,6 +14,7 @@ const ReviewList = styled.div`
   border-bottom: 1px solid #e9e9e9;
   margin-top: 20px;
   .review_user_name {
+    width: 8%;
     flex-grow: 0;
   }
 `;
@@ -27,17 +28,33 @@ const ReviewListHeader = styled.div`
 `;
 
 const ReviewDetail = styled.div`
+  width: 70%;
   display: flex;
   flex-grow: 1;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 3%;
+  padding-left: 1%;
   .Date {
     color: #9b9b9b;
   }
   img {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .review_info {
+    flex-grow: 1;
+    width: 90%;
+  }
+  .review_info .review_text {
+    height: 50px;
+    overflow: auto;
+  }
+  .review_detail_buttons {
+    width: 60px;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    align-items: start;
   }
   .review_detail_buttons button {
     background: none;
@@ -50,14 +67,18 @@ const ReviewDetail = styled.div`
     display: none;
   }
 `;
-const ImgWrapper = styled.div`
-  width: 70%;
+const ImgContainer = styled.div`
   display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  width : 90%
+  flex-wrap: nowrap;
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: none;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  -webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
 `;
 
 const StoreReviewList = ({ store, storeReviews }) => {
@@ -121,15 +142,15 @@ const StoreReviewList = ({ store, storeReviews }) => {
           <ReviewList key={idx}>
             <div className="review_user_name">{review.userName}</div>
             <ReviewDetail>
-              <div>
+              <div className="review_info">
                 <div className="Date">{review.reviewDate}</div>
-                <div>{review.reviewText}</div>
-                <ImgWrapper>
+                <div className="review_text">{review.reviewText}</div>
+                <ImgContainer>
                   {review.images &&
                     review.images.map((image, idx) => (
                       <ReviewImgView image={image.imageURL} key={idx} />
                     ))}
-                </ImgWrapper>
+                </ImgContainer>
               </div>
               <div className="review_detail_buttons">
                 <button
@@ -141,8 +162,8 @@ const StoreReviewList = ({ store, storeReviews }) => {
                   }
                 >
                   <FontAwesomeIcon
-                    icon={faTimes}
-                    style={{ color: 'red' }}
+                    icon={faEdit}
+                    style={{ color: 'black' }}
                     size="lg"
                     className="search"
                   />
@@ -156,8 +177,8 @@ const StoreReviewList = ({ store, storeReviews }) => {
                   }
                 >
                   <FontAwesomeIcon
-                    icon={faTimes}
-                    style={{ color: 'black' }}
+                    icon={faEraser}
+                    style={{ color: 'red' }}
                     size="lg"
                     className="search"
                   />

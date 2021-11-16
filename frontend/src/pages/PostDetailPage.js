@@ -30,6 +30,7 @@ const ContentsWrapper = styled.div`
   width: 100%;
   padding-left: 10%;
   padding-right: 10%;
+  margin-bottom: 200px;
 `;
 
 const Wrapper = styled.div`
