@@ -17,6 +17,7 @@ const StyledLink = styled(Link)`
   background: #495057;
   &:hover {
     background: #adb5bd;
+    color: white;
   }
 `;
 

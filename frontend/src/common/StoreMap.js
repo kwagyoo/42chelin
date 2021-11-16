@@ -60,7 +60,7 @@ const StoreMap = ({ storeList, history }) => {
     //map size
     var container = document.getElementById('map');
     var options = {
-      center: new kakao.maps.LatLng('37.48828465010806', '127.06477582672984'),
+      center: new kakao.maps.LatLng('37.48876874970571', '127.04863092330766'),
       level: 7,
     };
     var map = new kakao.maps.Map(container, options);

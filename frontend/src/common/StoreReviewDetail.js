@@ -22,7 +22,7 @@ const StoreHedaer = styled.div`
     border: none;
     background-color: white;
     :hover {
-      color: #2f4f4f;
+      color: gray;
       cursor: pointer;
     }
   }

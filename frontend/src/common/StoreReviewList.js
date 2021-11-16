@@ -50,26 +50,46 @@ const ReviewDetail = styled.div`
     overflow: auto;
   }
   .review_detail_buttons {
-    width: 60px;
+    width: 90px;
     display: flex;
     flex-direction: row;
     flex-grow: 0;
     align-items: start;
   }
-  .review_detail_buttons button {
+  .detail_button p {
+    visibility: visible;
+  }
+  .detail_button p:hover {
+    color: gray;
+  }
+  .detail_button {
     background: none;
     border: none;
+    display: block;
   }
-  .review_detail_buttons button:hover {
+
+  .detail_button:hover {
     cursor: pointer;
   }
   .hide {
     display: none;
   }
+
+  @media screen and (max-width: 950px) {
+    .review_detail_buttons {
+      width: 60px;
+    }
+    .detail_button svg {
+      visibility: visible;
+    }
+    .review_detail_buttons p {
+      visibility: hidden;
+    }
+  }
 `;
 const ImgContainer = styled.div`
   display: flex;
-  width : 90%
+  width: 90%;
   flex-wrap: nowrap;
   overflow: auto;
   overflow-x: auto;
@@ -78,7 +98,7 @@ const ImgContainer = styled.div`
   scrollbar-width: none; /* Firefox */
   -webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
-}
+  }
 `;
 
 const StoreReviewList = ({ store, storeReviews }) => {
@@ -156,9 +176,10 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <button
                   onClick={() => goUpdatePage(review)}
                   className={
-                    review.userName === localStorage.getItem('username')
+                    'detail_button ' +
+                    (review.userName === localStorage.getItem('username')
                       ? null
-                      : 'hide'
+                      : 'hide')
                   }
                 >
                   <FontAwesomeIcon
@@ -167,13 +188,15 @@ const StoreReviewList = ({ store, storeReviews }) => {
                     size="lg"
                     className="search"
                   />
+                  <p className="search">수정</p>
                 </button>
                 <button
                   onClick={() => deleteReview(review)}
                   className={
-                    review.userName === localStorage.getItem('username')
+                    'detail_button ' +
+                    (review.userName === localStorage.getItem('username')
                       ? null
-                      : 'hide'
+                      : 'hide')
                   }
                 >
                   <FontAwesomeIcon
@@ -182,6 +205,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
                     size="lg"
                     className="search"
                   />
+                  <p className="search">삭제</p>
                 </button>
               </div>
             </ReviewDetail>

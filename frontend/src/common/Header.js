@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { GetRandomStore } from '../lib/api/store';
 import { useHistory } from 'react-router-dom';
+import logo from '../image/Logo.png';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -27,14 +28,17 @@ const Wrapper = styled.div`
   display: flex;
   overflow: auto;
   align-items: center;
-
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 20px;
+  font-style: bold;
   .title {
     padding-left: 10px;
-    padding-right: 10px;
-    font-size: 30px;
-    font-weight: 800;
     letter-spacing: 2px;
-    text-decoration: none;
+    img {
+      width: 150px;
+      height: 60px;
+      padding-left: 10px;
+    }
   }
   .title:visited {
     color: #000;
@@ -44,28 +48,26 @@ const Wrapper = styled.div`
     border: none;
     background-color: white;
     :hover {
-      color: #2f4f4f;
+      color: gray;
       cursor: pointer;
     }
   }
 
   .header-menu-item {
-    height: 60px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-items: center;
   }
 
   .header-menu-item:hover {
-    color: #2f4f4f;
+    color: gray;
     cursor: pointer;
   }
 
   .header-menu-item a {
     padding: 15px 25px;
-    font-size: 15px;
     letter-spacing: 2px;
-    text-decoration: none;
   }
 
   .header-menu-item a:visited {
@@ -73,7 +75,7 @@ const Wrapper = styled.div`
   }
 
   .header-menu-item:hover a {
-    color: white;
+    color: gray;
   }
 
   .header-title {
@@ -155,9 +157,9 @@ const Wrapper = styled.div`
 
 const UserName = styled.div`
   height: 40px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-right: 10px;
-  font-weight: 800;
+  font-weight: 400;
 `;
 
 const Spacer = styled.div`
@@ -205,7 +207,7 @@ const Header = () => {
         <Wrapper>
           <div className="header-title">
             <Link to="/" className="title">
-              42Chelin
+              <img src={logo} alt="title" />
             </Link>
             <div className="title_header_smartphone">
               {isLogin ? (

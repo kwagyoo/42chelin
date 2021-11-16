@@ -2,17 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import styled from 'styled-components';
 import AWS from 'aws-sdk';
-import DefalutImg from '../image/defalut.png';
+import DefalutImg from '../image/default.png';
 
 const StoreCompactInfo = styled.div`
   border: 1px solid black;
   border-radius: 5px;
+  border-color: gray;
+
   .storeThumb {
     width: 100%;
     height: 200px;
   }
   .storeInfo {
     width: 100%;
+    font-family: 'Do Hyeon', sans-serif;
+    padding-top: 5%;
+    padding-left: 5%;
+    border-top: 1px solid;
+    border-color: #778899;
   }
 `;
 // 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다

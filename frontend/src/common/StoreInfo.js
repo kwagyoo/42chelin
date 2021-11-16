@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import DefalutImg from '../image/defalut.png';
+import DefalutImg from '../image/default.png';
 
 const StyledInfo = styled.div`
   display: flex;
@@ -10,6 +10,7 @@ const StyledInfo = styled.div`
 `;
 
 const StyledImg = styled.img`
+  width: 200px;
   padding: 10px;
 `;
 

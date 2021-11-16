@@ -16,13 +16,17 @@ const StoreListBlock = styled.div`
 `;
 
 const FlexWrapper = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: 500px) {
-    width: 300px;
+  @media (max-width: 960px) {
+    width: 100%;
     flex-direction: column;
     justify-content: center;
+    .carousel {
+      margin: auto;
+    }
   }
 `;
 
@@ -34,17 +38,26 @@ const ContentsWrapper = styled.div`
 `;
 
 const Wrapper = styled.div`
+  font-family: 'Do Hyeon', sans-serif;
+
   display: flex;
   justify-content: space-between;
   #map {
-    width: 300px;
+    width: 400px;
     height: 200px;
   }
-  @media (max-width: 500px) {
-    display: initial;
+  @media (max-width: 1000px) {
+    #map {
+      width: 350px;
+    }
+  }
+
+  @media (max-width: 960px) {
+    display: flex;
     justify-content: center;
     #map {
-      width: 100%;
+      width: 400px;
+      margin: 50px auto;
     }
   }
 `;

@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 const StyledForm = styled.form`
   margin: 10px auto 0px;
   width: 600px;
+  font-family: 'Do Hyeon', sans-serif;
+
   > * {
     margin-bottom: 10px;
   }

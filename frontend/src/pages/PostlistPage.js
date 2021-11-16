@@ -29,6 +29,9 @@ const SearchInput = styled.div`
   input:focus {
     outline: none;
   }
+  input::placeholder {
+    font-family: 'Do Hyeon', sans-serif;
+  }
 `;
 
 const OptionList = styled.div`
@@ -40,7 +43,7 @@ const OptionList = styled.div`
   ul {
     float: right;
     list-style-type: none;
-    width: 250px;
+    width: 180px;
     height: 24px;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -60,6 +63,55 @@ const OptionList = styled.div`
   }
 `;
 
+const MainBody = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  font-family: 'Do Hyeon', sans-serif;
+`;
+
+const ToggleButton = styled.div`
+  margin-left: 10px;
+  margin-bottom: 5px;
+  .btn-check {
+    width: 0;
+    height: 0;
+    margin-right: 10px;
+  }
+  .btn-group label:hover {
+    cursor: pointer;
+    color: #2f4f4f;
+  }
+  .btn-group {
+    width: 85px;
+    height: 30px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: normal;
+    align-items: center;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #6c757d;
+    overflow-x: hidden;
+  }
+  .btn-div {
+    display: flex;
+    flex-grow: 1;
+    width: 42px;
+    height: 100%;
+    align-items: center;
+    border: 1px solid;
+  }
+
+  .btn-div:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+  .btn-div:last-child {
+    border-radius: 0 5px 5px 0;
+  }
+  .btn-div.clicked {
+    background-color: #696969;
+  }
+`;
 // 재사용이 가능한 코드이므로 api로 따로 빼서 관리하면 좋다.
 const getAllStoreData = async ({ dispatch }) => {
   try {
@@ -73,7 +125,7 @@ const getAllStoreData = async ({ dispatch }) => {
 
 const PostlistPage = ({ history }) => {
   const [text, setText] = useState('');
-  const [change, setChange] = useState(false);
+  const [change, setChange] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -117,13 +169,10 @@ const PostlistPage = ({ history }) => {
           value={text}
         />
       </SearchInput>
-      <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
+      <MainBody className="main-body">
         <OptionList>
-          <div>지금까지 등록된 가게 개수 : {storeList.length}</div>
+          <div>전체 가게 개수 : {storeList.length}</div>
           <ul className="option-list-ul">
-            <li>
-              <button>최신순</button>
-            </li>
             <li>
               <button>리뷰갯수순</button>
             </li>
@@ -132,43 +181,56 @@ const PostlistPage = ({ history }) => {
             </li>
           </ul>
         </OptionList>
-        <div className="list-mode">
+        <ToggleButton className="list-mode">
           <div
             className="btn-group"
             role="group"
             aria-label="Basic radio toggle button group"
           >
-            <input
-              type="radio"
-              id="btnradio1"
-              name="btn-check"
-              onClick={ChangeList}
-            />
-            <label htmlFor="btnradio1">
-              <FontAwesomeIcon icon={faThLarge} />
-            </label>
-            <input
-              type="radio"
-              className="btn-check"
-              id="btnradio2"
-              name="btn-check"
-              onClick={ChangeList}
-            />
-            <label htmlFor="btnradio2">
-              <FontAwesomeIcon icon={faMap} />
-            </label>
+            <div className={'btn-div ' + (change ? 'clicked' : '')}>
+              <input
+                type="radio"
+                className="btn-check"
+                id="btnradio1"
+                name="btn-check"
+                onClick={ChangeList}
+              />
+              <label htmlFor="btnradio1">
+                <FontAwesomeIcon
+                  icon={faThLarge}
+                  size="lg"
+                  color={change ? '#ffffff' : '#696969'}
+                />
+              </label>
+            </div>
+            <div className={'btn-div ' + (change ? '' : 'clicked')}>
+              <input
+                type="radio"
+                className={'btn-check ' + (change ? '' : 'clicked')}
+                id="btnradio2"
+                name="btn-check"
+                onClick={ChangeList}
+              />
+              <label htmlFor="btnradio2">
+                <FontAwesomeIcon
+                  icon={faMap}
+                  size="lg"
+                  color={change ? '#696969' : '#ffffff'}
+                />
+              </label>
+            </div>
           </div>
-        </div>
+        </ToggleButton>
         {change === true ? (
           <Row gutter={[16, 16]}>
             {storeList &&
               storeList.map((store, index) => (
                 <Col
                   key={index}
-                  xs={12}
-                  md={8}
-                  lg={6}
-                  xl={4}
+                  xs={24}
+                  md={12}
+                  lg={8}
+                  xl={6}
                   onClick={() => goDetail(storeList[index])}
                 >
                   <PostBlock
@@ -182,7 +244,7 @@ const PostlistPage = ({ history }) => {
         ) : (
           <StoreMap storeList={storeList} history={history} />
         )}
-      </div>
+      </MainBody>
     </>
   );
 };

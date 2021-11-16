@@ -10,10 +10,13 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import Loading from '../common/Loading';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
   width: 600px;
+  font-family: 'Do Hyeon', sans-serif;
+
   > * {
     margin-bottom: 10px;
   }
@@ -144,6 +147,7 @@ const PostWritePage = ({ history, location }) => {
     console.log(query);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
+        console.log(res);
         setStore({
           placeName: res.place_name,
           address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
