@@ -47,6 +47,7 @@ const Wrapper = styled.div`
   .header-random-button {
     border: none;
     background-color: white;
+    /* color: black; */
     :hover {
       color: gray;
       cursor: pointer;
@@ -66,12 +67,14 @@ const Wrapper = styled.div`
   }
 
   .header-menu-item a {
+    color: #000000d9;
+
     padding: 15px 25px;
     letter-spacing: 2px;
   }
 
   .header-menu-item a:visited {
-    color: #000;
+    color: #000000d9;
   }
 
   .header-menu-item:hover a {
@@ -195,7 +198,6 @@ const Header = () => {
   const onLogout = () => {
     if (isLogin) {
       localStorage.removeItem('username');
-
       localStorage.removeItem('token');
       setisLogin('');
       alert('로그아웃 되었습니다.');

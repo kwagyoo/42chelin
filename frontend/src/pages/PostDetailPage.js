@@ -43,12 +43,18 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   #map {
-    width: 400px;
+    width: 500px;
     height: 200px;
   }
+  @media (max-width: 1500px) {
+    #map {
+      width: 380px;
+    }
+  }
+
   @media (max-width: 1000px) {
     #map {
-      width: 350px;
+      width: 330px;
     }
   }
 
@@ -56,7 +62,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     #map {
-      width: 400px;
+      width: 390px;
       margin: 50px auto;
     }
   }

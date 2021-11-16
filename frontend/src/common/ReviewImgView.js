@@ -1,11 +1,17 @@
+import styled from 'styled-components';
+
+const StyledImg = styled.img`
+  width: 200px;
+  overflow-y: hidden;
+  height: 200px;
+  object-fit: cover;
+  padding-right: 5px;
+`;
+
 const ReviewImgView = ({ image }) => {
   return (
     <>
-      <img
-        src={image}
-        alt="reviewImg"
-        style={{ width: '150px', height: '150px', paddingRight: '5%' }}
-      />
+      <StyledImg src={image} alt="reviewImg" />
     </>
   );
 };

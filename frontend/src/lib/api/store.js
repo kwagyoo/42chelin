@@ -59,3 +59,18 @@ export const GetStoreInfoKakao = async (request) => {
 
 export const GetRandomStore = () =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/random`);
+
+export const ToggleLikeStore = (request) => {
+  const { token, storeName, storeAddress, userName, isLike } = request;
+  console.log(request);
+  return client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/like`,
+    {
+      token: token,
+      storeName: storeName,
+      storeAddress: storeAddress,
+      userName: userName,
+      isLike: isLike,
+    },
+  );
+};

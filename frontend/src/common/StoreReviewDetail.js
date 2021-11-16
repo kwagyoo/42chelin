@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
+import { ToggleLikeStore } from '../lib/api/store';
 
 const StoreItemBlock = styled.div`
   width: 100%;
@@ -26,20 +28,46 @@ const StoreHedaer = styled.div`
       cursor: pointer;
     }
   }
+  .btn-like {
+    background-color: gray;
+  }
 `;
 
 const StoreReviewDetail = ({ storeList }) => {
+  const [isLike, setIsLike] = useState(false);
   const history = useHistory();
   const GoWritePage = () => {
     history.push(
       `/write?placeName=${storeList.storeName}&id=${storeList.storeID}`,
     );
   };
+
+  const ToggleLike = async () => {
+    setIsLike(!isLike);
+    const data = {
+      token: localStorage.getItem('token'),
+      storeName: storeList.storeName,
+      storeAddress: storeList.storeAddress,
+      userName: localStorage.getItem('username'),
+      isLike: !isLike,
+    };
+    try {
+      const res = await ToggleLikeStore(data);
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <StoreItemBlock>
       <StoreHedaer>
         <h2>{storeList.storeName}</h2>
-        <button onClick={GoWritePage}>리뷰작성</button>
+        <div>
+          <button onClick={ToggleLike} className="btn-like">
+            좋아요 버튼
+          </button>
+          <button onClick={GoWritePage}>리뷰작성</button>
+        </div>
       </StoreHedaer>
       <StoreInfoBlock>
         <span>{storeList.storeAddress}</span>

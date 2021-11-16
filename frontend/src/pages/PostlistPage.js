@@ -13,7 +13,7 @@ import { faThLarge } from '@fortawesome/free-solid-svg-icons';
 import StoreMap from '../common/StoreMap';
 
 const SearchInput = styled.div`
-  width: 90%;
+  width: 80%;
   height: 50px;
   margin: 30px auto 0 auto;
   background-color: #ffffff;
@@ -64,7 +64,7 @@ const OptionList = styled.div`
 `;
 
 const MainBody = styled.div`
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
   font-family: 'Do Hyeon', sans-serif;
 `;
