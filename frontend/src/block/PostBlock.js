@@ -74,7 +74,7 @@ const PostBlock = ({ src, delay, store }) => {
           <br />
           <div className="storeCount">
             <span>리뷰 ({store?.storeReviews})</span>
-            <span>좋아요 개수</span>
+            <span>좋아요 {store.storeLikes}</span>
           </div>
         </div>
       </animated.article>

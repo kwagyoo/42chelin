@@ -8,8 +8,7 @@ import { searchStoreData } from '../lib/api/store';
 import qs from 'qs';
 
 const SearchInput = styled.div`
-  height: 100px;
-  width: 650px;
+  width: 80%;
   height: 50px;
   margin: 30px auto 0 auto;
   background-color: #ffffff;
@@ -18,23 +17,33 @@ const SearchInput = styled.div`
   input {
     margin-left: 30px;
     margin-top: 5px;
-    height: 40px;
-    width: 550px;
+    height: 70%;
+    width: 70%;
     border-style: none;
   }
   input:focus {
     outline: none;
   }
+  input::placeholder {
+    font-family: 'Do Hyeon', sans-serif;
+  }
+`;
+const MainBody = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  font-family: 'Do Hyeon', sans-serif;
 `;
 
 const OptionList = styled.div`
+  display: flex;
+  justify-content: end;
   width: 100%;
   height: 30px;
   margin-top: 5px;
   ul {
     float: right;
     list-style-type: none;
-    width: 250px;
+    width: 180px;
     height: 24px;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -111,12 +120,9 @@ const SearchPage = ({ history, location }) => {
           value={text}
         />
       </SearchInput>
-      <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
+      <MainBody>
         <OptionList>
           <ul className="option-list-ul">
-            <li>
-              <button>최신순</button>
-            </li>
             <li>
               <button>리뷰갯수순</button>
             </li>
@@ -130,10 +136,10 @@ const SearchPage = ({ history, location }) => {
             searchstoreList.map((store, index) => (
               <Col
                 key={index}
-                xs={12}
-                md={8}
-                lg={6}
-                xl={4}
+                xs={24}
+                md={12}
+                lg={8}
+                xl={6}
                 onClick={() => goDetail(searchstoreList[index])}
               >
                 <PostBlock
@@ -144,7 +150,7 @@ const SearchPage = ({ history, location }) => {
               </Col>
             ))}
         </Row>
-      </div>
+      </MainBody>
     </>
   );
 };

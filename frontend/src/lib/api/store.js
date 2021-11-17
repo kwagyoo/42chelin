@@ -33,6 +33,7 @@ export const searchStoreData = (storeName) =>
 export const getStoreDetailData = (request) =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`, {
     params: {
+      userName: request.userName,
       storeName: request.storeName,
       storeAddress: request.storeAddress,
     },
@@ -62,7 +63,6 @@ export const GetRandomStore = () =>
 
 export const ToggleLikeStore = (request) => {
   const { token, storeName, storeAddress, userName, isLike } = request;
-  console.log(request);
   return client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/like`,
     {

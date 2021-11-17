@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import { ToggleLikeStore } from '../lib/api/store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
 
 const StoreItemBlock = styled.div`
   width: 100%;
@@ -16,7 +19,7 @@ const StoreInfoBlock = styled.div`
   border-bottom: 1px solid #e9e9e9;
 `;
 
-const StoreHedaer = styled.div`
+const StoreHeader = styled.div`
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #e9e9e9;
@@ -29,12 +32,18 @@ const StoreHedaer = styled.div`
     }
   }
   .btn-like {
-    background-color: gray;
+    padding-bottom: 10px;
+  }
+  .btn-reviewWrite {
+    font-size: 18px;
+  }
+  .store-header-title {
+    display: flex;
   }
 `;
 
 const StoreReviewDetail = ({ storeList }) => {
-  const [isLike, setIsLike] = useState(false);
+  const [isLike, setIsLike] = useState(storeList.isLike);
   const history = useHistory();
   const GoWritePage = () => {
     history.push(
@@ -52,23 +61,30 @@ const StoreReviewDetail = ({ storeList }) => {
       isLike: !isLike,
     };
     try {
-      const res = await ToggleLikeStore(data);
-      console.log(res);
+      await ToggleLikeStore(data);
     } catch (e) {
       console.error(e);
     }
   };
   return (
     <StoreItemBlock>
-      <StoreHedaer>
-        <h2>{storeList.storeName}</h2>
-        <div>
+      <StoreHeader>
+        <div className="store-header-title">
+          <h2>{storeList.storeName}</h2>
           <button onClick={ToggleLike} className="btn-like">
-            좋아요 버튼
+            {isLike ? (
+              <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
+            ) : (
+              <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
+            )}
           </button>
-          <button onClick={GoWritePage}>리뷰작성</button>
         </div>
-      </StoreHedaer>
+        <div>
+          <button className="btn-reviewWrite" onClick={GoWritePage}>
+            리뷰작성
+          </button>
+        </div>
+      </StoreHeader>
       <StoreInfoBlock>
         <span>{storeList.storeAddress}</span>
       </StoreInfoBlock>

@@ -77,7 +77,8 @@ const PostDetailPage = ({ location }) => {
 
   const getStore = async () => {
     try {
-      const res = await getStoreDetailData(query);
+      const userName = localStorage.getItem('username');
+      const res = await getStoreDetailData({ ...query, userName });
       setstoreList(res.data.body);
 
       const storeLocation = res.data.body.storeLocation;

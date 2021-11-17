@@ -150,12 +150,11 @@ const StoreReviewList = ({ store, storeReviews }) => {
     getImageURLsFromS3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <>
       <ReviewListHeader>
         <div>리뷰</div>
-        <div>좋아요 개수 출력</div>
+        <div>좋아요를 받은 개수 : {store.storeLikes}</div>
       </ReviewListHeader>
       {reviews &&
         reviews.map((review, idx) => (

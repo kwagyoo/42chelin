@@ -10,7 +10,6 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import Loading from '../common/Loading';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
@@ -94,7 +93,7 @@ const SaveStore = async (data) => {
   try {
     console.log('data', data);
     const imageNames = uploadImagesToS3(data.images);
-    const res = await saveStoreData({
+    await saveStoreData({
       ...data,
       token: userToken,
       images: imageNames,
@@ -132,7 +131,9 @@ const PostWritePage = ({ history, location }) => {
       if (store) {
         try {
           await SaveStore({ ...data, images: files });
-          history.push('/');
+          history.push(
+            `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+          );
         } catch (error) {
           alert('문제가 발생하였습니다. 콘솔을 확인해주세요.');
           console.error(error);

@@ -169,7 +169,7 @@ const PostlistPage = ({ history }) => {
           value={text}
         />
       </SearchInput>
-      <MainBody className="main-body">
+      <MainBody>
         <OptionList>
           <div>전체 가게 개수 : {storeList.length}</div>
           <ul className="option-list-ul">
