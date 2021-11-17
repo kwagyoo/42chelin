@@ -9,35 +9,64 @@ import qs from 'qs';
 import Carousel from '../common/Carousel';
 
 const StoreListBlock = styled.div`
-  margin-top: 3rem;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
   display: flex;
+  margin-top: 3rem;
+  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const FlexWrapper = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 960px) {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    .carousel {
+      margin: auto;
+    }
+  }
 `;
 
 const ContentsWrapper = styled.div`
   width: 100%;
   padding-left: 10%;
   padding-right: 10%;
+  margin-bottom: 200px;
 `;
 
 const Wrapper = styled.div`
+  font-family: 'Do Hyeon', sans-serif;
+
   display: flex;
   justify-content: space-between;
   #map {
     width: 500px;
     height: 200px;
   }
-`;
+  @media (max-width: 1500px) {
+    #map {
+      width: 380px;
+    }
+  }
 
-// const StyledSlider = styled.Slider`
-//   display: flex;
-// `;
+  @media (max-width: 1000px) {
+    #map {
+      width: 330px;
+    }
+  }
+
+  @media (max-width: 960px) {
+    display: flex;
+    justify-content: center;
+    #map {
+      width: 390px;
+      margin: 50px auto;
+    }
+  }
+`;
 
 const PostDetailPage = ({ location }) => {
   const [storeList, setstoreList] = useState('');
@@ -48,7 +77,8 @@ const PostDetailPage = ({ location }) => {
 
   const getStore = async () => {
     try {
-      const res = await getStoreDetailData(query);
+      const userName = localStorage.getItem('username');
+      const res = await getStoreDetailData({ ...query, userName });
       setstoreList(res.data.body);
 
       const storeLocation = res.data.body.storeLocation;
@@ -61,6 +91,9 @@ const PostDetailPage = ({ location }) => {
         level: 3,
       };
       var map = new kakao.maps.Map(container, options);
+      var zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.TOPRIGHT);
+
       var markerPosition = new kakao.maps.LatLng(
         `${storeLocation[1]}`,
         `${storeLocation[0]}`,
@@ -82,7 +115,7 @@ const PostDetailPage = ({ location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  console.log(storeList);
   return (
     <>
       <Header />
@@ -90,13 +123,16 @@ const PostDetailPage = ({ location }) => {
         {storeList && (
           <ContentsWrapper>
             <StoreListBlock>
-              <FlexWrapper>
+              <FlexWrapper className="flexwrapper">
                 <Carousel images={storeList.storeImages} />
                 <div id="map" />
               </FlexWrapper>
               <StoreReviewDetail storeList={storeList} />
             </StoreListBlock>
-            <StoreReviewList storeReviews={storeList.storeReviews} />
+            <StoreReviewList
+              store={storeList}
+              storeReviews={storeList.storeReviews}
+            />
           </ContentsWrapper>
         )}
       </Wrapper>

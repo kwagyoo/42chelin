@@ -9,6 +9,9 @@ import {
   faPencilAlt,
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
+import { GetRandomStore } from '../lib/api/store';
+import { useHistory } from 'react-router-dom';
+import logo from '../image/Logo.png';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -25,43 +28,57 @@ const Wrapper = styled.div`
   display: flex;
   overflow: auto;
   align-items: center;
-
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 20px;
+  font-style: bold;
   .title {
     padding-left: 10px;
-    padding-right: 10px;
-    font-size: 30px;
-    font-weight: 800;
     letter-spacing: 2px;
-    text-decoration: none;
+    img {
+      width: 150px;
+      height: 60px;
+      padding-left: 10px;
+    }
   }
   .title:visited {
     color: #000;
   }
 
+  .header-random-button {
+    border: none;
+    background-color: white;
+    /* color: black; */
+    :hover {
+      color: gray;
+      cursor: pointer;
+    }
+  }
+
   .header-menu-item {
-    height: 60px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-items: center;
   }
 
   .header-menu-item:hover {
-    background-color: gray;
+    color: gray;
+    cursor: pointer;
   }
 
   .header-menu-item a {
+    color: #000000d9;
+
     padding: 15px 25px;
-    font-size: 15px;
     letter-spacing: 2px;
-    text-decoration: none;
   }
 
   .header-menu-item a:visited {
-    color: #000;
+    color: #000000d9;
   }
 
   .header-menu-item:hover a {
-    color: white;
+    color: gray;
   }
 
   .header-title {
@@ -142,10 +159,10 @@ const Wrapper = styled.div`
 `;
 
 const UserName = styled.div`
+  height: 40px;
+  margin-top: 10px;
   margin-right: 10px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
+  font-weight: 400;
 `;
 
 const Spacer = styled.div`
@@ -159,6 +176,19 @@ const Header = () => {
   const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
+  const history = useHistory();
+
+  const RandomStore = async () => {
+    try {
+      const res = await GetRandomStore();
+      const { storeName, storeAddress } = res.data.body;
+      history.push(
+        `/detail?storeName=${storeName}&storeAddress=${storeAddress}`,
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
@@ -168,7 +198,6 @@ const Header = () => {
   const onLogout = () => {
     if (isLogin) {
       localStorage.removeItem('username');
-
       localStorage.removeItem('token');
       setisLogin('');
       alert('로그아웃 되었습니다.');
@@ -180,7 +209,7 @@ const Header = () => {
         <Wrapper>
           <div className="header-title">
             <Link to="/" className="title">
-              42Chelin
+              <img src={logo} alt="title" />
             </Link>
             <div className="title_header_smartphone">
               {isLogin ? (
@@ -227,9 +256,9 @@ const Header = () => {
             <div className="header-menu-item">
               <Link to="/">식당 리뷰</Link>
             </div>
-            <div className="header-menu-item">
-              <Link to="/">오늘의 식당 추천</Link>
-            </div>
+            <button className="header-random-button" onClick={RandomStore}>
+              오늘의 식당 추천
+            </button>
           </div>
           <div className="header-right">
             {isLogin ? (

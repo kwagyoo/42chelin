@@ -11,7 +11,7 @@ const GetUsername = async (token, dispatch) => {
   try {
     const res = await getUser(token);
     const username = JSON.parse(res.data.body).nickname;
-	localStorage.setItem('username', username);
+    localStorage.setItem('username', username);
     dispatch(getUserName(username));
   } catch (e) {
     Sentry.captureException(e);
@@ -26,7 +26,6 @@ const LoginRequest = async ({ location, dispatch, history }) => {
     const res = await getToken(code);
     const data = JSON.parse(res.data.body);
     const token = data.access_token;
-	console.log(data, token);
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
     await GetUsername(token, dispatch);
@@ -35,7 +34,7 @@ const LoginRequest = async ({ location, dispatch, history }) => {
     Sentry.captureException(e);
     console.log(e);
     alert('로그인에 실패했습니다.');
-	history.push('/');
+    history.push('/');
   }
 };
 
@@ -49,7 +48,7 @@ const LoginRequestEvent = ({ location, history }) => {
   return (
     <React.Fragment>
       <Header />
-      <Loading />
+      <Loading loadingText="로그인 중 .." />
     </React.Fragment>
   );
 };

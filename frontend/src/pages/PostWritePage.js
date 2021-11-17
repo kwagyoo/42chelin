@@ -6,14 +6,16 @@ import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
 import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
+import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { uploadImagesToS3 } from '../lib/api/aws';
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
   width: 600px;
+  font-family: 'Do Hyeon', sans-serif;
+
   > * {
     margin-bottom: 10px;
   }
@@ -38,6 +40,8 @@ const StyledForm = styled.form`
   }
   .write_page_header {
     text-align: center;
+    margin-top: 20px;
+    margin-bottom: 5px;
   }
 `;
 
@@ -86,16 +90,14 @@ const useInput = (initialValue, validator) => {
 
 const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
-  if (!userToken) return null;
   try {
-    console.log(data);
+    console.log('data', data);
     const imageNames = uploadImagesToS3(data.images);
-    const res = await saveStoreData({
+    await saveStoreData({
       ...data,
       token: userToken,
       images: imageNames,
     });
-    console.log(res);
   } catch (e) {
     console.error(e);
   }
@@ -127,46 +129,46 @@ const PostWritePage = ({ history, location }) => {
     if (!loading) {
       setLoading((loading) => !loading);
       if (store) {
-        await SaveStore({ ...data, images: files });
+        try {
+          await SaveStore({ ...data, images: files });
+          history.push(
+            `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+          );
+        } catch (error) {
+          alert('문제가 발생하였습니다. 콘솔을 확인해주세요.');
+          console.error(error);
+        }
       }
       setLoading((loading) => !loading);
     }
   };
 
-  //useEffect안에서 async await 사용 x
-  //https://velog.io/@he0_077/useEffect-%ED%9B%85%EC%97%90%EC%84%9C-async-await-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
-  const getStoreInfoAsync = async (query) => {
-    try {
-      if (Object.keys(query).length !== 0) {
-        const storeInfo = await GetStoreInfoKakao(query);
-        console.log(storeInfo);
-        setStore({
-          placeName: storeInfo.place_name,
-          address: storeInfo.road_address_name
-            ?.split(' ')
-            .slice(0, 2)
-            .join(' '),
-          x: storeInfo.x,
-          y: storeInfo.y,
-          id: storeInfo.id,
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
     const query = querystring.parse(location.search);
-    getStoreInfoAsync(query);
+    console.log(query);
+    if (Object.keys(query).length !== 0) {
+      GetStoreInfoKakao(query).then((res) => {
+        console.log(res);
+        setStore({
+          placeName: res.place_name,
+          address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+          id: res.id,
+          category: res.category_group_code,
+          x: res.x,
+          y: res.y,
+        });
+      });
+    }
   }, [location.search]);
 
   useEffect(() => {
-    setValue('userName', 'hyunyoo');
+    setValue('userName', localStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);
     setValue('y', store?.y);
+    setValue('storeID', store?.id);
+    setValue('storeCategory', store?.category);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
@@ -219,20 +221,18 @@ const PostWritePage = ({ history, location }) => {
             />
           </div>
           <div>
-            x
             <ImageUpload
               files={files}
               count={count}
               setFiles={setFiles}
               setCount={setCount}
-              setValue={setValue}
             />
           </div>
           <Button name="submit" disabled={loading}></Button>
           <Button
             name="cancel"
             disabled={loading}
-            onClick={() => history.push('/')}
+            onClick={() => history.goBack()}
           ></Button>
         </StyledForm>
       </main>

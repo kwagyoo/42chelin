@@ -9,10 +9,10 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const Loading = () => {
+const Loading = ({ loadingText }) => {
   return (
     <>
-      <Title>로그인 중 ..</Title>
+      <Title>{loadingText}</Title>
       <Spinner></Spinner>
     </>
   );

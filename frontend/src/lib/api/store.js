@@ -1,8 +1,21 @@
 import client from './client';
 
-export const saveStoreData = (request) => {
-  client.post(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/save-store-data`,
+export const saveStoreData = async (request) =>
+  await client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/save`,
+    request,
+  );
+
+export const updateStoreReview = async (request) => {
+  await client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/update`,
+    request,
+  );
+};
+
+export const deleteStoreReview = async (request) => {
+  await client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/delete`,
     request,
   );
 };
@@ -20,6 +33,7 @@ export const searchStoreData = (storeName) =>
 export const getStoreDetailData = (request) =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`, {
     params: {
+      userName: request.userName,
       storeName: request.storeName,
       storeAddress: request.storeAddress,
     },
@@ -42,4 +56,21 @@ export const GetStoreInfoKakao = async (request) => {
     console.error(error);
     return Promise.reject(error);
   }
+};
+
+export const GetRandomStore = () =>
+  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/random`);
+
+export const ToggleLikeStore = (request) => {
+  const { token, storeName, storeAddress, userName, isLike } = request;
+  return client.post(
+    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/like`,
+    {
+      token: token,
+      storeName: storeName,
+      storeAddress: storeAddress,
+      userName: userName,
+      isLike: isLike,
+    },
+  );
 };

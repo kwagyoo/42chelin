@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 
 export const uploadImagesToS3 = (images) => {
   try {
+    console.log(images);
     const imageNames = images.map((image) => {
       const imageName =
         Math.random().toString(36).substr(2, 15) +
@@ -20,4 +21,20 @@ export const uploadImagesToS3 = (images) => {
   } catch (err) {
     console.error(err);
   }
+};
+
+export const loadImageFromS3 = async (image) => {
+  const s3 = new AWS.S3();
+  return new Promise((resolve, reject) => {
+    s3.getSignedUrlPromise('getObject', {
+      Bucket: '42chelin',
+      Key: `img/${image}`, // ex) assets/
+    })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 };

@@ -7,18 +7,8 @@ import 'antd/dist/antd.css';
 import { searchStoreData } from '../lib/api/store';
 import qs from 'qs';
 
-function importAll(r) {
-  let images = [];
-  r.keys().forEach((item, index) => {
-    images[index] = r(item);
-    images[index].delay = 150 * index;
-  });
-  return images;
-}
-
 const SearchInput = styled.div`
-  height: 100px;
-  width: 650px;
+  width: 80%;
   height: 50px;
   margin: 30px auto 0 auto;
   background-color: #ffffff;
@@ -27,23 +17,33 @@ const SearchInput = styled.div`
   input {
     margin-left: 30px;
     margin-top: 5px;
-    height: 40px;
-    width: 550px;
+    height: 70%;
+    width: 70%;
     border-style: none;
   }
   input:focus {
     outline: none;
   }
+  input::placeholder {
+    font-family: 'Do Hyeon', sans-serif;
+  }
+`;
+const MainBody = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  font-family: 'Do Hyeon', sans-serif;
 `;
 
 const OptionList = styled.div`
+  display: flex;
+  justify-content: end;
   width: 100%;
   height: 30px;
   margin-top: 5px;
   ul {
     float: right;
     list-style-type: none;
-    width: 250px;
+    width: 180px;
     height: 24px;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -64,7 +64,6 @@ const OptionList = styled.div`
 `;
 
 const SearchPage = ({ history, location }) => {
-  const [images, setImages] = useState([]);
   const [text, setText] = useState('');
   const [searchstoreList, setSearchstoreList] = useState([]);
 
@@ -82,10 +81,8 @@ const SearchPage = ({ history, location }) => {
   };
 
   const SearchData = async (query) => {
-    console.log(query);
     try {
       const res = await searchStoreData(query.storeName);
-      console.log(res);
       setSearchstoreList(res.data.body);
     } catch (e) {
       console.error(e);
@@ -94,9 +91,6 @@ const SearchPage = ({ history, location }) => {
   };
 
   useEffect(() => {
-    setImages(
-      importAll(require.context('../image/', false, /.(png|jpe?g|svg)$/)),
-    );
     const query = qs.parse(location.search, {
       ignoreQueryPrefix: true,
     });
@@ -126,12 +120,9 @@ const SearchPage = ({ history, location }) => {
           value={text}
         />
       </SearchInput>
-      <div className="main-body" style={{ width: '90%', margin: '0 auto' }}>
+      <MainBody>
         <OptionList>
           <ul className="option-list-ul">
-            <li>
-              <button>최신순</button>
-            </li>
             <li>
               <button>리뷰갯수순</button>
             </li>
@@ -141,26 +132,25 @@ const SearchPage = ({ history, location }) => {
           </ul>
         </OptionList>
         <Row gutter={[16, 16]}>
-          {images &&
-            searchstoreList &&
-            images.map((image, index) => (
+          {searchstoreList &&
+            searchstoreList.map((store, index) => (
               <Col
                 key={index}
-                xs={12}
-                md={8}
-                lg={6}
-                xl={4}
+                xs={24}
+                md={12}
+                lg={8}
+                xl={6}
                 onClick={() => goDetail(searchstoreList[index])}
               >
                 <PostBlock
-                  src={image}
-                  delay={image.delay}
+                  src={store.storeImage}
+                  delay={store.delay}
                   store={searchstoreList[index]}
                 />
               </Col>
             ))}
         </Row>
-      </div>
+      </MainBody>
     </>
   );
 };

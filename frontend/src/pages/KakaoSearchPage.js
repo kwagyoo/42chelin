@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const SearchInput = styled.div`
+  font-family: 'Do Hyeon', sans-serif;
+
   position: relative;
   overflow: hidden;
   height: 58px;
@@ -31,6 +33,8 @@ const SearchInput = styled.div`
 `;
 
 const StoreInfoWarp = styled.div`
+  font-family: 'Do Hyeon', sans-serif;
+
   margin-bottom: 0;
   padding: 0;
   border: 0;
