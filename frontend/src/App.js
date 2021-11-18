@@ -9,6 +9,7 @@ import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
 import Auth from './hoc/auth';
+import RandomStore from './pages/RandomStore';
 
 const App = () => {
   AWS.config.update({
@@ -27,6 +28,7 @@ const App = () => {
       <Route path="/write" component={PostWritePage} />
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
+      <Route path="/random" component={RandomStore} />
     </>
   );
 };
