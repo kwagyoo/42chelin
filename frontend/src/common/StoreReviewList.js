@@ -14,7 +14,7 @@ const ReviewList = styled.div`
   border-bottom: 1px solid #e9e9e9;
   margin-top: 20px;
   .review_user_name {
-    width: 8%;
+    width: 15%;
     flex-grow: 0;
   }
 `;
@@ -75,7 +75,7 @@ const ReviewDetail = styled.div`
     display: none;
   }
 
-  @media screen and (max-width: 950px) {
+  @media screen and (max-width: 1000px) {
     .review_detail_buttons {
       width: 60px;
     }

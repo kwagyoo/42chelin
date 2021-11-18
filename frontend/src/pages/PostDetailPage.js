@@ -62,7 +62,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     #map {
-      width: 390px;
+      width: 350px;
       margin: 50px auto;
     }
   }
