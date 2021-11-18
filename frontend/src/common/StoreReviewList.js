@@ -131,23 +131,8 @@ const StoreReviewList = ({ store, storeReviews }) => {
     history.push('/update');
   };
 
-  const getImageURLsFromS3 = async () => {
-    const FixedReview = await Promise.all(
-      storeReviews.map(async (review) => {
-        const parsedImages = JSON.parse(review.images);
-        const imageURLs = await Promise.all(
-          parsedImages.map(async (image) => {
-            const imageURL = await loadImageFromS3(image);
-            return { image, imageURL };
-          }),
-        );
-        return { ...review, imageNames: review.images, images: imageURLs };
-      }),
-    );
-    setReviews(FixedReview);
-  };
   useEffect(() => {
-    getImageURLsFromS3();
+    //getImageURLsFromS3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

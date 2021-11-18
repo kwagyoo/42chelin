@@ -1,5 +1,5 @@
 /* global kakao */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
 import StoreReviewDetail from '../common/StoreReviewDetail';
@@ -7,6 +7,7 @@ import StoreReviewList from '../common/StoreReviewList';
 import { getStoreDetailData } from '../lib/api/store';
 import qs from 'qs';
 import Carousel from '../common/Carousel';
+import { loadImageFromS3 } from '../lib/api/aws';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -75,6 +76,30 @@ const PostDetailPage = ({ location }) => {
     ignoreQueryPrefix: true,
   });
 
+  const getImageURLsFromS3 = useCallback(async () => {
+    try {
+      const fixedReviews = await Promise.all(
+        storeList.storeReviews.map(async (review) => {
+          const imageURLs = await Promise.all(
+            review.images.map(async (image) => {
+              const imageURL = await loadImageFromS3(image);
+              return { image, imageURL };
+            }),
+          );
+          return { ...review, imageNames: review.images, images: imageURLs };
+        }),
+      );
+      console.log(fixedReviews);
+      setStoreList({
+        ...storeList,
+        storeImages: fixedReviews.map((review) => review.images),
+        storeReviews: fixedReviews,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [storeList]);
+
   const getStore = async () => {
     try {
       const userName = localStorage.getItem('username');
@@ -108,14 +133,18 @@ const PostDetailPage = ({ location }) => {
   };
 
   useEffect(() => {
-    getStore();
+    console.log('d');
+    getImageURLsFromS3();
+  }, [storeList, getImageURLsFromS3]);
 
+  useEffect(() => {
+    getStore();
     return () => {
       setstoreList('');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(storeList);
+
   return (
     <>
       <Header />
