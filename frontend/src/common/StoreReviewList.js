@@ -13,7 +13,11 @@ const ReviewList = styled.div`
   margin-top: 20px;
   .review_user_name {
     width: 15%;
+    font-size: 15px;
     flex-grow: 0;
+    @media (max-width: 550px) {
+      padding-right: 25%;
+    }
   }
 `;
 
@@ -142,6 +146,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
               <div className="review_info">
                 <div className="Date">{review.reviewDate}</div>
                 <div className="review_text">{review.reviewText}</div>
+
                 <ImgContainer>
                   {review.images &&
                     review.images.map((image, idx) => (

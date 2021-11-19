@@ -33,9 +33,11 @@ const StoreHeader = styled.div`
   }
   .btn-like {
     padding-bottom: 10px;
+    background-color: #fafafa;
   }
   .btn-reviewWrite {
     font-size: 18px;
+    background-color: #fafafa;
   }
   .store-header-title {
     display: flex;

@@ -40,6 +40,7 @@ const ContentsWrapper = styled.div`
 
 const Wrapper = styled.div`
   font-family: 'Do Hyeon', sans-serif;
+  background-color: #fafafa;
 
   display: flex;
   justify-content: space-between;
@@ -64,6 +65,14 @@ const Wrapper = styled.div`
     justify-content: center;
     #map {
       width: 350px;
+      margin: 50px auto;
+    }
+  }
+  @media (max-width: 400px) {
+    display: flex;
+    justify-content: center;
+    #map {
+      width: 300px;
       margin: 50px auto;
     }
   }
@@ -138,7 +147,7 @@ const PostDetailPage = ({ location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return (
     <>
       <Header />

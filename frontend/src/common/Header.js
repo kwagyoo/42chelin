@@ -15,7 +15,7 @@ const HeaderBlock = styled.header`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   overflow: auto;
   z-index: 999;
   background: white;
@@ -36,6 +36,11 @@ const Wrapper = styled.div`
       width: 150px;
       height: 60px;
       padding-left: 10px;
+    }
+    @media (max-width: 320px) {
+      img {
+        width: 90%;
+      }
     }
   }
   .title:visited {
@@ -164,6 +169,9 @@ const UserName = styled.div`
   margin-top: 10px;
   margin-right: 10px;
   font-weight: 400;
+  @media (max-width: 320px) {
+    font-size: 20px;
+  }
 `;
 
 const Spacer = styled.div`

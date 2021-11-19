@@ -36,6 +36,9 @@ const Container = styled.div`
   @media (max-width: 960px) {
     width: 350px;
   }
+  @media (max-width: 400px) {
+    width: 300px;
+  }
 `;
 
 // 슬라이드 CSS

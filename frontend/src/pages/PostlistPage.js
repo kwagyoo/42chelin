@@ -12,13 +12,17 @@ import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons';
 import StoreMap from '../common/StoreMap';
 
+const ListBody = styled.div`
+  background-color: #fafafa;
+`;
+
 const SearchInput = styled.div`
   width: 80%;
   height: 50px;
   margin: 30px auto 0 auto;
   background-color: #ffffff;
   border-radius: 25px;
-  border: 1.5px solid #550055;
+  border: 1.5px solid gray;
   input {
     margin-left: 30px;
     margin-top: 5px;
@@ -55,7 +59,7 @@ const OptionList = styled.div`
   }
   ul > li > button {
     border: none;
-    background-color: white;
+    background-color: #fafafa;
   }
 
   ul > li > button:active {
@@ -112,6 +116,7 @@ const ToggleButton = styled.div`
     background-color: #696969;
   }
 `;
+
 // 재사용이 가능한 코드이므로 api로 따로 빼서 관리하면 좋다.
 const getAllStoreData = async ({ dispatch }) => {
   try {
@@ -159,7 +164,7 @@ const PostlistPage = ({ history }) => {
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
-    <>
+    <ListBody>
       <Header />
       <SearchInput onKeyPress={onKeyPress}>
         <input
@@ -245,7 +250,7 @@ const PostlistPage = ({ history }) => {
           <StoreMap storeList={storeList} history={history} />
         )}
       </MainBody>
-    </>
+    </ListBody>
   );
 };
 
