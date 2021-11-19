@@ -9,8 +9,6 @@ import {
   faPencilAlt,
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
-import { GetRandomStore } from '../lib/api/store';
-import { useHistory } from 'react-router-dom';
 import logo from '../image/Logo.png';
 
 const HeaderBlock = styled.header`
@@ -48,6 +46,9 @@ const Wrapper = styled.div`
     border: none;
     background-color: white;
     /* color: black; */
+  }
+  .header-random-button a {
+    color: #000000d9;
     :hover {
       color: gray;
       cursor: pointer;
@@ -176,19 +177,6 @@ const Header = () => {
   const name = localStorage.getItem('username');
   const [isLogin, setisLogin] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
-  const history = useHistory();
-
-  const RandomStore = async () => {
-    try {
-      const res = await GetRandomStore();
-      const { storeName, storeAddress } = res.data.body;
-      history.push(
-        `/detail?storeName=${storeName}&storeAddress=${storeAddress}`,
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   useEffect(() => {
     if (!isLogin) setisLogin(localStorage.getItem('token'));
@@ -256,8 +244,8 @@ const Header = () => {
             <div className="header-menu-item">
               <Link to="/">식당 리뷰</Link>
             </div>
-            <button className="header-random-button" onClick={RandomStore}>
-              오늘의 식당 추천
+            <button className="header-random-button">
+              <Link to="/random">오늘 뭐먹지?</Link>
             </button>
           </div>
           <div className="header-right">
