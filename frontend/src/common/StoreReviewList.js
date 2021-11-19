@@ -6,15 +6,13 @@ import ReviewImgView from './ReviewImgView';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
-import { loadImageFromS3 } from '../lib/api/aws';
-import { useEffect, useState } from 'react';
 
 const ReviewList = styled.div`
   display: flex;
   border-bottom: 1px solid #e9e9e9;
   margin-top: 20px;
   .review_user_name {
-    width: 8%;
+    width: 15%;
     flex-grow: 0;
   }
 `;
@@ -75,7 +73,7 @@ const ReviewDetail = styled.div`
     display: none;
   }
 
-  @media screen and (max-width: 950px) {
+  @media screen and (max-width: 1000px) {
     .review_detail_buttons {
       width: 60px;
     }
@@ -104,7 +102,6 @@ const ImgContainer = styled.div`
 const StoreReviewList = ({ store, storeReviews }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [reviews, setReviews] = useState('');
 
   const deleteReview = async (review) => {
     try {
@@ -131,33 +128,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
     history.push('/update');
   };
 
-  const getImageURLsFromS3 = async () => {
-    const FixedReview = await Promise.all(
-      storeReviews.map(async (review) => {
-        const parsedImages = JSON.parse(review.images);
-        const imageURLs = await Promise.all(
-          parsedImages.map(async (image) => {
-            const imageURL = await loadImageFromS3(image);
-            return { image, imageURL };
-          }),
-        );
-        return { ...review, imageNames: review.images, images: imageURLs };
-      }),
-    );
-    setReviews(FixedReview);
-  };
-  useEffect(() => {
-    getImageURLsFromS3();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
     <>
       <ReviewListHeader>
         <div>리뷰</div>
         <div>좋아요를 받은 개수 : {store.storeLikes}</div>
       </ReviewListHeader>
-      {reviews &&
-        reviews.map((review, idx) => (
+      {storeReviews &&
+        storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
             <div className="review_user_name">{review.userName}</div>
             <ReviewDetail>

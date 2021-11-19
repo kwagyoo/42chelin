@@ -4,7 +4,10 @@ import styled from 'styled-components';
 const Flex = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-right: 15px;
+  @media (max-width: 500px) {
+    margin-right: 30px;
+  }
 `;
 
 const Spinner = () => {

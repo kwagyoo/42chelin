@@ -7,6 +7,7 @@ import StoreReviewList from '../common/StoreReviewList';
 import { getStoreDetailData } from '../lib/api/store';
 import qs from 'qs';
 import Carousel from '../common/Carousel';
+import { loadImageFromS3 } from '../lib/api/aws';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -62,14 +63,38 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     #map {
-      width: 390px;
+      width: 350px;
       margin: 50px auto;
     }
   }
 `;
 
+const getImageURLsFromS3 = async (storeList) => {
+  try {
+    const fixedReviews = await Promise.all(
+      storeList.storeReviews.map(async (review) => {
+        const imageURLs = await Promise.all(
+          review.images.map(async (image) => {
+            const imageURL = await loadImageFromS3(image);
+            return { image, imageURL };
+          }),
+        );
+        return { ...review, images: imageURLs };
+      }),
+    );
+
+    return {
+      ...storeList,
+      storeImages: fixedReviews.map((review) => review.images).flat(),
+      storeReviews: fixedReviews,
+    };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const PostDetailPage = ({ location }) => {
-  const [storeList, setstoreList] = useState('');
+  const [storeList, setStoreList] = useState(null);
 
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
@@ -79,7 +104,7 @@ const PostDetailPage = ({ location }) => {
     try {
       const userName = localStorage.getItem('username');
       const res = await getStoreDetailData({ ...query, userName });
-      setstoreList(res.data.body);
+      setStoreList(await getImageURLsFromS3(res.data.body));
 
       const storeLocation = res.data.body.storeLocation;
       var container = document.getElementById('map');
@@ -106,16 +131,14 @@ const PostDetailPage = ({ location }) => {
       console.error(e);
     }
   };
-
   useEffect(() => {
     getStore();
-
     return () => {
-      setstoreList('');
+      setStoreList('');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(storeList);
+  
   return (
     <>
       <Header />
