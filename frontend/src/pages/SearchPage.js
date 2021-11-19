@@ -7,6 +7,11 @@ import 'antd/dist/antd.css';
 import { searchStoreData } from '../lib/api/store';
 import qs from 'qs';
 
+const ListBody = styled.div`
+  background-color: #fafafa;
+  height: 100vh;
+`;
+
 const SearchInput = styled.div`
   width: 80%;
   height: 50px;
@@ -110,7 +115,7 @@ const SearchPage = ({ history, location }) => {
 
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
   return (
-    <>
+    <ListBody>
       <Header />
       <SearchInput onKeyPress={onKeyPress}>
         <input
@@ -151,7 +156,7 @@ const SearchPage = ({ history, location }) => {
             ))}
         </Row>
       </MainBody>
-    </>
+    </ListBody>
   );
 };
 

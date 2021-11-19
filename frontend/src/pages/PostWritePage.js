@@ -11,10 +11,21 @@ import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+const Body = styled.div`
+  background-color: #fafafa;
+  width: 100vw;
+  height: 100vh;
+`;
+
 const StyledForm = styled.form`
   margin: 10px auto 0px;
-  width: 600px;
+  width: 550px;
+  padding: 0 10px 0 10px;
   font-family: 'Do Hyeon', sans-serif;
+  @media (max-width: 550px) {
+    margin-top: 10px;
+    width: 100vw;
+  }
 
   > * {
     margin-bottom: 10px;
@@ -43,6 +54,10 @@ const StyledForm = styled.form`
     margin-top: 20px;
     margin-bottom: 5px;
   }
+  .btn-group {
+    display: block;
+    text-align: center;
+  }
 `;
 
 const TargetStoreSearch = styled.div`
@@ -52,6 +67,7 @@ const TargetStoreSearch = styled.div`
   display: flex;
   justify-content: space-between;
   .target_store_info {
+    width: 100vw;
     height: 100%;
     display: flex;
     flex-direction: ${(props) => (props.store ? 'column' : 'row')};
@@ -173,7 +189,7 @@ const PostWritePage = ({ history, location }) => {
   }, [store, setValue]);
 
   return (
-    <React.Fragment>
+    <Body>
       <Header />
       <main>
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
@@ -228,15 +244,17 @@ const PostWritePage = ({ history, location }) => {
               setCount={setCount}
             />
           </div>
-          <Button name="submit" disabled={loading}></Button>
-          <Button
-            name="cancel"
-            disabled={loading}
-            onClick={() => history.goBack()}
-          ></Button>
+          <div className="btn-group">
+            <Button name="submit" disabled={loading}></Button>
+            <Button
+              name="cancel"
+              disabled={loading}
+              onClick={() => history.goBack()}
+            ></Button>
+          </div>
         </StyledForm>
       </main>
-    </React.Fragment>
+    </Body>
   );
 };
 export default PostWritePage;

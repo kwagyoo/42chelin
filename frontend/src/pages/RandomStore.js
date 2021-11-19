@@ -6,9 +6,13 @@ import styled from 'styled-components';
 import Header from '../common/Header';
 import { GetRandomStore } from '../lib/api/store';
 
+const MainBody = styled.div`
+  height: 100vh;
+  overflow: hidden;
+  background-color: #fafafa;
+`;
 const Container = styled.div`
   font-family: 'Do Hyeon', sans-serif;
-  margin-top: 20vh;
   width: 100vw;
   height: 100%;
   display: flex;
@@ -185,7 +189,7 @@ const RandomStore = () => {
   };
 
   return (
-    <>
+    <MainBody>
       <Header />
       <Container>
         <div className="randomBox">
@@ -221,7 +225,7 @@ const RandomStore = () => {
           </div>
         </div>
       </Container>
-    </>
+    </MainBody>
   );
 };
 
