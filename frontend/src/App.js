@@ -10,6 +10,7 @@ import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
 import Auth from './hoc/auth';
 import RandomStore from './pages/RandomStore';
+import AntModal from './common/Modal';
 
 const App = () => {
   AWS.config.update({
@@ -29,6 +30,7 @@ const App = () => {
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
       <Route path="/random" component={RandomStore} />
+      <Route path="/test" component={AntModal} />
     </>
   );
 };
