@@ -64,7 +64,6 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
       if (x.imageURL) return x.image === name;
       return x.name === name;
     });
-    console.log(name);
     if (selectedFile?.preview) URL.revokeObjectURL(selectedFile.preview);
     setFiles((prevFiles) => prevFiles.filter((x) => x !== selectedFile)); //splice의 경우 원래 함수를 잘라주는 함수라서 새로 배열을 생성하지 않아 갱신하지 않는것일 듯
     setCount((prevCount) => prevCount - 1);

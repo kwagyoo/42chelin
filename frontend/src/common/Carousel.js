@@ -34,7 +34,7 @@ const Container = styled.div`
     width: 400px;
   }
   @media (max-width: 960px) {
-    width: 400px;
+    width: 350px;
   }
 `;
 
@@ -100,13 +100,15 @@ const Carousel = ({ images }) => {
     ],
   };
   useEffect(() => {
-    if (images.length < 3)
+    if (images && images.length < 3)
       setModifiedImages([
         ...modifiedImages,
         ...Array(3 - images.length).fill('../image/default.png'),
       ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images]);
+
+  console.log(modifiedImages);
 
   return (
     <Container className="carousel">
