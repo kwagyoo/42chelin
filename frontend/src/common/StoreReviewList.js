@@ -6,8 +6,6 @@ import ReviewImgView from './ReviewImgView';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
-import { loadImageFromS3 } from '../lib/api/aws';
-import { useEffect, useState } from 'react';
 
 const ReviewList = styled.div`
   display: flex;
@@ -104,7 +102,6 @@ const ImgContainer = styled.div`
 const StoreReviewList = ({ store, storeReviews }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [reviews, setReviews] = useState('');
 
   const deleteReview = async (review) => {
     try {
@@ -131,18 +128,14 @@ const StoreReviewList = ({ store, storeReviews }) => {
     history.push('/update');
   };
 
-  useEffect(() => {
-    //getImageURLsFromS3();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
     <>
       <ReviewListHeader>
         <div>리뷰</div>
         <div>좋아요를 받은 개수 : {store.storeLikes}</div>
       </ReviewListHeader>
-      {reviews &&
-        reviews.map((review, idx) => (
+      {storeReviews &&
+        storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
             <div className="review_user_name">{review.userName}</div>
             <ReviewDetail>

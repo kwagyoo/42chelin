@@ -1,5 +1,5 @@
 /* global kakao */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
 import StoreReviewDetail from '../common/StoreReviewDetail';
@@ -69,42 +69,42 @@ const Wrapper = styled.div`
   }
 `;
 
+const getImageURLsFromS3 = async (storeList) => {
+  try {
+    const fixedReviews = await Promise.all(
+      storeList.storeReviews.map(async (review) => {
+        const imageURLs = await Promise.all(
+          review.images.map(async (image) => {
+            const imageURL = await loadImageFromS3(image);
+            return { image, imageURL };
+          }),
+        );
+        return { ...review, images: imageURLs };
+      }),
+    );
+
+    return {
+      ...storeList,
+      storeImages: fixedReviews.map((review) => review.images).flat(),
+      storeReviews: fixedReviews,
+    };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const PostDetailPage = ({ location }) => {
-  const [storeList, setstoreList] = useState('');
+  const [storeList, setStoreList] = useState(null);
 
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
 
-  const getImageURLsFromS3 = useCallback(async () => {
-    try {
-      const fixedReviews = await Promise.all(
-        storeList.storeReviews.map(async (review) => {
-          const imageURLs = await Promise.all(
-            review.images.map(async (image) => {
-              const imageURL = await loadImageFromS3(image);
-              return { image, imageURL };
-            }),
-          );
-          return { ...review, imageNames: review.images, images: imageURLs };
-        }),
-      );
-      console.log(fixedReviews);
-      setStoreList({
-        ...storeList,
-        storeImages: fixedReviews.map((review) => review.images),
-        storeReviews: fixedReviews,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [storeList]);
-
   const getStore = async () => {
     try {
       const userName = localStorage.getItem('username');
       const res = await getStoreDetailData({ ...query, userName });
-      setstoreList(res.data.body);
+      setStoreList(await getImageURLsFromS3(res.data.body));
 
       const storeLocation = res.data.body.storeLocation;
       var container = document.getElementById('map');
@@ -131,16 +131,10 @@ const PostDetailPage = ({ location }) => {
       console.error(e);
     }
   };
-
-  useEffect(() => {
-    console.log('d');
-    getImageURLsFromS3();
-  }, [storeList, getImageURLsFromS3]);
-
   useEffect(() => {
     getStore();
     return () => {
-      setstoreList('');
+      setStoreList('');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
