@@ -14,6 +14,10 @@ import StoreMap from '../common/StoreMap';
 
 const ListBody = styled.div`
   background-color: #fafafa;
+  input[type='radio'] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
 `;
 
 const SearchInput = styled.div`
@@ -96,6 +100,7 @@ const ToggleButton = styled.div`
     background-color: #ffffff;
     color: #6c757d;
     overflow-x: hidden;
+    -webkit-border-radius: 0;
   }
   .btn-div {
     display: flex;
