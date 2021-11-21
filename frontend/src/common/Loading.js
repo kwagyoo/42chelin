@@ -2,9 +2,11 @@ import styled from 'styled-components';
 import Spinner from './Spinner';
 
 const Container = styled.div`
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  min-height: 100vh;
 `;
 const Title = styled.h1`
   font-size: 64px;
@@ -21,7 +23,7 @@ const Title = styled.h1`
 const Loading = ({ loadingText }) => {
   return (
     <Container>
-      <Title>{loadingText}</Title>
+      <Title>{loadingText ? loadingText : '로딩중..'}</Title>
       <Spinner></Spinner>
     </Container>
   );

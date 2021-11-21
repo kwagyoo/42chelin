@@ -2,7 +2,6 @@ import AWS from 'aws-sdk';
 
 export const uploadImagesToS3 = (images) => {
   try {
-    console.log(images);
     const imageNames = images.map((image) => {
       const imageName =
         Math.random().toString(36).substr(2, 15) +
