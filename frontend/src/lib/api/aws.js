@@ -33,3 +33,19 @@ export const loadImageFromS3 = async (image) => {
       });
   });
 };
+
+export const loadThumbnailFromS3 = async (image) => {
+  const s3 = new AWS.S3();
+  return new Promise((resolve, reject) => {
+    s3.getSignedUrlPromise('getObject', {
+      Bucket: '42chelin-images',
+      Key: `w_300/${image}`, // ex) assets/
+    })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
