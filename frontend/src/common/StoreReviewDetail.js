@@ -46,6 +46,7 @@ const StoreHeader = styled.div`
 
 const StoreReviewDetail = ({ storeList }) => {
   const [isLike, setIsLike] = useState(storeList.isLike);
+  const userName = localStorage.getItem('username');
   const history = useHistory();
   const GoWritePage = () => {
     history.push(
@@ -73,13 +74,15 @@ const StoreReviewDetail = ({ storeList }) => {
       <StoreHeader>
         <div className="store-header-title">
           <h2>{storeList.storeName}</h2>
-          <button onClick={ToggleLike} className="btn-like">
-            {isLike ? (
-              <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
-            ) : (
-              <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
-            )}
-          </button>
+          {userName && (
+            <button onClick={ToggleLike} className="btn-like">
+              {isLike ? (
+                <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
+              ) : (
+                <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
+              )}
+            </button>
+          )}
         </div>
         <div>
           <button className="btn-reviewWrite" onClick={GoWritePage}>
