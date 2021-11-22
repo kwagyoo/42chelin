@@ -7,7 +7,7 @@ export const uploadImagesToS3 = (images) => {
       image.name.slice(image.name.lastIndexOf('.'));
     const upload = new AWS.S3.ManagedUpload({
       params: {
-        Bucket: '42chelin/img',
+        Bucket: '42chelin-images/original',
         Key: imageName,
         Body: image,
       },
@@ -22,8 +22,8 @@ export const loadImageFromS3 = async (image) => {
   const s3 = new AWS.S3();
   return new Promise((resolve, reject) => {
     s3.getSignedUrlPromise('getObject', {
-      Bucket: '42chelin',
-      Key: `img/${image}`, // ex) assets/
+      Bucket: '42chelin-images',
+      Key: `original/${image}`, // ex) assets/
     })
       .then((data) => {
         resolve(data);

@@ -49,8 +49,8 @@ const PostBlock = ({ src, delay, store }) => {
       s3.getSignedUrl(
         'getObject',
         {
-          Bucket: '42chelin',
-          Key: `img/${src}`, // ex) assets/
+          Bucket: '42chelin-images',
+          Key: `original/${src}`, // ex) assets/
         },
         (err, url) => {
           if (err) {

@@ -8,7 +8,7 @@ import { getStoreDetailData } from '../lib/api/store';
 import qs from 'qs';
 import Carousel from '../common/Carousel';
 import { loadImageFromS3 } from '../lib/api/aws';
-import { ToggleLikeStore } from '../lib/api/store';
+import { toggleLikeStore } from '../lib/api/store';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -160,7 +160,7 @@ const PostDetailPage = ({ location }) => {
       isLike: !isLike,
     };
     try {
-      const res = await ToggleLikeStore(data);
+      const res = await toggleLikeStore(data);
       setLikes(res.data.body.likes);
     } catch (e) {
       console.error(e);

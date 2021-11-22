@@ -1,9 +1,5 @@
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-<<<<<<< HEAD
-import { toggleLikeStore } from '../lib/api/store';
-=======
->>>>>>> 0d4f060c1945c797285d71dd8ae4fa606319be63
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';

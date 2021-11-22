@@ -23,7 +23,7 @@ const Container = styled.div`
   ol {
     list-style: none;
   }
-  .randombox {
+  .randomBox {
     width: 300px;
     height: 100px;
   }
@@ -163,17 +163,17 @@ const RandomStore = () => {
   });
   const history = useHistory();
   const SampleStore = [
-    "연스시"
-   , "스파게티 스토리"
-   , "농민백암순대"
-   , "모스버거"
-   , "노브랜드버거"
-   , "서브웨이"
-   , "리에"
-   , "백년교동짬뽕"
-   , "부산어묵"
-   , "이삭토스트"
-]
+    '연스시',
+    '스파게티 스토리',
+    '농민백암순대',
+    '모스버거',
+    '노브랜드버거',
+    '서브웨이',
+    '리에',
+    '백년교동짬뽕',
+    '부산어묵',
+    '이삭토스트',
+  ];
 
   const reset = () => {
     displaySlot.current.style.display = 'block';
@@ -200,7 +200,6 @@ const RandomStore = () => {
     );
   };
 
-
   return (
     <MainBody>
       <Header />
@@ -218,8 +217,7 @@ const RandomStore = () => {
               <ul className="slide_box">
                 {SampleStore.map((store, idx) => (
                   <li key={idx}>{store}</li>
-                  )
-                )}
+                ))}
               </ul>
             </div>
           </div>
