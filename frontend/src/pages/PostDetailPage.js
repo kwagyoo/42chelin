@@ -116,7 +116,8 @@ const PostDetailPage = ({ location }) => {
       const userName = localStorage.getItem('username');
       const res = await getStoreDetailData({ ...query, userName });
       setStoreList(await getImageURLsFromS3(res.data.body));
-
+      setLikes(res.data.body.storeLikes);
+      setIsLike(res.data.body.isLike);
       const storeLocation = res.data.body.storeLocation;
       var container = document.getElementById('map');
       var options = {

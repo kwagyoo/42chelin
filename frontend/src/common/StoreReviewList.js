@@ -9,6 +9,9 @@ import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
 import { useState } from 'react';
 
+const Wrapper = styled.div`
+  font-size: 15px;
+`;
 const ReviewList = styled.div`
   display: flex;
   border-bottom: 1px solid #e9e9e9;
@@ -142,7 +145,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
   };
 
   return (
-    <>
+    <Wrapper>
       <AntModal visible={loading} loadingText={loadingText} />
       <ReviewListHeader>
         <div>리뷰</div>
@@ -203,7 +206,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
             </ReviewDetail>
           </ReviewList>
         ))}
-    </>
+    </Wrapper>
   );
 };
 

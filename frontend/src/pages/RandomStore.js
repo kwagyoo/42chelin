@@ -24,9 +24,25 @@ const Container = styled.div`
     list-style: none;
   }
   .randomBox {
-    width: 300px;
-    height: 100px;
+    height: 400px;
   }
+  @media (max-width: 425px) {
+    h2 {
+      font-size: 1em;
+      height: 100%;
+    }
+    // Todo: 크기가 커지면 자동으로 밀려나게 하고 싶었는데 안되서 일단 overflow hidden으로 처리함
+    .menu_btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .menu_print {
+        overflow: hidden;
+      }
+    }
+  }
+
   .slot_container {
     height: 100px;
     overflow: hidden;
@@ -35,6 +51,21 @@ const Container = styled.div`
     justify-content: center;
   }
   .title {
+    h1 {
+      font-size: 3rem;
+    }
+    h3 {
+      font-size: 2rem;
+      color: gray;
+    }
+    @media (max-width: 425px) {
+      h1 {
+        font-size: 2em;
+      }
+      h3 {
+        font-size: 1.17em;
+      }
+    }
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -89,11 +120,11 @@ const Container = styled.div`
   }
   .slide_box li {
     height: 50px;
-    font-size: 30px;
+    font-size: 2em;
     font-weight: bold;
   }
   .menu_print {
-    height: 100px;
+    height: 60px;
     display: none;
     justify-content: center;
     align-items: center;
@@ -209,24 +240,26 @@ const RandomStore = () => {
             <h1>오늘 뭐먹지?</h1>
             <h3>오늘의 픽</h3>
           </div>
-          <div className="menu_print" ref={store_print}>
-            <h2>{store.storeName}</h2>
-          </div>
-          <div className="menu_slot" ref={displaySlot}>
-            <div className="slot_container">
-              <ul className="slide_box">
-                {SampleStore.map((store, idx) => (
-                  <li key={idx}>{store}</li>
-                ))}
-              </ul>
+          <div className="menu_btn">
+            <div className="menu_print" ref={store_print}>
+              <h2>{store.storeName}</h2>
             </div>
-          </div>
-          <div className="btn_area">
-            <button onClick={getStore}>Pick menu</button>
-            <button className="btn-go" ref={btnGo} onClick={GoStore}>
-              Go
-            </button>
-            <button onClick={reset}>Reset</button>
+            <div className="menu_slot" ref={displaySlot}>
+              <div className="slot_container">
+                <ul className="slide_box">
+                  {SampleStore.map((store, idx) => (
+                    <li key={idx}>{store}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="btn_area">
+              <button onClick={getStore}>Pick menu</button>
+              <button className="btn-go" ref={btnGo} onClick={GoStore}>
+                Go
+              </button>
+              <button onClick={reset}>Reset</button>
+            </div>
           </div>
         </div>
       </Container>
