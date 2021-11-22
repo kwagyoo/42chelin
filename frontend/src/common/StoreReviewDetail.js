@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-import { ToggleLikeStore } from '../lib/api/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +30,8 @@ const StoreHeader = styled.div`
     }
   }
   .btn-like {
+    display: flex;
+    margin-top: 5px;
     padding-bottom: 10px;
     background-color: #fafafa;
   }
@@ -44,8 +44,7 @@ const StoreHeader = styled.div`
   }
 `;
 
-const StoreReviewDetail = ({ storeList }) => {
-  const [isLike, setIsLike] = useState(storeList.isLike);
+const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
   const userName = localStorage.getItem('username');
   const history = useHistory();
   const GoWritePage = () => {
@@ -54,21 +53,6 @@ const StoreReviewDetail = ({ storeList }) => {
     );
   };
 
-  const ToggleLike = async () => {
-    setIsLike(!isLike);
-    const data = {
-      token: localStorage.getItem('token'),
-      storeName: storeList.storeName,
-      storeAddress: storeList.storeAddress,
-      userName: localStorage.getItem('username'),
-      isLike: !isLike,
-    };
-    try {
-      await ToggleLikeStore(data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
   return (
     <StoreItemBlock>
       <StoreHeader>
@@ -76,6 +60,7 @@ const StoreReviewDetail = ({ storeList }) => {
           <h2>{storeList.storeName}</h2>
           {userName && (
             <button onClick={ToggleLike} className="btn-like">
+              <p>좋아요</p>
               {isLike ? (
                 <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
               ) : (

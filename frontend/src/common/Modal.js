@@ -19,13 +19,13 @@ const Title = styled.h1`
     margin-bottom: 60px;
   }
 `;
+const StyledModal = styled(Modal)`
+  .ant-modal-body {
+    height: 400px;
+  }
+`;
 
-const AntModal = ({visible, loadingText}) => {
-  const StyledModal = styled(Modal)`
-    .ant-modal-body {
-      height: 400px;
-    }
-  `;
+const AntModal = ({ visible, loadingText }) => {
   return (
     <>
       <StyledModal
@@ -34,10 +34,10 @@ const AntModal = ({visible, loadingText}) => {
         closable={false}
         centered={true}
       >
-    <Container>
-      <Title>{loadingText ? loadingText : '로딩중..'}</Title>
-      <Spinner></Spinner>
-    </Container>
+        <Container>
+          <Title>{loadingText ? loadingText : '로딩중..'}</Title>
+          <Spinner></Spinner>
+        </Container>
       </StyledModal>
     </>
   );

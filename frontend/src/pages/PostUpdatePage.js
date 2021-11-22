@@ -106,7 +106,6 @@ const PostWritePage = ({ history, location }) => {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
-  const [visible, setVisible] = useState(false);
   const [loadingText, setLoadingText] = useState('');
 
   const { register, handleSubmit, setValue } = useForm();

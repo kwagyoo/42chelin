@@ -24,8 +24,9 @@ const StoreCompactInfo = styled.div`
     /* border-top: 1px solid;
     border-color: #778899; */
     h2 {
-      width: 100vw;
-      height: 2vh;
+      width: 100%;
+      height: 3vh;
+      overflow: hidden;
     }
     .storeAddress {
       color: gray;
