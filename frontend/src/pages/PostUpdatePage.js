@@ -101,7 +101,7 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const PostWritePage = ({ history, location }) => {
+const PostUpdatePage = ({ history, location }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -116,9 +116,8 @@ const PostWritePage = ({ history, location }) => {
   );
 
   const UpdateStoreReview = async (data) => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return null;
     try {
+      const userToken = localStorage.getItem('token');
       const newImages = uploadImagesToS3(
         data.storeImages.filter((image) => image.imageURL === undefined),
       );
@@ -136,6 +135,7 @@ const PostWritePage = ({ history, location }) => {
         `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
       );
     } catch (e) {
+      alert('오류가 발생하였습니다.');
       console.error(e);
     }
   };
@@ -219,4 +219,4 @@ const PostWritePage = ({ history, location }) => {
     </Body>
   );
 };
-export default PostWritePage;
+export default PostUpdatePage;

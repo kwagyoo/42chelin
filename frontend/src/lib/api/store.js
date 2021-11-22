@@ -1,24 +1,22 @@
 import client from './client';
 
-export const saveStoreData = async (request) =>
-  await client.post(
+export const saveStoreData = (request) =>
+  client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/save`,
     request,
   );
 
-export const updateStoreReview = async (request) => {
-  await client.post(
+export const updateStoreReview = (request) =>
+  client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/update`,
     request,
   );
-};
 
-export const deleteStoreReview = async (request) => {
-  await client.post(
+export const deleteStoreReview = (request) =>
+  client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/delete`,
     request,
   );
-};
 
 export const loadAllStoreData = () =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores`);
@@ -39,29 +37,10 @@ export const getStoreDetailData = (request) =>
     },
   });
 
-export const GetStoreInfoKakao = async (request) => {
-  try {
-    console.log(request);
-    const res = await client.get(
-      `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/getstorekakao`,
-      {
-        params: {
-          id: request.id,
-          storeName: request.placeName,
-        },
-      },
-    );
-    return res.data.body;
-  } catch (error) {
-    console.error(error);
-    return Promise.reject(error);
-  }
-};
-
-export const GetRandomStore = () =>
+export const getRandomStore = () =>
   client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/random`);
 
-export const ToggleLikeStore = (request) => {
+export const toggleLikeStore = (request) => {
   const { token, storeName, storeAddress, userName, isLike } = request;
   return client.post(
     `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/like`,

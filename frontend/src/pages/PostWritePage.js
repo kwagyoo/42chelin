@@ -5,11 +5,13 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import { Link } from 'react-router-dom';
-import { GetStoreInfoKakao, saveStoreData } from '../lib/api/store';
+import { saveStoreData } from '../lib/api/store';
+import { getStoreInfoKakao } from '../lib/api/kakao';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from 'react-router';
 import AntModal from '../common/Modal';
 
 const Body = styled.div`
@@ -105,20 +107,6 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const SaveStore = async (data) => {
-  const userToken = localStorage.getItem('token');
-  try {
-    const imageNames = uploadImagesToS3(data.images);
-    await saveStoreData({
-      ...data,
-      token: userToken,
-      images: imageNames,
-    });
-  } catch (e) {
-    console.error(e);
-  }
-};
-
 function formatDate(date) {
   let d = new Date(date),
     month = '' + (d.getMonth() + 1),
@@ -131,7 +119,9 @@ function formatDate(date) {
   return [year, month, day].join('-');
 }
 
-const PostWritePage = ({ history, location }) => {
+const PostWritePage = ({ location }) => {
+  const history = useHistory();
+
   const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
@@ -142,20 +132,30 @@ const PostWritePage = ({ history, location }) => {
 
   const review = useInput('', (value) => value.length < 300);
 
+  const SaveStore = async (data) => {
+    try {
+      const userToken = localStorage.getItem('token');
+      const imageNames = uploadImagesToS3(data.images);
+      await saveStoreData({
+        ...data,
+        token: userToken,
+        images: imageNames,
+      });
+      history.push(
+        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+      );
+    } catch (e) {
+      alert('저장에 실패하였습니다.');
+      console.error(e);
+    }
+  };
+
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
       if (store) {
-        try {
-          await SaveStore({ ...data, images: files });
-          history.push(
-            `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
-          );
-        } catch (error) {
-          alert('문제가 발생하였습니다. 콘솔을 확인해주세요.');
-          console.error(error);
-        }
+        await SaveStore({ ...data, images: files });
       }
       setLoading((loading) => !loading);
     }
@@ -164,16 +164,21 @@ const PostWritePage = ({ history, location }) => {
   useEffect(() => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
-      GetStoreInfoKakao(query).then((res) => {
-        setStore({
-          placeName: res.place_name,
-          address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
-          id: res.id,
-          category: res.category_group_code,
-          x: res.x,
-          y: res.y,
+      getStoreInfoKakao(query)
+        .then((res) => {
+          setStore({
+            placeName: res.place_name,
+            address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+            id: res.id,
+            category: res.category_group_code,
+            x: res.x,
+            y: res.y,
+          });
+        })
+        .catch((err) => {
+          alert('가게 정보를 가져올 수 없습니다.');
+          console.error(err);
         });
-      });
     }
   }, [location.search]);
 
