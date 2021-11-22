@@ -162,6 +162,18 @@ const RandomStore = () => {
     storeAddress: '',
   });
   const history = useHistory();
+  const SampleStore = [
+    "연스시"
+   , "스파게티 스토리"
+   , "농민백암순대"
+   , "모스버거"
+   , "노브랜드버거"
+   , "서브웨이"
+   , "리에"
+   , "백년교동짬뽕"
+   , "부산어묵"
+   , "이삭토스트"
+]
 
   const reset = () => {
     displaySlot.current.style.display = 'block';
@@ -188,6 +200,7 @@ const RandomStore = () => {
     );
   };
 
+
   return (
     <MainBody>
       <Header />
@@ -203,16 +216,10 @@ const RandomStore = () => {
           <div className="menu_slot" ref={displaySlot}>
             <div className="slot_container">
               <ul className="slide_box">
-                <li>연스시</li>
-                <li>스파게티 스토리</li>
-                <li>농민백암순대</li>
-                <li>모스버거</li>
-                <li>노브랜드버거</li>
-                <li>서브웨이</li>
-                <li>리에</li>
-                <li>백년교동짬뽕</li>
-                <li>부산어묵</li>
-                <li>이삭토스트</li>
+                {SampleStore.map((store, idx) => (
+                  <li key={idx}>{store}</li>
+                  )
+                )}
               </ul>
             </div>
           </div>

@@ -62,7 +62,6 @@ const KakaoSearchPage = () => {
       const res = await SearchKakao(text);
       const data = res.data.body;
       setSearchstoreList(data);
-      console.log(data);
     } catch (e) {
       console.log(e);
     }

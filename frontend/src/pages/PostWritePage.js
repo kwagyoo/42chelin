@@ -10,6 +10,7 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import AntModal from '../common/Modal';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -107,7 +108,6 @@ const useInput = (initialValue, validator) => {
 const SaveStore = async (data) => {
   const userToken = localStorage.getItem('token');
   try {
-    console.log('data', data);
     const imageNames = uploadImagesToS3(data.images);
     await saveStoreData({
       ...data,
@@ -136,6 +136,7 @@ const PostWritePage = ({ history, location }) => {
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
 
   const { register, handleSubmit, setValue } = useForm();
 
@@ -161,10 +162,8 @@ const PostWritePage = ({ history, location }) => {
 
   useEffect(() => {
     const query = querystring.parse(location.search);
-    console.log(query);
     if (Object.keys(query).length !== 0) {
       GetStoreInfoKakao(query).then((res) => {
-        console.log(res);
         setStore({
           placeName: res.place_name,
           address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
@@ -192,6 +191,7 @@ const PostWritePage = ({ history, location }) => {
     <Body>
       <Header />
       <main>
+        {/* <AntModal visible={loading} loadingText={loadingText} /> */}
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
           <div className="write_page_header">
             <h1>리뷰 작성</h1>
