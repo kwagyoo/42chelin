@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import StoreInfo from '../common/StoreInfo';
-import { SearchKakao } from '../lib/api/kakao';
+import { searchKakao } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -59,7 +59,7 @@ const KakaoSearchPage = () => {
 
   const SearchStoreEvent = async () => {
     try {
-      const res = await SearchKakao(text);
+      const res = await searchKakao(text);
       const data = res.data.body;
       setSearchstoreList(data);
       console.log(data);

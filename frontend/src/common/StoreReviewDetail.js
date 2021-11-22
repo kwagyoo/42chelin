@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-import { ToggleLikeStore } from '../lib/api/store';
+import { toggleLikeStore } from '../lib/api/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
@@ -63,7 +63,7 @@ const StoreReviewDetail = ({ storeList }) => {
       isLike: !isLike,
     };
     try {
-      await ToggleLikeStore(data);
+      await toggleLikeStore(data);
     } catch (e) {
       console.error(e);
     }
