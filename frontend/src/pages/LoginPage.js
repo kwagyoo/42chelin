@@ -7,7 +7,7 @@ import { getUserName, setAccessToken } from '../module/users';
 import Loading from '../common/Loading';
 import * as Sentry from '@sentry/react';
 
-const GetUsername = async (token, dispatch) => {
+const GetUsername = async (token, dispatch, history) => {
   try {
     const res = await getUser(token);
     const username = JSON.parse(res.data.body).nickname;
@@ -15,7 +15,9 @@ const GetUsername = async (token, dispatch) => {
     dispatch(getUserName(username));
   } catch (e) {
     Sentry.captureException(e);
-    console.log(e);
+    alert('username이 존재하지 않습니다');
+    history.push('/');
+
   }
 };
 

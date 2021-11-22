@@ -7,11 +7,23 @@ import ImageUpload from '../common/ImageUpload';
 import { updateStoreReview } from '../lib/api/store';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
+import AntModal from '../common/Modal';
+
+const Body = styled.div`
+  background-color: #fafafa;
+  width: 100vw;
+  height: 100vh;
+`;
 
 const StyledForm = styled.form`
   margin: 10px auto 0px;
-  width: 600px;
+  width: 550px;
+  padding: 0 10px 0 10px;
   font-family: 'Do Hyeon', sans-serif;
+  @media (max-width: 550px) {
+    margin-top: 10px;
+    width: 100vw;
+  }
 
   > * {
     margin-bottom: 10px;
@@ -36,6 +48,12 @@ const StyledForm = styled.form`
     border: 1px solid black;
   }
   .write_page_header {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 5px;
+  }
+  .btn-group {
+    display: block;
     text-align: center;
   }
 `;
@@ -88,6 +106,8 @@ const PostUpdatePage = ({ history, location }) => {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
+  const [visible, setVisible] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
 
   const { register, handleSubmit, setValue } = useForm();
 
@@ -112,11 +132,9 @@ const PostUpdatePage = ({ history, location }) => {
           ...newImages,
         ],
       });
-      setTimeout(() => {
-        history.push(
-          `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
-        );
-      }, 2000);
+      history.push(
+        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+      );
     } catch (e) {
       alert('오류가 발생하였습니다.');
       console.error(e);
@@ -126,7 +144,12 @@ const PostUpdatePage = ({ history, location }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
-      await UpdateStoreReview({ ...data, storeImages: files });
+      setLoadingText('수정중..');
+      try {
+        await UpdateStoreReview({ ...data, storeImages: files });
+      } catch (e) {
+        console.log(e);
+      }
       setLoading((loading) => false);
     }
   };
@@ -145,9 +168,10 @@ const PostUpdatePage = ({ history, location }) => {
   }, [history, review, setValue]);
 
   return (
-    <React.Fragment>
+    <Body>
       <Header />
       <main>
+        <AntModal visible={loading} loadingText={loadingText} />
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
           <div className="write_page_header">
             <h1>리뷰 작성</h1>
@@ -183,15 +207,17 @@ const PostUpdatePage = ({ history, location }) => {
               setValue={setValue}
             />
           </div>
-          <Button name="submit" disabled={loading}></Button>
-          <Button
-            name="cancel"
-            disabled={loading}
-            onClick={() => history.push('/')}
-          ></Button>
+          <div className="btn-group">
+            <Button name="submit" disabled={loading}></Button>
+            <Button
+              name="cancel"
+              disabled={loading}
+              onClick={() => history.push('/')}
+            ></Button>
+          </div>
         </StyledForm>
       </main>
-    </React.Fragment>
+    </Body>
   );
 };
 export default PostUpdatePage;

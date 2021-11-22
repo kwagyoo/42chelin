@@ -12,6 +12,7 @@ import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router';
+import AntModal from '../common/Modal';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -125,6 +126,7 @@ const PostWritePage = ({ location }) => {
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
 
   const { register, handleSubmit, setValue } = useForm();
 
@@ -194,6 +196,7 @@ const PostWritePage = ({ location }) => {
     <Body>
       <Header />
       <main>
+        {/* <AntModal visible={loading} loadingText={loadingText} /> */}
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
           <div className="write_page_header">
             <h1>리뷰 작성</h1>

@@ -111,8 +111,6 @@ const Carousel = ({ images }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images]);
 
-  console.log(modifiedImages);
-
   return (
     <Container className="carousel">
       <StyledSlider {...settings}>
