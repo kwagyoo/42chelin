@@ -105,7 +105,7 @@ const ImgContainer = styled.div`
   }
 `;
 
-const StoreReviewList = ({ store, storeReviews }) => {
+const StoreReviewList = ({ store, storeReviews, likes }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -144,10 +144,9 @@ const StoreReviewList = ({ store, storeReviews }) => {
   return (
     <>
       <AntModal visible={loading} loadingText={loadingText} />
-
       <ReviewListHeader>
         <div>리뷰</div>
-        <div>좋아요를 받은 개수 : {store.storeLikes}</div>
+        <div>좋아요를 받은 개수 : {likes}</div>
       </ReviewListHeader>
       {storeReviews &&
         storeReviews.map((review, idx) => (

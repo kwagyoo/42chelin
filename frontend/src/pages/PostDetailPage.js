@@ -8,6 +8,7 @@ import { getStoreDetailData } from '../lib/api/store';
 import qs from 'qs';
 import Carousel from '../common/Carousel';
 import { loadImageFromS3 } from '../lib/api/aws';
+import { ToggleLikeStore } from '../lib/api/store';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -104,7 +105,8 @@ const getImageURLsFromS3 = async (storeList) => {
 
 const PostDetailPage = ({ location }) => {
   const [storeList, setStoreList] = useState(null);
-
+  const [isLike, setIsLike] = useState(false);
+  const [likes, setLikes] = useState(0);
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
@@ -148,6 +150,23 @@ const PostDetailPage = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const ToggleLike = async () => {
+    setIsLike(!isLike);
+    const data = {
+      token: localStorage.getItem('token'),
+      storeName: storeList.storeName,
+      storeAddress: storeList.storeAddress,
+      userName: localStorage.getItem('username'),
+      isLike: !isLike,
+    };
+    try {
+      const res = await ToggleLikeStore(data);
+      setLikes(res.data.body.likes);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -159,11 +178,16 @@ const PostDetailPage = ({ location }) => {
                 <Carousel images={storeList.storeImages} />
                 <div id="map" />
               </FlexWrapper>
-              <StoreReviewDetail storeList={storeList} />
+              <StoreReviewDetail
+                storeList={storeList}
+                ToggleLike={ToggleLike}
+                isLike={isLike}
+              />
             </StoreListBlock>
             <StoreReviewList
               store={storeList}
               storeReviews={storeList.storeReviews}
+              likes={likes}
             />
           </ContentsWrapper>
         )}

@@ -153,6 +153,7 @@ const PostWritePage = ({ location }) => {
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => !loading);
+      setLoadingText('게시글 저장중..');
       if (store) {
         await SaveStore({ ...data, images: files });
       }
@@ -196,7 +197,7 @@ const PostWritePage = ({ location }) => {
     <Body>
       <Header />
       <main>
-        {/* <AntModal visible={loading} loadingText={loadingText} /> */}
+        {loading && <AntModal visible="true" loadingText={loadingText} />}
         <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
           <div className="write_page_header">
             <h1>리뷰 작성</h1>
