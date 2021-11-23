@@ -10,6 +10,7 @@ import qs from 'qs';
 const ListBody = styled.div`
   background-color: #fafafa;
   height: 100vh;
+  min-height: 100vh;
 `;
 
 const SearchInput = styled.div`

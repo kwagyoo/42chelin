@@ -6,9 +6,11 @@ import { searchKakao } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+const Wrapper = styled.div`
+  min-height: 100vh;
+`;
 const SearchInput = styled.div`
   font-family: 'Do Hyeon', sans-serif;
-
   position: relative;
   overflow: hidden;
   height: 58px;
@@ -76,7 +78,7 @@ const KakaoSearchPage = () => {
   // Todo : onchange 될때마다 계속 실행됌 아마 컴포넌트의 업데이트를 감지해서 그런듯??
 
   return (
-    <>
+    <Wrapper>
       <SearchInput onKeyPress={onKeyPress}>
         <input
           type="text"
@@ -104,7 +106,7 @@ const KakaoSearchPage = () => {
             />
           ))}
       </StoreInfoWarp>
-    </>
+    </Wrapper>
   );
 };
 

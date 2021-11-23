@@ -7,6 +7,7 @@ import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
 import { loadThumbnailFromS3 } from '../lib/api/aws';
 
 const StoreCompactInfo = styled.div`
+  cursor: pointer;
   article {
     border: 1px solid black;
     border-radius: 5px;
