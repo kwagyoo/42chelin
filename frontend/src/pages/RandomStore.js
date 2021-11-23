@@ -217,7 +217,6 @@ const RandomStore = () => {
   const getStore = async () => {
     try {
       const res = await getRandomStore();
-      console.log(res);
       displaySlot.current.style.display = 'none';
       btnGo.current.style.display = 'block';
       setStore(res.data.body);

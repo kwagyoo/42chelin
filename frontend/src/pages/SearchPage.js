@@ -40,35 +40,6 @@ const MainBody = styled.div`
   font-family: 'Do Hyeon', sans-serif;
 `;
 
-const OptionList = styled.div`
-  display: flex;
-  justify-content: end;
-  width: 100%;
-  height: 30px;
-  margin-top: 5px;
-  ul {
-    float: right;
-    list-style-type: none;
-    width: 180px;
-    height: 24px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin-bottom: 0px;
-  }
-  ul > li {
-    float: left;
-    padding-left: 5px;
-  }
-  ul > li > button {
-    border: none;
-    background-color: white;
-  }
-
-  ul > li > button:active {
-    color: blue;
-  }
-`;
-
 const SearchPage = ({ history, location }) => {
   const [text, setText] = useState('');
   const [searchstoreList, setSearchstoreList] = useState([]);
