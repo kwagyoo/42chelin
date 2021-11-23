@@ -6,7 +6,12 @@ import ReviewImgView from './ReviewImgView';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
+import AntModal from '../common/Modal';
+import { useState } from 'react';
 
+const Wrapper = styled.div`
+  font-size: 15px;
+`;
 const ReviewList = styled.div`
   display: flex;
   border-bottom: 1px solid #e9e9e9;
@@ -103,26 +108,32 @@ const ImgContainer = styled.div`
   }
 `;
 
-const StoreReviewList = ({ store, storeReviews }) => {
+const StoreReviewList = ({ store, storeReviews, likes }) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
 
   const deleteReview = async (review) => {
-    try {
-      const userToken = localStorage.getItem('token');
-      const deleteReviewData = {
-        token: userToken,
-        storeName: store.storeName,
-        storeAddress: store.storeAddress,
-        userName: review.userName,
-        reviewDate: review.reviewDate,
-      };
-      const res = await deleteStoreReview(deleteReviewData);
-      console.log('deleteStoreReview', res);
-      history.go(0);
-    } catch (error) {
-      console.error(error);
-      alert('에러가 발생했습니다. 잠시 뒤 다시 시도해주세요.');
+    if (!loading) {
+      setLoading((loading) => !loading);
+      setLoadingText('삭제중..');
+      try {
+        const userToken = localStorage.getItem('token');
+        const deleteReviewData = {
+          token: userToken,
+          storeName: store.storeName,
+          storeAddress: store.storeAddress,
+          userName: review.userName,
+          reviewDate: review.reviewDate,
+        };
+        await deleteStoreReview(deleteReviewData);
+        history.go(0);
+      } catch (error) {
+        console.error(error);
+        alert('에러가 발생했습니다. 잠시 뒤 다시 시도해주세요.');
+      }
+      setLoading((loading) => !loading);
     }
   };
 
@@ -133,10 +144,11 @@ const StoreReviewList = ({ store, storeReviews }) => {
   };
 
   return (
-    <>
+    <Wrapper>
+      <AntModal visible={loading} loadingText={loadingText} />
       <ReviewListHeader>
         <div>리뷰</div>
-        <div>좋아요를 받은 개수 : {store.storeLikes}</div>
+        <div>좋아요를 받은 개수 : {likes}</div>
       </ReviewListHeader>
       {storeReviews &&
         storeReviews.map((review, idx) => (
@@ -193,7 +205,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
             </ReviewDetail>
           </ReviewList>
         ))}
-    </>
+    </Wrapper>
   );
 };
 

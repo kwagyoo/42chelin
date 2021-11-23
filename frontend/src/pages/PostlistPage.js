@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import 'antd/dist/antd.css';
 import { loadAllStoreData } from '../lib/api/store';
 import { getList } from '../module/posts';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons';
@@ -18,6 +18,7 @@ const ListBody = styled.div`
     -moz-appearance: none;
     -webkit-appearance: none;
   }
+  height: 100vh;
 `;
 
 const SearchInput = styled.div`
@@ -45,29 +46,12 @@ const SearchInput = styled.div`
 const OptionList = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 80vw;
   height: 30px;
   margin-top: 5px;
-  ul {
-    float: right;
-    list-style-type: none;
-    width: 180px;
-    height: 24px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin-bottom: 0px;
-  }
-  ul > li {
-    float: left;
-    padding-left: 5px;
-  }
-  ul > li > button {
-    border: none;
-    background-color: #fafafa;
-  }
 
-  ul > li > button:active {
-    color: blue;
+  .store-count {
+    width: 100px;
   }
 `;
 
@@ -75,6 +59,46 @@ const MainBody = styled.div`
   width: 80%;
   margin: 0 auto;
   font-family: 'Do Hyeon', sans-serif;
+  .sort-opt {
+    display: flex;
+    ul {
+      float: right;
+      list-style-type: none;
+      width: 100%;
+      height: 30px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      margin-bottom: 0px;
+    }
+    ul > li {
+      float: left;
+      padding-left: 5px;
+    }
+    ul > li > button {
+      border: none;
+      background-color: #fafafa;
+    }
+
+    ul > li > button:active {
+      color: blue;
+    }
+    .option-list-ul {
+      padding-left: 5px;
+      button:active {
+        color: #696969;
+      }
+    }
+    @media (max-width: 425px) {
+      .option-list-ul {
+        padding-bottom: 10px;
+      }
+    }
+    @media (max-width: 320px) {
+      .option-list-ul {
+        height: 50px;
+      }
+    }
+  }
 `;
 
 const ToggleButton = styled.div`
@@ -123,21 +147,23 @@ const ToggleButton = styled.div`
 `;
 
 // 재사용이 가능한 코드이므로 api로 따로 빼서 관리하면 좋다.
-const getAllStoreData = async ({ dispatch }) => {
-  try {
-    const res = await loadAllStoreData();
-    const data = res.data.body;
-    dispatch(getList(data));
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const PostlistPage = ({ history }) => {
   const [text, setText] = useState('');
   const [change, setChange] = useState(true);
-
+  const [stores, setStores] = useState([]);
   const dispatch = useDispatch();
+
+  const getAllStoreData = async ({ dispatch }) => {
+    try {
+      const res = await loadAllStoreData();
+      const data = res.data.body;
+      setStores(data);
+      dispatch(getList(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const onChange = (e) => {
     setText(e.target.value);
@@ -160,14 +186,29 @@ const PostlistPage = ({ history }) => {
   useEffect(() => {
     getAllStoreData({ dispatch });
   }, [dispatch]);
-  const { storeList } = useSelector((state) => state.posts);
-  const goDetail = (storeList) => {
-    if (!storeList) return;
+
+  const goDetail = (stores) => {
+    if (!stores) return;
     history.push(
-      `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
+      `/detail?storeName=${stores.storeName}&storeAddress=${stores.storeAddress}`,
     );
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
+  const LikeSort = () => {
+    const sortItem = [...stores];
+    setStores(sortItem.sort((a, b) => b.storeLikes - a.storeLikes));
+  };
+
+  const ReviewSort = () => {
+    const sortItem = [...stores];
+    setStores(sortItem.sort((a, b) => b.storeReviews - a.storeReviews));
+  };
+  const StoreSort = () => {
+    const sortItem = [...stores];
+    setStores(
+      sortItem.sort((a, b) => ('' + a.storeName).localeCompare(b.storeName)),
+    );
+  };
   return (
     <ListBody>
       <Header />
@@ -181,78 +222,83 @@ const PostlistPage = ({ history }) => {
       </SearchInput>
       <MainBody>
         <OptionList>
-          <div>전체 가게 개수 : {storeList.length}</div>
+          <div className="store-count">가게 개수 : {stores.length}</div>
+        </OptionList>
+        <div className="sort-opt">
+          <ToggleButton className="list-mode">
+            <div
+              className="btn-group"
+              role="group"
+              aria-label="Basic radio toggle button group"
+            >
+              <div className={'btn-div ' + (change ? 'clicked' : '')}>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  id="btnradio1"
+                  name="btn-check"
+                  onClick={ChangeList}
+                />
+                <label htmlFor="btnradio1">
+                  <FontAwesomeIcon
+                    icon={faThLarge}
+                    size="lg"
+                    color={change ? '#ffffff' : '#696969'}
+                  />
+                </label>
+              </div>
+              <div className={'btn-div ' + (change ? '' : 'clicked')}>
+                <input
+                  type="radio"
+                  className={'btn-check ' + (change ? '' : 'clicked')}
+                  id="btnradio2"
+                  name="btn-check"
+                  onClick={ChangeList}
+                />
+                <label htmlFor="btnradio2">
+                  <FontAwesomeIcon
+                    icon={faMap}
+                    size="lg"
+                    color={change ? '#696969' : '#ffffff'}
+                  />
+                </label>
+              </div>
+            </div>
+          </ToggleButton>
           <ul className="option-list-ul">
             <li>
-              <button>리뷰갯수순</button>
+              <button onClick={LikeSort}>좋아요순</button>
             </li>
             <li>
-              <button>이름순</button>
+              <button onClick={ReviewSort}>리뷰갯수순</button>
+            </li>
+            <li>
+              <button onClick={StoreSort}>이름순</button>
             </li>
           </ul>
-        </OptionList>
-        <ToggleButton className="list-mode">
-          <div
-            className="btn-group"
-            role="group"
-            aria-label="Basic radio toggle button group"
-          >
-            <div className={'btn-div ' + (change ? 'clicked' : '')}>
-              <input
-                type="radio"
-                className="btn-check"
-                id="btnradio1"
-                name="btn-check"
-                onClick={ChangeList}
-              />
-              <label htmlFor="btnradio1">
-                <FontAwesomeIcon
-                  icon={faThLarge}
-                  size="lg"
-                  color={change ? '#ffffff' : '#696969'}
-                />
-              </label>
-            </div>
-            <div className={'btn-div ' + (change ? '' : 'clicked')}>
-              <input
-                type="radio"
-                className={'btn-check ' + (change ? '' : 'clicked')}
-                id="btnradio2"
-                name="btn-check"
-                onClick={ChangeList}
-              />
-              <label htmlFor="btnradio2">
-                <FontAwesomeIcon
-                  icon={faMap}
-                  size="lg"
-                  color={change ? '#696969' : '#ffffff'}
-                />
-              </label>
-            </div>
-          </div>
-        </ToggleButton>
+        </div>
         {change === true ? (
           <Row gutter={[16, 16]}>
-            {storeList &&
-              storeList.map((store, index) => (
+            {stores &&
+              stores.map((store, index) => (
                 <Col
                   key={index}
                   xs={24}
                   md={12}
                   lg={8}
                   xl={6}
-                  onClick={() => goDetail(storeList[index])}
+                  onClick={() => goDetail(stores[index])}
                 >
                   <PostBlock
                     src={store.storeImage}
                     delay={store.delay}
-                    store={storeList[index]}
+                    store={stores[index]}
                   />
                 </Col>
               ))}
           </Row>
         ) : (
-          <StoreMap storeList={storeList} history={history} />
+          <StoreMap storeList={stores} history={history} />
         )}
       </MainBody>
     </ListBody>

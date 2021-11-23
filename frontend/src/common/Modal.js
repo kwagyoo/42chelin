@@ -1,30 +1,43 @@
 import { Modal } from 'antd';
-import { useState } from 'react';
 import styled from 'styled-components';
-import Loading from './Loading';
+import Spinner from './Spinner';
 
-const AntModal = () => {
-  const [visible, setVisible] = useState(false);
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+const Title = styled.h1`
+  font-size: 64px;
+  font-weight: bold;
+  margin: 8px;
+  margin-bottom: 96px;
+  text-align: center;
+  @media (max-width: 500px) {
+    font-size: 40px;
+    margin-bottom: 60px;
+  }
+`;
+const StyledModal = styled(Modal)`
+  .ant-modal-body {
+    height: 400px;
+  }
+`;
 
-  const showModal = () => {
-    setVisible(true);
-  };
-
-  const StyledModal = styled(Modal)`
-    .ant-modal-body {
-      height: 400px;
-    }
-  `;
+const AntModal = ({ visible, loadingText }) => {
   return (
     <>
-      <button onClick={showModal}>Open Modal</button>
       <StyledModal
         visible={visible}
         footer={null}
         closable={false}
         centered={true}
       >
-        <Loading loadingText={'Loading ..'} />
+        <Container>
+          <Title>{loadingText ? loadingText : '로딩중..'}</Title>
+          <Spinner></Spinner>
+        </Container>
       </StyledModal>
     </>
   );

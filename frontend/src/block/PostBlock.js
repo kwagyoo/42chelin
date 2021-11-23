@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import styled from 'styled-components';
-import AWS from 'aws-sdk';
 import DefalutImg from '../image/default.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
+import { loadThumbnailFromS3 } from '../lib/api/aws';
 
 const StoreCompactInfo = styled.div`
   article {
@@ -24,8 +24,9 @@ const StoreCompactInfo = styled.div`
     /* border-top: 1px solid;
     border-color: #778899; */
     h2 {
-      width: 100vw;
-      height: 2vh;
+      width: 100%;
+      height: 3vh;
+      overflow: hidden;
     }
     .storeAddress {
       color: gray;
@@ -39,25 +40,23 @@ const StoreCompactInfo = styled.div`
     padding-top: 5%;
   }
 `;
+
 // 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
 const PostBlock = ({ src, delay, store }) => {
   const [imgurl, setImgUrl] = useState('');
+
+  const loadThumbnail = async (src) => {
+    try {
+      const url = await loadThumbnailFromS3([src]);
+      setImgUrl(url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    const s3 = new AWS.S3();
     if (src) {
-      s3.getSignedUrl(
-        'getObject',
-        {
-          Bucket: '42chelin',
-          Key: `img/${src}`, // ex) assets/
-        },
-        (err, url) => {
-          if (err) {
-            console.log(err);
-          }
-          setImgUrl(url);
-        },
-      );
+      loadThumbnail(src);
     } else {
       setImgUrl(DefalutImg);
     }

@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-import { ToggleLikeStore } from '../lib/api/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +20,7 @@ const StoreInfoBlock = styled.div`
 const StoreHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e9e9e9;
   button {
     border: none;
@@ -32,7 +31,9 @@ const StoreHeader = styled.div`
     }
   }
   .btn-like {
-    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
     background-color: #fafafa;
   }
   .btn-reviewWrite {
@@ -41,11 +42,12 @@ const StoreHeader = styled.div`
   }
   .store-header-title {
     display: flex;
+    align-items: center;
   }
 `;
 
-const StoreReviewDetail = ({ storeList }) => {
-  const [isLike, setIsLike] = useState(storeList.isLike);
+const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
+  const userName = localStorage.getItem('username');
   const history = useHistory();
   const GoWritePage = () => {
     history.push(
@@ -53,33 +55,21 @@ const StoreReviewDetail = ({ storeList }) => {
     );
   };
 
-  const ToggleLike = async () => {
-    setIsLike(!isLike);
-    const data = {
-      token: localStorage.getItem('token'),
-      storeName: storeList.storeName,
-      storeAddress: storeList.storeAddress,
-      userName: localStorage.getItem('username'),
-      isLike: !isLike,
-    };
-    try {
-      await ToggleLikeStore(data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
   return (
     <StoreItemBlock>
       <StoreHeader>
         <div className="store-header-title">
           <h2>{storeList.storeName}</h2>
-          <button onClick={ToggleLike} className="btn-like">
-            {isLike ? (
-              <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
-            ) : (
-              <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
-            )}
-          </button>
+          {userName && (
+            <button onClick={ToggleLike} className="btn-like">
+              <p>좋아요</p>
+              {isLike ? (
+                <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
+              ) : (
+                <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
+              )}
+            </button>
+          )}
         </div>
         <div>
           <button className="btn-reviewWrite" onClick={GoWritePage}>
