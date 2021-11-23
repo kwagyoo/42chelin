@@ -1,22 +1,59 @@
 import styled from 'styled-components';
+import logo from '../image/LogoWhite.png';
 
 const StyledFooter = styled.footer`
-  margin: 0 auto;
-  padding-top: 5px;
-  padding-bottom: 2px;
-  background-color: #9b9b9b;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  padding-left: 5%;
+  margin-top: 10px;
+  background-color: #333;
+  color: #bbbbbb;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  a {
+    color: #bbbbbb;
+    :hover {
+      color: #ffffff;
+    }
+  }
+  .footer_content {
+    display: flex;
+    flex-direction: column;
+  }
+  .footer_logo {
+    img {
+      width: 200px;
+      height: 100px;
+      margin-right: 53px;
+      padding-bottom: 10px;
+    }
+    @media (max-width: 425px) {
+      img {
+        display: none;
+      }
+    }
+  }
 `;
 
 const Footer = () => {
   return (
     <StyledFooter>
-      <p>
-        <span>개발자 : bkwag, hyunyoo</span>
-        <br />
-        <span>github : https://github.com/kwagyoo/42chelin</span>
-        <br />
+      <div className="footer_content">
         <span>Copyright 2021. All Rights Reserved.</span>
-      </p>
+        <span>개발자 : bkwag, hyunyoo</span>
+        <span>
+          github :
+          <a href="https://github.com/kwagyoo/42chelin">
+            https://github.com/kwagyoo/42chelin
+          </a>
+        </span>
+        <span> 버그 제보는 이슈로 남겨주세요</span>
+      </div>
+      <div className="footer_logo">
+        <img src={logo} alt="title" />
+      </div>
     </StyledFooter>
   );
 };

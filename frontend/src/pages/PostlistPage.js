@@ -11,14 +11,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons';
 import StoreMap from '../common/StoreMap';
-
 const ListBody = styled.div`
   background-color: #fafafa;
   input[type='radio'] {
     -moz-appearance: none;
     -webkit-appearance: none;
   }
-  height: 100vh;
+  height: 100%;
 `;
 
 const SearchInput = styled.div`
@@ -57,6 +56,7 @@ const OptionList = styled.div`
 
 const MainBody = styled.div`
   width: 80%;
+  min-height: 100vh;
   margin: 0 auto;
   font-family: 'Do Hyeon', sans-serif;
   .sort-opt {

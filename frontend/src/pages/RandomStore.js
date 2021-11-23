@@ -7,6 +7,7 @@ import Header from '../common/Header';
 import { getRandomStore } from '../lib/api/store';
 
 const MainBody = styled.div`
+  min-height: 100vh;
   height: 100vh;
   overflow: hidden;
   background-color: #fafafa;

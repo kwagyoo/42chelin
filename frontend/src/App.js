@@ -11,6 +11,7 @@ import AWS from 'aws-sdk';
 import Auth from './hoc/auth';
 import RandomStore from './pages/RandomStore';
 import Loading from './common/Loading';
+import Footer from './common/Footer';
 
 const App = () => {
   AWS.config.update({
@@ -31,6 +32,7 @@ const App = () => {
       <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
       <Route path="/random" component={RandomStore} />
       <Route path="/test" component={Loading} />
+      <Footer />
     </>
   );
 };
