@@ -84,6 +84,9 @@ const MainBody = styled.div`
     }
     .option-list-ul {
       padding-left: 5px;
+      button {
+        cursor: pointer;
+      }
       button:active {
         color: #696969;
       }
