@@ -20,6 +20,7 @@ const StoreInfoBlock = styled.div`
 const StoreHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e9e9e9;
   button {
     border: none;
@@ -31,8 +32,8 @@ const StoreHeader = styled.div`
   }
   .btn-like {
     display: flex;
-    margin-top: 5px;
-    padding-bottom: 10px;
+    flex-direction: column-reverse;
+    align-items: center;
     background-color: #fafafa;
   }
   .btn-reviewWrite {
@@ -41,6 +42,7 @@ const StoreHeader = styled.div`
   }
   .store-header-title {
     display: flex;
+    align-items: center;
   }
 `;
 

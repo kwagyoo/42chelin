@@ -18,6 +18,7 @@ const ListBody = styled.div`
     -moz-appearance: none;
     -webkit-appearance: none;
   }
+  height: 100vh;
 `;
 
 const SearchInput = styled.div`

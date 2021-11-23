@@ -127,8 +127,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
           userName: review.userName,
           reviewDate: review.reviewDate,
         };
-        const res = await deleteStoreReview(deleteReviewData);
-        console.log('deleteStoreReview', res);
+        await deleteStoreReview(deleteReviewData);
         history.go(0);
       } catch (error) {
         console.error(error);

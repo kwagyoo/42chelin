@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import styled from 'styled-components';
-import AWS from 'aws-sdk';
 import DefalutImg from '../image/default.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
@@ -50,7 +49,6 @@ const PostBlock = ({ src, delay, store }) => {
     try {
       const url = await loadThumbnailFromS3([src]);
       setImgUrl(url);
-      console.log(url);
     } catch (err) {
       console.error(err);
     }
