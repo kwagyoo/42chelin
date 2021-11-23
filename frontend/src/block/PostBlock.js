@@ -5,6 +5,7 @@ import AWS from 'aws-sdk';
 import DefalutImg from '../image/default.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
+import { loadThumbnailFromS3 } from '../lib/api/aws';
 
 const StoreCompactInfo = styled.div`
   article {
@@ -40,25 +41,24 @@ const StoreCompactInfo = styled.div`
     padding-top: 5%;
   }
 `;
+
 // 옵셔널체이닝 store?.name -> store가 undefind 일 경우 undefind를 리턴한다
 const PostBlock = ({ src, delay, store }) => {
   const [imgurl, setImgUrl] = useState('');
+
+  const loadThumbnail = async (src) => {
+    try {
+      const url = await loadThumbnailFromS3([src]);
+      setImgUrl(url);
+      console.log(url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    const s3 = new AWS.S3();
     if (src) {
-      s3.getSignedUrl(
-        'getObject',
-        {
-          Bucket: '42chelin-images',
-          Key: `original/${src}`, // ex) assets/
-        },
-        (err, url) => {
-          if (err) {
-            console.log(err);
-          }
-          setImgUrl(url);
-        },
-      );
+      loadThumbnail(src);
     } else {
       setImgUrl(DefalutImg);
     }
