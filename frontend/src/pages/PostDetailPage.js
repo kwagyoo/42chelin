@@ -42,7 +42,7 @@ const ContentsWrapper = styled.div`
 const Wrapper = styled.div`
   font-family: 'Do Hyeon', sans-serif;
   background-color: #fafafa;
-
+  min-height: 100vh;
   display: flex;
   justify-content: space-between;
   #map {
