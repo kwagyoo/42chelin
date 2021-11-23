@@ -16,7 +16,7 @@ const ListBody = styled.div`
 const SearchInput = styled.div`
   width: 80%;
   height: 50px;
-  margin: 30px auto 0 auto;
+  margin: 30px auto 30px auto;
   background-color: #ffffff;
   border-radius: 25px;
   border: 1.5px solid #550055;
@@ -127,16 +127,6 @@ const SearchPage = ({ history, location }) => {
         />
       </SearchInput>
       <MainBody>
-        <OptionList>
-          <ul className="option-list-ul">
-            <li>
-              <button>리뷰갯수순</button>
-            </li>
-            <li>
-              <button>이름순</button>
-            </li>
-          </ul>
-        </OptionList>
         <Row gutter={[16, 16]}>
           {searchstoreList &&
             searchstoreList.map((store, index) => (
