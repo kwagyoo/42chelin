@@ -1,16 +1,15 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-import PostDetailPage from './pages/PostDetailPage';
-import PostlistPage from './pages/PostlistPage';
-import PostUpdatePage from './pages/PostUpdatePage';
-import PostWritePage from './pages/PostWritePage';
+import StoreDetailPage from './pages/StoreDetailPage';
+import StorelistPage from './pages/StorelistPage';
+import ReviewUpdatePage from './pages/ReviewUpdatePage';
+import ReviewWritePage from './pages/ReviewWritePage';
 import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
 import Auth from './hoc/auth';
 import RandomStore from './pages/RandomStore';
-import Loading from './common/Loading';
 import Footer from './common/Footer';
 
 const App = () => {
@@ -23,15 +22,14 @@ const App = () => {
 
   return (
     <>
-      <Route path="/" component={PostlistPage} exact />
+      <Route path="/" component={StorelistPage} exact />
       <Route path="/login" component={LoginPage} />
-      <Route path="/detail" component={PostDetailPage} />
-      <Route path="/update" component={PostUpdatePage} />
-      <Route path="/write" component={PostWritePage} />
+      <Route path="/detail" component={StoreDetailPage} />
+      <Route path="/update" component={Auth(ReviewUpdatePage, true)} />
+      <Route path="/write" component={Auth(ReviewWritePage, true)} />
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
       <Route path="/random" component={RandomStore} />
-      <Route path="/test" component={Loading} />
       <Footer />
     </>
   );

@@ -65,7 +65,7 @@ const KakaoSearchPage = () => {
       const data = res.data.body;
       setSearchstoreList(data);
     } catch (e) {
-      console.log(e);
+      alert(e.response.data.message);
     }
   };
 

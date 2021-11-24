@@ -31,16 +31,15 @@ const img = {
 };
 
 const Thumb = styled.div`
-  display: inline-block,
-  flex: 110px,
-  borderRadius: 2,
-  border: 1px solid #eaeaea,
-  marginBottom: 8,
-  marginRight: 8,
-  width: 110,
-  height: 110,
-  padding: 4,
-  boxSizing: border-box,
+  display: inline-block;
+  border-radius: 2;
+  border: 1px solid #eaeaea;
+  margin-bottom: 8;
+  margin-right: 8;
+  width: 110;
+  height: 110;
+  padding: 4;
+  box-sizing: border-box;
 `;
 
 const thumbInner = {

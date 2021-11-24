@@ -120,7 +120,7 @@ function formatDate(date) {
   return [year, month, day].join('-');
 }
 
-const PostWritePage = ({ location }) => {
+const ReviewWritePage = ({ location }) => {
   const history = useHistory();
 
   const [store, setStore] = useState(null);
@@ -146,8 +146,9 @@ const PostWritePage = ({ location }) => {
         `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
       );
     } catch (e) {
-      alert('저장에 실패하였습니다.');
-      console.error(e);
+      if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
+      else alert('저장에 실패하였습니다.');
+      console.error(e.response.data.message);
     }
   };
 
@@ -163,25 +164,27 @@ const PostWritePage = ({ location }) => {
   };
 
   useEffect(() => {
-    const query = querystring.parse(location.search);
-    if (Object.keys(query).length !== 0) {
-      getStoreInfoKakao(query)
-        .then((res) => {
-          setStore({
-            placeName: res.place_name,
-            address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
-            id: res.id,
-            category: res.category_group_code,
-            x: res.x,
-            y: res.y,
+    if (location) {
+      const query = querystring.parse(location.search);
+      if (Object.keys(query).length !== 0) {
+        getStoreInfoKakao(query)
+          .then((res) => {
+            setStore({
+              placeName: res.place_name,
+              address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+              id: res.id,
+              category: res.category_group_code,
+              x: res.x,
+              y: res.y,
+            });
+          })
+          .catch((err) => {
+            alert('가게 정보를 가져올 수 없습니다.');
+            console.error(err);
           });
-        })
-        .catch((err) => {
-          alert('가게 정보를 가져올 수 없습니다.');
-          console.error(err);
-        });
+      }
     }
-  }, [location.search]);
+  }, [location]);
 
   useEffect(() => {
     setValue('userName', localStorage.getItem('username'));
@@ -264,4 +267,4 @@ const PostWritePage = ({ location }) => {
     </Body>
   );
 };
-export default PostWritePage;
+export default ReviewWritePage;

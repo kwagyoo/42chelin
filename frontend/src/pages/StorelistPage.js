@@ -151,7 +151,7 @@ const ToggleButton = styled.div`
 
 // 재사용이 가능한 코드이므로 api로 따로 빼서 관리하면 좋다.
 
-const PostlistPage = ({ history }) => {
+const StorelistPage = ({ history }) => {
   const [text, setText] = useState('');
   const [change, setChange] = useState(true);
   const [stores, setStores] = useState([]);
@@ -164,7 +164,7 @@ const PostlistPage = ({ history }) => {
       setStores(data);
       dispatch(getList(data));
     } catch (e) {
-      console.log(e);
+      alert(e.response.data.message);
     }
   };
 
@@ -308,4 +308,4 @@ const PostlistPage = ({ history }) => {
   );
 };
 
-export default PostlistPage;
+export default StorelistPage;

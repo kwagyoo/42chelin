@@ -222,7 +222,7 @@ const RandomStore = () => {
       setStore(res.data.body);
       if (resetNum === 0) store_print.current.style.display = 'block';
     } catch (e) {
-      console.error(e);
+      alert(e.response.data.message);
     }
   };
 
