@@ -98,12 +98,12 @@ const getImageURLsFromS3 = async (storeList) => {
       storeImages: fixedReviews.map((review) => review.images).flat(),
       storeReviews: fixedReviews,
     };
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    alert(e.response.data.message);
   }
 };
 
-const PostDetailPage = ({ location }) => {
+const StoreDetailPage = ({ location }) => {
   const [storeList, setStoreList] = useState(null);
   const [isLike, setIsLike] = useState(false);
   const [likes, setLikes] = useState(0);
@@ -140,7 +140,7 @@ const PostDetailPage = ({ location }) => {
       });
       marker.setMap(map);
     } catch (e) {
-      console.error(e);
+      alert(e.response.data.message);
     }
   };
   useEffect(() => {
@@ -164,7 +164,7 @@ const PostDetailPage = ({ location }) => {
       const res = await toggleLikeStore(data);
       setLikes(res.data.body.likes);
     } catch (e) {
-      console.error(e);
+      alert(e.response.data.message);
     }
   };
 
@@ -197,4 +197,4 @@ const PostDetailPage = ({ location }) => {
   );
 };
 
-export default PostDetailPage;
+export default StoreDetailPage;

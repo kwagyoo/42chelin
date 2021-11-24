@@ -7,18 +7,11 @@ import { getUserName, setAccessToken } from '../module/users';
 import Loading from '../common/Loading';
 import * as Sentry from '@sentry/react';
 
-const GetUsername = async (token, dispatch, history) => {
-  try {
-    const res = await getUser(token);
-    const username = JSON.parse(res.data.body).nickname;
-    localStorage.setItem('username', username);
-    dispatch(getUserName(username));
-  } catch (e) {
-    Sentry.captureException(e);
-    alert('username이 존재하지 않습니다');
-    history.push('/');
-
-  }
+const GetUsername = async (token, dispatch) => {
+  const res = await getUser(token);
+  const username = JSON.parse(res.data.body).nickname;
+  localStorage.setItem('username', username);
+  dispatch(getUserName(username));
 };
 
 const LoginRequest = async ({ location, dispatch, history }) => {
@@ -26,16 +19,14 @@ const LoginRequest = async ({ location, dispatch, history }) => {
   const code = query.code;
   try {
     const res = await getToken(code);
-    const data = JSON.parse(res.data.body);
-    const token = data.access_token;
+    const token = res.data.body.access_token;
+    await GetUsername(token, dispatch);
     localStorage.setItem('token', token);
     dispatch(setAccessToken());
-    await GetUsername(token, dispatch);
     history.push('/');
   } catch (e) {
     Sentry.captureException(e);
-    console.log(e);
-    alert('로그인에 실패했습니다.');
+    alert(e.response.data.message);
     history.push('/');
   }
 };

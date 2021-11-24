@@ -101,7 +101,7 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const PostUpdatePage = ({ history, location }) => {
+const ReviewUpdatePage = ({ history, location }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -135,8 +135,9 @@ const PostUpdatePage = ({ history, location }) => {
         `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
       );
     } catch (e) {
-      alert('오류가 발생하였습니다.');
-      console.error(e);
+      if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
+      else alert('저장에 실패하였습니다.');
+      console.error(e.response.data.message);
     }
   };
 
@@ -147,7 +148,7 @@ const PostUpdatePage = ({ history, location }) => {
       try {
         await UpdateStoreReview({ ...data, storeImages: files });
       } catch (e) {
-        console.log(e);
+        alert(e.response.data.message);
       }
       setLoading((loading) => false);
     }
@@ -219,4 +220,4 @@ const PostUpdatePage = ({ history, location }) => {
     </Body>
   );
 };
-export default PostUpdatePage;
+export default ReviewUpdatePage;
