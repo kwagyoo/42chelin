@@ -25,8 +25,8 @@ const App = () => {
       <Route path="/" component={StorelistPage} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/detail" component={StoreDetailPage} />
-      <Route path="/update" component={Auth(ReviewUpdatePage, true)} />
-      <Route path="/write" component={Auth(ReviewWritePage, true)} />
+      <Route path="/update" component={ReviewUpdatePage} />
+      <Route path="/write" component={ReviewWritePage} />
       <Route path="/search" component={SearchPage} />
       <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
       <Route path="/random" component={RandomStore} />

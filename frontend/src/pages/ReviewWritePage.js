@@ -164,25 +164,23 @@ const ReviewWritePage = ({ location }) => {
   };
 
   useEffect(() => {
-    if (location) {
-      const query = querystring.parse(location.search);
-      if (Object.keys(query).length !== 0) {
-        getStoreInfoKakao(query)
-          .then((res) => {
-            setStore({
-              placeName: res.place_name,
-              address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
-              id: res.id,
-              category: res.category_group_code,
-              x: res.x,
-              y: res.y,
-            });
-          })
-          .catch((err) => {
-            alert('가게 정보를 가져올 수 없습니다.');
-            console.error(err);
+    const query = querystring.parse(location.search);
+    if (Object.keys(query).length !== 0) {
+      getStoreInfoKakao(query)
+        .then((res) => {
+          setStore({
+            placeName: res.place_name,
+            address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+            id: res.id,
+            category: res.category_group_code,
+            x: res.x,
+            y: res.y,
           });
-      }
+        })
+        .catch((err) => {
+          alert('가게 정보를 가져올 수 없습니다.');
+          console.error(err);
+        });
     }
   }, [location]);
 
