@@ -13,7 +13,7 @@ export const fetchUser = (token) =>
   });
 
 export const fetchRegister = (code, id, password) =>
-  client.post(`/user`, {
+  client.post(`/user/test`, {
     code: code,
     id: id,
     password: password,

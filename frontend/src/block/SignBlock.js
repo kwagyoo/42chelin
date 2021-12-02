@@ -25,7 +25,10 @@ const StyledLoginForm = styled.form`
     text-align: center;
     margin: 5px;
   }
-
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    box-shadow: 0 0 0 1000px white inset;
+  }
   .idForm {
     border-bottom: 2px solid #adadad;
     margin: 30px;
