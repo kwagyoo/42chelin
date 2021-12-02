@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import { getRandomStore } from '../lib/api/store';
+import { fetchRandomStore } from '../lib/api/store';
 
 const MainBody = styled.div`
   min-height: 100vh;
@@ -216,7 +216,7 @@ const RandomStore = () => {
 
   const getStore = async () => {
     try {
-      const res = await getRandomStore();
+      const res = await fetchRandomStore();
       displaySlot.current.style.display = 'none';
       btnGo.current.style.display = 'block';
       setStore(res.data.body);

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../common/Header';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import Header from '../common/Header';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
+import AntModal from '../common/Modal';
 import { Link } from 'react-router-dom';
-import { saveStoreData } from '../lib/api/store';
+import { createStore } from '../lib/api/store';
 import { getStoreInfoKakao } from '../lib/api/kakao';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router';
-import AntModal from '../common/Modal';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -133,11 +133,11 @@ const ReviewWritePage = ({ location }) => {
 
   const review = useInput('', (value) => value.length < 300);
 
-  const SaveStore = async (data) => {
+  const writeReview = async (data) => {
     try {
       const userToken = localStorage.getItem('token');
       const imageNames = uploadImagesToS3(data.images);
-      await saveStoreData({
+      await createStore({
         ...data,
         token: userToken,
         images: imageNames,
@@ -157,7 +157,7 @@ const ReviewWritePage = ({ location }) => {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
       if (store) {
-        await SaveStore({ ...data, images: files });
+        await writeReview({ ...data, images: files });
       }
       setLoading((loading) => !loading);
     }

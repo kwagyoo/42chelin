@@ -2,7 +2,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import styled from 'styled-components';
-import CarouselImg from './CarouselImg';
+import CarouselImgBlock from '../block/CarouselImgBlock';
 import { useEffect, useState } from 'react';
 
 const Container = styled.div`
@@ -116,7 +116,7 @@ const Carousel = ({ images }) => {
       <StyledSlider {...settings}>
         {modifiedImages
           ? modifiedImages.map((image, idx) => (
-              <CarouselImg image={image} key={idx} />
+              <CarouselImgBlock image={image} key={idx} />
             ))
           : null}
       </StyledSlider>

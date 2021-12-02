@@ -1,49 +1,28 @@
-import React, { useEffect } from 'react';
+// import { useState } from 'react';
+import SignBlock from '../block/SignBlock';
 import Header from '../common/Header';
-import queryString from 'query-string';
-import { useDispatch } from 'react-redux';
-import { getToken, getUser } from '../lib/api/auth';
-import { getUserName, setAccessToken } from '../module/users';
-import Loading from '../common/Loading';
-import * as Sentry from '@sentry/react';
+import logo from '../image/Logo.png';
 
-const GetUsername = async (token, dispatch) => {
-  const res = await getUser(token);
-  const username = JSON.parse(res.data.body).nickname;
-  localStorage.setItem('username', username);
-  dispatch(getUserName(username));
-};
-
-const LoginRequest = async ({ location, dispatch, history }) => {
-  const query = queryString.parse(location.search);
-  const code = query.code;
-  try {
-    const res = await getToken(code);
-    const token = res.data.body.access_token;
-    await GetUsername(token, dispatch);
-    localStorage.setItem('token', token);
-    dispatch(setAccessToken());
-    history.push('/');
-  } catch (e) {
-    Sentry.captureException(e);
-    alert(e.response.data.message);
-    history.push('/');
-  }
-};
-
-const LoginRequestEvent = ({ location, history }) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    LoginRequest({ location, dispatch, history });
-  }, [dispatch, location, history]);
+const LoginPage = () => {
+  //   const [loading, setLoading] = useState(false);
+  const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
 
   return (
-    <React.Fragment>
+    <>
       <Header />
-      <Loading loadingText="로그인 중 .." />
-    </React.Fragment>
+      <SignBlock>
+        <img src={logo} alt="logo" />
+        <div className="idForm">
+          <input placeholder="Id" className="id"></input>
+        </div>
+        <div className="pwForm">
+          <input type="password" placeholder="Pw" className="pw"></input>
+        </div>
+        <button className="btn">Login</button>
+        <div>Don't you have ID?</div>
+      </SignBlock>
+    </>
   );
 };
 
-export default LoginRequestEvent;
+export default LoginPage;

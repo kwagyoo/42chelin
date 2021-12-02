@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../common/Header';
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import Header from '../common/Header';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
-import { updateStoreReview } from '../lib/api/store';
+import AntModal from '../common/Modal';
+import { updateReview } from '../lib/api/review';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
-import AntModal from '../common/Modal';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -121,7 +121,7 @@ const ReviewUpdatePage = ({ history, location }) => {
       const newImages = uploadImagesToS3(
         data.storeImages.filter((image) => image.imageURL === undefined),
       );
-      await updateStoreReview({
+      await updateReview({
         ...data,
         token: userToken,
         reviewImages: [
