@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { deleteStoreReview } from '../lib/api/store';
-import ReviewImgView from './ReviewImgView';
+import { deleteReview } from '../lib/api/review';
+import ReviewImgView from '../block/ReviewImgViewBlock';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
@@ -114,7 +114,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
 
-  const deleteReview = async (review) => {
+  const deleteStoreReview = async (review) => {
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('삭제중..');
@@ -127,7 +127,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
           userName: review.userName,
           reviewDate: review.reviewDate,
         };
-        await deleteStoreReview(deleteReviewData);
+        await deleteReview(deleteReviewData);
         history.go(0);
       } catch (error) {
         console.error(error);
@@ -185,7 +185,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
                   <p className="search">수정</p>
                 </button>
                 <button
-                  onClick={() => deleteReview(review)}
+                  onClick={() => deleteStoreReview(review)}
                   className={
                     'detail_button ' +
                     (review.userName === localStorage.getItem('username')

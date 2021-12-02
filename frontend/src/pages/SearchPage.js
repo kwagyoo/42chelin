@@ -1,10 +1,10 @@
+import 'antd/dist/antd.css';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Header from '../common/Header';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
-import styled from 'styled-components';
-import 'antd/dist/antd.css';
-import { searchStoreData } from '../lib/api/store';
+import { searchStore } from '../lib/api/store';
 import qs from 'qs';
 
 const ListBody = styled.div`
@@ -59,7 +59,7 @@ const SearchPage = ({ history, location }) => {
 
   const SearchData = async (query) => {
     try {
-      const res = await searchStoreData(query.storeName);
+      const res = await searchStore(query.storeName);
       setSearchstoreList(res.data.body);
     } catch (e) {
       console.error(e);

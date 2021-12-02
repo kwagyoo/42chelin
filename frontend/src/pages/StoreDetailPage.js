@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import StoreReviewDetail from '../common/StoreReviewDetail';
-import StoreReviewList from '../common/StoreReviewList';
-import { getStoreDetailData } from '../lib/api/store';
-import qs from 'qs';
 import Carousel from '../common/Carousel';
+import StoreReviewDetailBlock from '../block/StoreReviewDetailBlock';
+import StoreReviewListBlock from '../block/StoreReviewListBlock';
+import { getStoreDetail } from '../lib/api/store';
+import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
 
@@ -114,7 +114,7 @@ const StoreDetailPage = ({ location }) => {
   const getStore = async () => {
     try {
       const userName = localStorage.getItem('username');
-      const res = await getStoreDetailData({ ...query, userName });
+      const res = await getStoreDetail({ ...query, userName });
       setStoreList(await getImageURLsFromS3(res.data.body));
       setLikes(res.data.body.storeLikes);
       setIsLike(res.data.body.isLike);
@@ -179,13 +179,13 @@ const StoreDetailPage = ({ location }) => {
                 <Carousel images={storeList.storeImages} />
                 <div id="map" />
               </FlexWrapper>
-              <StoreReviewDetail
+              <StoreReviewDetailBlock
                 storeList={storeList}
                 ToggleLike={ToggleLike}
                 isLike={isLike}
               />
             </StoreListBlock>
-            <StoreReviewList
+            <StoreReviewListBlock
               store={storeList}
               storeReviews={storeList.storeReviews}
               likes={likes}

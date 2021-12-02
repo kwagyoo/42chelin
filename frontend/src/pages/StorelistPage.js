@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../common/Header';
+import styled from 'styled-components';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
-import styled from 'styled-components';
 import 'antd/dist/antd.css';
-import { loadAllStoreData } from '../lib/api/store';
+import { getAllStore } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons';
 import StoreMap from '../common/StoreMap';
+import Header from '../common/Header';
+
 const ListBody = styled.div`
   background-color: #fafafa;
   input[type='radio'] {
@@ -18,6 +19,7 @@ const ListBody = styled.div`
     -webkit-appearance: none;
   }
   height: 100%;
+  padding-bottom: 10px;
 `;
 
 const SearchInput = styled.div`
@@ -159,7 +161,7 @@ const StorelistPage = ({ history }) => {
 
   const getAllStoreData = async ({ dispatch }) => {
     try {
-      const res = await loadAllStoreData();
+      const res = await getAllStore();
       const data = res.data.body;
       setStores(data);
       dispatch(getList(data));

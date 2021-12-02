@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-import StoreInfo from '../common/StoreInfo';
-import { searchKakao } from '../lib/api/kakao';
+import StoreInfoBlock from '../block/StoreInfoBlock';
+import { fetchKakaoApi } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -61,7 +61,7 @@ const KakaoSearchPage = () => {
 
   const SearchStoreEvent = async () => {
     try {
-      const res = await searchKakao(text);
+      const res = await fetchKakaoApi(text);
       const data = res.data.body;
       setSearchstoreList(data);
     } catch (e) {
@@ -97,7 +97,7 @@ const KakaoSearchPage = () => {
       <StoreInfoWarp>
         {searchstoreList &&
           searchstoreList.map((store, idx) => (
-            <StoreInfo
+            <StoreInfoBlock
               onClick={() => SubmitStoreData(store.place_name, store.id)}
               address={store.address_name}
               placeName={store.place_name}
