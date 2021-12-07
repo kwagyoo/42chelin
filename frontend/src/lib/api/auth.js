@@ -18,3 +18,12 @@ export const fetchRegister = (code, id, password) =>
     id: id,
     password: password,
   });
+
+export const fetchLogin = ({ id, password }) => {
+  console.log(`/user/${id}/login`, password);
+  return client.get(`/user/${id}/login`, {
+    params: {
+      password,
+    },
+  });
+};
