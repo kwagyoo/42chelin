@@ -1,3 +1,4 @@
+import { getCookie } from '../../common/Cookie';
 import client from './client';
 
 export const fetchToken = (code) =>
@@ -19,11 +20,18 @@ export const fetchRegister = (code, id, password) =>
     password: password,
   });
 
-export const fetchLogin = ({ id, password }) => {
-  console.log(`/user/${id}/login`, password);
-  return client.get(`/user/${id}/login`, {
+export const fetchLogin = (id, password) =>
+  client.get(`/user/${id}/login`, {
     params: {
       password,
     },
+    withCredentials: true,
   });
-};
+
+export const fetchReset = (id) =>
+  client.post(`/user/${id}/refresh`, {
+    headers: {
+      Authorization: `Bearer ${getCookie('accToken')}`,
+    },
+    withCredentials: true,
+  });
