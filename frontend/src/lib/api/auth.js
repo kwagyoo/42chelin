@@ -21,12 +21,15 @@ export const fetchRegister = (code, id, password) =>
   });
 
 export const fetchLogin = (id, password) =>
-  client.get(`/user/${id}/login`, {
-    params: {
-      password,
+  client.get(
+    `/user/${id}/login`,
+    {
+      params: {
+        password,
+      },
     },
-    withCredentials: true,
-  });
+    { withCredentials: true },
+  );
 
 export const fetchReset = (id) =>
   client.post(`/user/${id}/refresh`, {

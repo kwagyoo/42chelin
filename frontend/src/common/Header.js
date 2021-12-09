@@ -207,14 +207,14 @@ const Header = () => {
       const id = 'bkwag';
       const pw = 'admin';
       const res = await fetchLogin(id, pw);
-      const accToken = res.data.access_token;
-      if (accToken) {
-        setCookie('accToken', accToken, {
-          path: '/',
-          secure: true,
-          sameSite: 'none',
-        });
-      }
+      //   const accToken = res.data.access_token;
+      //   if (accToken) {
+      //     setCookie('accToken', accToken, {
+      //       path: '/',
+      //       secure: true,
+      //       sameSite: 'none',
+      //     });
+      //   }
       console.log(res);
     } catch (e) {
       console.log(e);
@@ -303,7 +303,6 @@ const Header = () => {
                   onClick={() => window.location.replace(URL)}
                 />
                 <Button name="테스트" onClick={onLogin} />
-                <Button name="ref테스트" onClick={onReset} />
               </>
             )}
           </div>
