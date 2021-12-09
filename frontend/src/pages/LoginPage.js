@@ -2,6 +2,7 @@
 import SignBlock from '../block/SignBlock';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
+import TokenVerify from '../common/TokenVerify';
 import logo from '../image/Logo.png';
 import { fetchLogin } from '../lib/api/auth';
 
@@ -14,8 +15,12 @@ const LoginPage = () => {
       e.preventDefault();
       const id = 'hyunyoo';
       const pw = 'asdf1234';
+      //   await TokenVerify();
       const res = await fetchLogin(id, pw);
+      console.log('res', res);
       const accToken = res.data.access_token;
+      const refToken = res.data.refresh_token;
+
       if (accToken) {
         setCookie('accToken', accToken, {
           path: '/',
@@ -23,9 +28,15 @@ const LoginPage = () => {
           sameSite: 'none',
         });
       }
-      console.log(res);
+      if (refToken) {
+        setCookie('refToken', refToken, {
+          path: '/',
+          secure: true,
+          sameSite: 'none',
+        });
+      }
     } catch (e) {
-      console.log(e.response);
+      console.error('1', e);
     }
   };
 

@@ -7,7 +7,6 @@ import ReviewWritePage from './pages/ReviewWritePage';
 import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
-import Auth from './hoc/auth';
 import RandomStore from './pages/RandomStore';
 import Footer from './common/Footer';
 import RegisterPage from './pages/RegisterPage';
@@ -23,12 +22,12 @@ const App = () => {
 
   return (
     <>
-      <Route path="/" component={StorelistPage} exact />
+      <Route exact path="/" component={StorelistPage} />
       <Route path="/detail" component={StoreDetailPage} />
       <Route path="/update" component={ReviewUpdatePage} />
       <Route path="/write" component={ReviewWritePage} />
       <Route path="/search" component={SearchPage} />
-      <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
+      <Route path="/storeSearch" component={KakaoSearchPage} />
       <Route path="/random" component={RandomStore} />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />

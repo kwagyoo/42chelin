@@ -21,20 +21,16 @@ export const fetchRegister = (code, id, password) =>
   });
 
 export const fetchLogin = (id, password) =>
-  client.get(
-    `/user/${id}/login`,
-    {
-      params: {
-        password,
-      },
+  client.get(`/user/${id}/login`, {
+    params: {
+      password,
     },
-    { withCredentials: true },
-  );
+  });
 
-export const fetchReset = (id) =>
+export const fetchRefresh = (id) =>
   client.post(`/user/${id}/refresh`, {
     headers: {
       Authorization: `Bearer ${getCookie('accToken')}`,
     },
-    withCredentials: true,
+    refresh_token: getCookie('refToken'),
   });

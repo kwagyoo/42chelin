@@ -10,8 +10,7 @@ import {
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
-import { fetchLogin, fetchReset } from '../lib/api/auth';
-import { setCookie } from './Cookie';
+import { fetchReset } from '../lib/api/auth';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -202,34 +201,6 @@ const Header = () => {
     }
   };
 
-  const onLogin = async () => {
-    try {
-      const id = 'bkwag';
-      const pw = 'admin';
-      const res = await fetchLogin(id, pw);
-      //   const accToken = res.data.access_token;
-      //   if (accToken) {
-      //     setCookie('accToken', accToken, {
-      //       path: '/',
-      //       secure: true,
-      //       sameSite: 'none',
-      //     });
-      //   }
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const onReset = async () => {
-    try {
-      const id = 'bkwag';
-      const res = await fetchReset(id);
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   return (
     <React.Fragment>
       <HeaderBlock>
@@ -302,7 +273,6 @@ const Header = () => {
                   name="로그인"
                   onClick={() => window.location.replace(URL)}
                 />
-                <Button name="테스트" onClick={onLogin} />
               </>
             )}
           </div>
