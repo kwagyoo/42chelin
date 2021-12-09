@@ -9,10 +9,11 @@ const LoginPage = () => {
   //   const [loading, setLoading] = useState(false);
   //   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
 
-  const onLogin = async () => {
+  const onLogin = async (e) => {
     try {
-      const id = 'bkwag';
-      const pw = 'admin';
+      e.preventDefault();
+      const id = 'hyunyoo';
+      const pw = 'asdf1234';
       const res = await fetchLogin(id, pw);
       const accToken = res.data.access_token;
       if (accToken) {
@@ -24,14 +25,14 @@ const LoginPage = () => {
       }
       console.log(res);
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
     }
   };
 
   return (
     <>
       <Header />
-      <SignBlock>
+      <SignBlock onSubmit={onLogin}>
         <img src={logo} alt="logo" />
         <div className="idForm">
           <input placeholder="Id" className="id"></input>
@@ -39,9 +40,7 @@ const LoginPage = () => {
         <div className="pwForm">
           <input type="password" placeholder="Pw" className="pw"></input>
         </div>
-        <button className="btn" onClick={onLogin}>
-          Login
-        </button>
+        <button className="btn">Login</button>
         <div>Don't you have ID?</div>
       </SignBlock>
     </>
