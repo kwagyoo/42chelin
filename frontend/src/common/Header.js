@@ -10,7 +10,11 @@ import {
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
-import { fetchReset } from '../lib/api/auth';
+import { fetchRefresh } from '../lib/api/auth';
+import { getCookie, removeCookie, setCookie } from './Cookie';
+import jwt from 'jsonwebtoken';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsLogin } from '../module/users';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -183,20 +187,60 @@ const Spacer = styled.div`
 `;
 
 const Header = () => {
-  const name = localStorage.getItem('username');
-  const [isLogin, setisLogin] = useState('');
+  const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
+  //Todo : selector 가 랜더링 시점마다 계속 불리는 문제
+  const { isLogin } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  const checkAutoLogin = async (clusterName) => {
+    try {
+      const res = await fetchRefresh(clusterName);
+      const refToken = res.data.refresh_token;
+      if (refToken) {
+        setCookie('refToken', refToken, {
+          path: '/',
+          secure: true,
+          sameSite: 'none',
+        });
+      }
+      //access token 가져와서 decode해서
+      //sessionStrage에 username을 넣어야함
+      sessionStorage.setItem('username', clusterName);
+      setName(clusterName);
+      dispatch(setIsLogin(true));
+    } catch (err) {
+      console.error('auto login failed');
+    }
+  };
 
   useEffect(() => {
-    if (!isLogin) setisLogin(localStorage.getItem('token'));
-  }, [isLogin]);
-  const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+    setName(sessionStorage.getItem('username'));
+    if (name) dispatch(setIsLogin(true));
+    else if (!isLogin) {
+      const accToken = getCookie('accToken');
+      const refToken = getCookie('refToken');
+      if (accToken && refToken) {
+        const clusterName = jwt.decode(
+          accToken,
+          process.env.REACT_APP_JWT_SECRET_KEY,
+        ).clusterName;
+        checkAutoLogin(clusterName);
+        //재발급 요청
+      } else {
+        //쿠키 다 지우고 로그인 요구해야지
+        removeCookie('accToken');
+        removeCookie('refToken');
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogin, name]);
 
   const onLogout = () => {
     if (isLogin) {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      setisLogin('');
+      sessionStorage.removeItem('username');
+      removeCookie('accToken');
+      removeCookie('refToken');
+      dispatch(setIsLogin(false));
       alert('로그아웃 되었습니다.');
     }
   };
@@ -231,7 +275,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <a href={URL}>
+                <a href="/login">
                   <FontAwesomeIcon
                     icon={faSignInAlt}
                     style={{ color: 'black', width: '30px', height: '30px' }}
@@ -269,10 +313,7 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Button
-                  name="로그인"
-                  onClick={() => window.location.replace(URL)}
-                />
+                <Button name="로그인" to="/login" />
               </>
             )}
           </div>

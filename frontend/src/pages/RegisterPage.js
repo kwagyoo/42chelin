@@ -59,7 +59,7 @@ const RegisterPage = ({ location }) => {
       <div className="idForm">
         <input
           name="email"
-          tpye="email"
+          type="email"
           placeholder="Email"
           className="id"
           onChange={onChange}

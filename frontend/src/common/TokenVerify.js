@@ -1,7 +1,6 @@
 import { getCookie, setCookie } from './Cookie';
 import jwt from 'jsonwebtoken';
 import { fetchRefresh } from '../lib/api/auth';
-import { useHistory } from 'react-router';
 
 const TokenVerify = async () => {
   const id = 'hyunyoo';
