@@ -24,7 +24,7 @@ const TokenVerify = async () => {
                 });
               }
             } catch (e) {
-              console.log('catch e');
+              console.log('catch e', e.response.statusCode);
               // status 200이 아니면, alert 띄우고 홈으로 이동
               //   history.go('/');
             }

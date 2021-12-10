@@ -1,4 +1,5 @@
 // import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import SignBlock from '../block/SignBlock';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
@@ -9,6 +10,7 @@ import { fetchLogin } from '../lib/api/auth';
 const LoginPage = () => {
   //   const [loading, setLoading] = useState(false);
   //   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+  const history = useHistory();
 
   const onLogin = async (e) => {
     try {
@@ -35,6 +37,7 @@ const LoginPage = () => {
           sameSite: 'none',
         });
       }
+      history.push('/');
     } catch (e) {
       console.error('1', e);
     }
