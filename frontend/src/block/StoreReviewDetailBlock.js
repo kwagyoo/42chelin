@@ -47,7 +47,7 @@ const StoreHeader = styled.div`
 `;
 
 const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
-  const userName = localStorage.getItem('username');
+  const userName = sessionStorage.getItem('username');
   const history = useHistory();
   const GoWritePage = () => {
     history.push(

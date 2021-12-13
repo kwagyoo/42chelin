@@ -6,7 +6,7 @@ import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import AntModal from '../common/Modal';
 import { Link } from 'react-router-dom';
-import { createStore } from '../lib/api/store';
+import { writeReview } from '../lib/api/store';
 import { getStoreInfoKakao } from '../lib/api/kakao';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
@@ -133,22 +133,25 @@ const ReviewWritePage = ({ location }) => {
 
   const review = useInput('', (value) => value.length < 300);
 
-  const writeReview = async (data) => {
+  const sendReview = async (data) => {
     try {
-      const userToken = localStorage.getItem('token');
       const imageNames = uploadImagesToS3(data.images);
-      await createStore({
+      console.log(data);
+      await writeReview({
         ...data,
-        token: userToken,
         images: imageNames,
       });
       history.push(
-        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+        `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
       );
     } catch (e) {
-      if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
-      else alert('저장에 실패하였습니다.');
-      console.error(e.response.data.message);
+      if (e.response?.status) {
+        alert('저장에 실패했습니다.');
+        console.error(e.response.data.errorMessage);
+      } else {
+        alert('내부 문제가 발생했습니다.');
+        console.error(e.message);
+      }
     }
   };
 
@@ -157,7 +160,7 @@ const ReviewWritePage = ({ location }) => {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
       if (store) {
-        await writeReview({ ...data, images: files });
+        await sendReview({ ...data, images: files });
       }
       setLoading((loading) => !loading);
     }
@@ -185,7 +188,7 @@ const ReviewWritePage = ({ location }) => {
   }, [location]);
 
   useEffect(() => {
-    setValue('userName', localStorage.getItem('username'));
+    setValue('clusterName', sessionStorage.getItem('username'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);

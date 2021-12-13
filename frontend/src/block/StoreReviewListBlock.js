@@ -119,13 +119,12 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
       setLoading((loading) => !loading);
       setLoadingText('삭제중..');
       try {
-        const userToken = localStorage.getItem('token');
         const deleteReviewData = {
-          token: userToken,
+          storeID: store.storeID,
           storeName: store.storeName,
           storeAddress: store.storeAddress,
-          userName: review.userName,
-          reviewDate: review.reviewDate,
+          clusterName: review.clusterName,
+          reviewID: review.reviewID,
         };
         await deleteReview(deleteReviewData);
         history.go(0);
@@ -138,8 +137,8 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
   };
 
   const goUpdatePage = (review) => {
-    const { storeName, storeAddress, userName } = store;
-    dispatch(setReview({ storeName, storeAddress, userName, review }));
+    const { storeName, storeAddress, clusterName } = store;
+    dispatch(setReview({ storeName, storeAddress, clusterName, review }));
     history.push('/update');
   };
 
@@ -171,7 +170,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
                   onClick={() => goUpdatePage(review)}
                   className={
                     'detail_button ' +
-                    (review.userName === localStorage.getItem('username')
+                    (review.clusterName === sessionStorage.getItem('username')
                       ? null
                       : 'hide')
                   }
@@ -188,7 +187,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
                   onClick={() => deleteStoreReview(review)}
                   className={
                     'detail_button ' +
-                    (review.userName === localStorage.getItem('username')
+                    (review.clusterName === sessionStorage.getItem('username')
                       ? null
                       : 'hide')
                   }

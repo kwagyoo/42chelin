@@ -1,21 +1,32 @@
 import client from './client';
+import { getCookie } from '../../common/Cookie';
 
-export const createStore = (request) => client.post(`/stores/save`, request);
-
-export const getAllStore = () => client.get(`/stores`);
+export const writeReview = (request) =>
+  client.post(
+    `/store/${request.storeID}/review`,
+    request,
+    { refresh_token: getCookie('refToken') },
+    {
+      headers: {
+        Authorization: `Bearer ${getCookie('accToken')}`,
+      },
+    },
+  );
 
 export const searchStore = (storeName) =>
-  client.get(`/search`, {
+  client.get(`store/search`, {
     params: {
       storeName: storeName,
     },
   });
 
 export const getStoreDetail = (request) =>
-  client.get(`/stores/detail`, {
+  client.get(`/store/${request.storeID}/`, {
+    headers: {
+      Authorization: `Bearer ${getCookie('accToken')}`,
+    },
     params: {
       userName: request.userName,
-      storeName: request.storeName,
       storeAddress: request.storeAddress,
     },
   });

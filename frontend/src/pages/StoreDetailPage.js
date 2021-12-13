@@ -115,10 +115,11 @@ const StoreDetailPage = ({ location }) => {
     try {
       const userName = localStorage.getItem('username');
       const res = await getStoreDetail({ ...query, userName });
-      setStoreList(await getImageURLsFromS3(res.data.body));
-      setLikes(res.data.body.storeLikes);
-      setIsLike(res.data.body.isLike);
-      const storeLocation = res.data.body.storeLocation;
+      console.log(res);
+      setStoreList(await getImageURLsFromS3(res.data));
+      setLikes(res.data.storeLikes);
+      setIsLike(res.data.isLike);
+      const storeLocation = res.data.storeLocation;
       var container = document.getElementById('map');
       var options = {
         center: new kakao.maps.LatLng(

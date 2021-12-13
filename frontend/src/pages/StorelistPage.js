@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
 import 'antd/dist/antd.css';
-import { getAllStore } from '../lib/api/store';
+import { searchStore } from '../lib/api/store';
 import { getList } from '../module/posts';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -161,7 +161,7 @@ const StorelistPage = ({ history }) => {
 
   const getAllStoreData = async ({ dispatch }) => {
     try {
-      const res = await getAllStore();
+      const res = await searchStore();
       const data = res.data.body;
       setStores(data);
       dispatch(getList(data));
