@@ -13,10 +13,10 @@ export const fetchUser = (token) =>
     },
   });
 
-export const fetchRegister = (code, id, password) =>
+export const fetchRegister = (code, email, password) =>
   client.post(`/user/test`, {
     code: code,
-    id: id,
+    email: email,
     password: password,
   });
 

@@ -188,7 +188,7 @@ const ReviewWritePage = ({ location }) => {
   }, [location]);
 
   useEffect(() => {
-    setValue('clusterName', sessionStorage.getItem('username'));
+    setValue('clusterName', sessionStorage.getItem('clusterName'));
     setValue('storeName', store?.placeName);
     setValue('storeAddress', store?.address);
     setValue('x', store?.x);

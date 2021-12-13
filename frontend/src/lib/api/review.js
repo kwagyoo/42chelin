@@ -1,20 +1,16 @@
 import client from './client';
 import { getCookie } from '../../common/Cookie';
 
-export const updateReview = (request) =>
-  client.post(`/stores/update`, request, {
+export const updateReview = (path, request) =>
+  client.put(`/store/${path.storeID}/review/${path.reviewID}`, request, {
     headers: {
       Authorization: `Bearer ${getCookie('accToken')}`,
     },
   });
 
 export const deleteReview = (request) =>
-  client.delete(
-    `/store/${request.storeID}/review/${request.reviewID}`,
-    request,
-    {
-      headers: {
-        Authorization: `Bearer ${getCookie('accToken')}`,
-      },
+  client.delete(`/store/${request.storeID}/review/${request.reviewID}`, {
+    headers: {
+      Authorization: `Bearer ${getCookie('accToken')}`,
     },
-  );
+  });

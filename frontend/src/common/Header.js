@@ -205,7 +205,7 @@ const Header = () => {
       }
       //access token 가져와서 decode해서
       //sessionStrage에 username을 넣어야함
-      sessionStorage.setItem('username', clusterName);
+      sessionStorage.setItem('clusterName', clusterName);
       setName(clusterName);
       dispatch(setIsLogin(true));
     } catch (err) {
@@ -214,7 +214,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setName(sessionStorage.getItem('username'));
+    setName(sessionStorage.getItem('clusterName'));
     if (name) dispatch(setIsLogin(true));
     else if (!isLogin) {
       const accToken = getCookie('accToken');
@@ -237,7 +237,7 @@ const Header = () => {
 
   const onLogout = () => {
     if (isLogin) {
-      sessionStorage.removeItem('username');
+      sessionStorage.removeItem('clusterName');
       removeCookie('accToken');
       removeCookie('refToken');
       dispatch(setIsLogin(false));

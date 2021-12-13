@@ -195,7 +195,7 @@ const StorelistPage = ({ history }) => {
   const goDetail = (stores) => {
     if (!stores) return;
     history.push(
-      `/detail?storeName=${stores.storeName}&storeAddress=${stores.storeAddress}`,
+      `/detail?storeID=${stores.storeID}&storeAddress=${stores.storeAddress}`,
     );
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음

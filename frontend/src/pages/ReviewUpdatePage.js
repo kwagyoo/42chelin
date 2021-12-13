@@ -101,13 +101,12 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const ReviewUpdatePage = ({ history, location }) => {
+const ReviewUpdatePage = ({ history }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
   const [loadingText, setLoadingText] = useState('');
-
   const { register, handleSubmit, setValue } = useForm();
 
   const reviewText = useInput(
@@ -115,15 +114,13 @@ const ReviewUpdatePage = ({ history, location }) => {
     (value) => value.length < 1000,
   );
 
-  const UpdateStoreReview = async (data) => {
+  const UpdateStoreReview = async (path, data) => {
     try {
-      const userToken = localStorage.getItem('token');
       const newImages = uploadImagesToS3(
         data.storeImages.filter((image) => image.imageURL === undefined),
       );
-      await updateReview({
+      await updateReview(path, {
         ...data,
-        token: userToken,
         reviewImages: [
           ...data.storeImages
             .filter((image) => image.imageURL)
@@ -132,7 +129,7 @@ const ReviewUpdatePage = ({ history, location }) => {
         ],
       });
       history.push(
-        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
+        `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
       );
     } catch (e) {
       if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
@@ -146,7 +143,13 @@ const ReviewUpdatePage = ({ history, location }) => {
       setLoading((loading) => true);
       setLoadingText('수정중..');
       try {
-        await UpdateStoreReview({ ...data, storeImages: files });
+        await UpdateStoreReview(
+          {
+            storeID: review.storeID,
+            reviewID: review.review.reviewID,
+          },
+          { ...data, storeImages: files },
+        );
       } catch (e) {
         alert(e.response.data.message);
       }
@@ -156,9 +159,8 @@ const ReviewUpdatePage = ({ history, location }) => {
 
   useEffect(() => {
     if (review) {
-      setValue('userName', review.review.userName);
+      setValue('clusterName', review.review.clusterName);
       setValue('reviewDate', review.review.reviewDate);
-      setValue('storeName', review.storeName);
       setValue('storeAddress', review.storeAddress);
       setFiles(review.review.images);
     } else {

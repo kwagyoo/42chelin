@@ -113,8 +113,8 @@ const StoreDetailPage = ({ location }) => {
 
   const getStore = async () => {
     try {
-      const userName = localStorage.getItem('username');
-      const res = await getStoreDetail({ ...query, userName });
+      const clusterName = localStorage.getItem('clusterName');
+      const res = await getStoreDetail({ ...query, clusterName });
       console.log(res);
       setStoreList(await getImageURLsFromS3(res.data));
       setLikes(res.data.storeLikes);
@@ -155,10 +155,9 @@ const StoreDetailPage = ({ location }) => {
   const ToggleLike = async () => {
     setIsLike(!isLike);
     const data = {
-      token: localStorage.getItem('token'),
       storeName: storeList.storeName,
       storeAddress: storeList.storeAddress,
-      userName: localStorage.getItem('username'),
+      clusterName: sessionStorage.getItem('clustername'),
       isLike: !isLike,
     };
     try {

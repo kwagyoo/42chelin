@@ -47,7 +47,7 @@ const StoreHeader = styled.div`
 `;
 
 const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
-  const userName = sessionStorage.getItem('username');
+  const clusterName = sessionStorage.getItem('clusterName');
   const history = useHistory();
   const GoWritePage = () => {
     history.push(
@@ -60,7 +60,7 @@ const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
       <StoreHeader>
         <div className="store-header-title">
           <h2>{storeList.storeName}</h2>
-          {userName && (
+          {clusterName && (
             <button onClick={ToggleLike} className="btn-like">
               <p>좋아요</p>
               {isLike ? (

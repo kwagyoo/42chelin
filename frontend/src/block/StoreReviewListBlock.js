@@ -137,8 +137,8 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
   };
 
   const goUpdatePage = (review) => {
-    const { storeName, storeAddress, clusterName } = store;
-    dispatch(setReview({ storeName, storeAddress, clusterName, review }));
+    const { storeID, storeAddress } = store;
+    dispatch(setReview({ storeID, storeAddress, review }));
     history.push('/update');
   };
 
@@ -152,7 +152,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
       {storeReviews &&
         storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
-            <div className="review_user_name">{review.userName}</div>
+            <div className="review_user_name">{review.clusterName}</div>
             <ReviewDetail>
               <div className="review_info">
                 <div className="Date">{review.reviewDate}</div>
@@ -170,7 +170,8 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
                   onClick={() => goUpdatePage(review)}
                   className={
                     'detail_button ' +
-                    (review.clusterName === sessionStorage.getItem('username')
+                    (review.clusterName ===
+                    sessionStorage.getItem('clusterName')
                       ? null
                       : 'hide')
                   }
@@ -187,7 +188,8 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
                   onClick={() => deleteStoreReview(review)}
                   className={
                     'detail_button ' +
-                    (review.clusterName === sessionStorage.getItem('username')
+                    (review.clusterName ===
+                    sessionStorage.getItem('clusterName')
                       ? null
                       : 'hide')
                   }

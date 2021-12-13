@@ -26,7 +26,7 @@ export const getStoreDetail = (request) =>
       Authorization: `Bearer ${getCookie('accToken')}`,
     },
     params: {
-      userName: request.userName,
+      clusterName: request.clusterName,
       storeAddress: request.storeAddress,
     },
   });
@@ -34,12 +34,12 @@ export const getStoreDetail = (request) =>
 export const fetchRandomStore = () => client.get(`/store/random`);
 
 export const toggleLikeStore = (request) => {
-  const { token, storeName, storeAddress, userName, isLike } = request;
+  const { token, storeName, storeAddress, clusterName, isLike } = request;
   return client.post(`/stores/like`, {
     token: token,
     storeName: storeName,
     storeAddress: storeAddress,
-    userName: userName,
+    clusterName: clusterName,
     isLike: isLike,
   });
 };

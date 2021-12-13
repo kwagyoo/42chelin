@@ -47,7 +47,7 @@ const RegisterPage = ({ location }) => {
     try {
       const response = await fetchRegister(code, email, password);
       console.log(response);
-      history.push('/');
+      history.push('/login');
     } catch (e) {
       console.error(e.response);
     }
@@ -96,7 +96,6 @@ const RegisterPage = ({ location }) => {
       <button className="btn" disabled={loading}>
         Register
       </button>
-      <div>Don't you have ID?</div>
     </SignBlock>
   );
 };

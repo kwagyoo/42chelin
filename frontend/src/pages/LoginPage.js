@@ -16,8 +16,8 @@ const LoginPage = () => {
     id: '',
     password: '',
   });
-
   const { id, password } = inputs; // 비구조화 할당을 통해 값 추출
+  const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
 
   const onChange = (e) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -31,7 +31,7 @@ const LoginPage = () => {
     try {
       e.preventDefault();
       const res = await fetchLogin(id, password);
-      sessionStorage.setItem('username', id);
+      sessionStorage.setItem('clusterName', id);
       const accToken = res.data.access_token;
       const refToken = res.data.refresh_token;
       dispatch(setIsLogin(true));
@@ -87,7 +87,9 @@ const LoginPage = () => {
         <button className="btn" disabled={loading}>
           Login
         </button>
-        <div>Don't you have ID?</div>
+        <div>
+          <a href={URL}>Don't you have ID?</a>
+        </div>
       </SignBlock>
     </>
   );
