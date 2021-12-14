@@ -46,7 +46,12 @@ const StoreHeader = styled.div`
   }
 `;
 
-const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
+const StoreReviewDetail = ({
+  storeList,
+  ToggleLike,
+  isLike,
+  likeButtonDisable,
+}) => {
   const clusterName = sessionStorage.getItem('clusterName');
   const history = useHistory();
   const GoWritePage = () => {
@@ -61,7 +66,11 @@ const StoreReviewDetail = ({ storeList, ToggleLike, isLike }) => {
         <div className="store-header-title">
           <h2>{storeList.storeName}</h2>
           {clusterName && (
-            <button onClick={ToggleLike} className="btn-like">
+            <button
+              onClick={ToggleLike}
+              disabled={likeButtonDisable}
+              className="btn-like"
+            >
               <p>좋아요</p>
               {isLike ? (
                 <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />

@@ -107,6 +107,7 @@ const StoreDetailPage = ({ location }) => {
   const [storeList, setStoreList] = useState(null);
   const [isLike, setIsLike] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [likeButtonDisable, setLikeButtonDisable] = useState(false);
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
@@ -115,7 +116,6 @@ const StoreDetailPage = ({ location }) => {
     try {
       const clusterName = localStorage.getItem('clusterName');
       const res = await getStoreDetail({ ...query, clusterName });
-      console.log(res);
       setStoreList(await getImageURLsFromS3(res.data));
       setLikes(res.data.storeLikes);
       setIsLike(res.data.isLike);
@@ -153,16 +153,25 @@ const StoreDetailPage = ({ location }) => {
   }, []);
 
   const ToggleLike = async () => {
+    if (likeButtonDisable) return;
     setIsLike(!isLike);
+
+    setLikeButtonDisable(true);
+    setTimeout(() => {
+      setLikeButtonDisable(false);
+    }, 1000);
+
+    if (isLike) setLikes(likes - 1);
+    else setLikes(likes + 1);
     const data = {
-      storeName: storeList.storeName,
-      storeAddress: storeList.storeAddress,
-      clusterName: sessionStorage.getItem('clustername'),
+      storeID: storeList.storeID,
+      clusterName: sessionStorage.getItem('clusterName'),
       isLike: !isLike,
     };
     try {
       const res = await toggleLikeStore(data);
-      setLikes(res.data.body.likes);
+      console.log(res);
+      setLikes(res.data.likes);
     } catch (e) {
       alert(e.response.data.message);
     }
@@ -183,6 +192,7 @@ const StoreDetailPage = ({ location }) => {
                 storeList={storeList}
                 ToggleLike={ToggleLike}
                 isLike={isLike}
+                likeButtonDisable={likeButtonDisable}
               />
             </StoreListBlock>
             <StoreReviewListBlock

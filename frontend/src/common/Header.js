@@ -13,8 +13,6 @@ import logo from '../image/Logo.png';
 import { fetchRefresh } from '../lib/api/auth';
 import { getCookie, removeCookie, setCookie } from './Cookie';
 import jwt from 'jsonwebtoken';
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsLogin } from '../module/users';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -189,9 +187,8 @@ const Spacer = styled.div`
 const Header = () => {
   const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   //Todo : selector 가 랜더링 시점마다 계속 불리는 문제
-  const { isLogin } = useSelector((state) => state.users);
-  const dispatch = useDispatch();
   const checkAutoLogin = async (clusterName) => {
     try {
       const res = await fetchRefresh(clusterName);
@@ -207,16 +204,15 @@ const Header = () => {
       //sessionStrage에 username을 넣어야함
       sessionStorage.setItem('clusterName', clusterName);
       setName(clusterName);
-      dispatch(setIsLogin(true));
+      setIsLogin(true);
     } catch (err) {
       console.error('auto login failed');
     }
   };
 
   useEffect(() => {
-    setName(sessionStorage.getItem('clusterName'));
-    if (name) dispatch(setIsLogin(true));
-    else if (!isLogin) {
+    if (name) {
+      setIsLogin(true);
       const accToken = getCookie('accToken');
       const refToken = getCookie('refToken');
       if (accToken && refToken) {
@@ -231,16 +227,23 @@ const Header = () => {
         removeCookie('accToken');
         removeCookie('refToken');
       }
-    }
+    } else setIsLogin(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogin, name]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('clusterName'))
+      setName(sessionStorage.getItem('clusterName'));
+    else setName('');
+  }, []);
 
   const onLogout = () => {
     if (isLogin) {
       sessionStorage.removeItem('clusterName');
+      setName('');
       removeCookie('accToken');
       removeCookie('refToken');
-      dispatch(setIsLogin(false));
       alert('로그아웃 되었습니다.');
     }
   };

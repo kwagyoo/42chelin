@@ -34,12 +34,17 @@ export const getStoreDetail = (request) =>
 export const fetchRandomStore = () => client.get(`/store/random`);
 
 export const toggleLikeStore = (request) => {
-  const { token, storeName, storeAddress, clusterName, isLike } = request;
-  return client.post(`/stores/like`, {
-    token: token,
-    storeName: storeName,
-    storeAddress: storeAddress,
-    clusterName: clusterName,
-    isLike: isLike,
-  });
+  const { clusterName, isLike } = request;
+  return client.put(
+    `/store/${request.storeID}/like`,
+    {
+      clusterName: clusterName,
+      isLike: isLike,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${getCookie('accToken')}`,
+      },
+    },
+  );
 };

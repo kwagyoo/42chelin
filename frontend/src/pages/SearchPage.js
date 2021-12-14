@@ -81,7 +81,7 @@ const SearchPage = ({ history, location }) => {
   const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(
-      `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
+      `/detail?storeID=${storeList.storeID}&storeAddress=${storeList.storeAddress}`,
     );
   };
 

@@ -191,7 +191,7 @@ const RandomStore = () => {
   const btnGo = useRef();
   const [resetNum, setResetNum] = useState(0);
   const [store, setStore] = useState({
-    storeName: '',
+    storeID: '',
     storeAddress: '',
   });
   const history = useHistory();
@@ -207,12 +207,6 @@ const RandomStore = () => {
     '부산어묵',
     '이삭토스트',
   ];
-  useEffect(() => {
-    console.log('실행');
-    TokenVerify()
-      .then()
-      .catch((e) => console.error(e));
-  }, []);
 
   const reset = () => {
     displaySlot.current.style.display = 'block';
@@ -226,16 +220,16 @@ const RandomStore = () => {
       const res = await fetchRandomStore();
       displaySlot.current.style.display = 'none';
       btnGo.current.style.display = 'block';
-      setStore(res.data.body);
+      console.log(res);
+      setStore(res.data);
       if (resetNum === 0) store_print.current.style.display = 'block';
     } catch (e) {
       alert(e.response.data.message);
     }
   };
-
   const GoStore = () => {
     history.push(
-      `/detail?storeName=${store.storeName}&storeAddress=${store.storeAddress}`,
+      `/detail?storeID=${store.storeID}&storeAddress=${store.storeAddress}`,
     );
   };
 
