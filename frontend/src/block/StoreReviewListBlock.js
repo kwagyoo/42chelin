@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
 import { useState } from 'react';
+import TokenVerify from '../common/TokenVerify';
 
 const Wrapper = styled.div`
   font-size: 15px;
@@ -108,6 +109,26 @@ const ImgContainer = styled.div`
   }
 `;
 
+const deleteStoreReview = async (deleteReviewData, history) => {
+  try {
+    await deleteReview(deleteReviewData);
+    return 200;
+  } catch (e) {
+    if (e.response.status < 500) {
+      if (e.response.status === 403) {
+        console.error('Token is expired.');
+        await TokenVerify(sessionStorage.getItem('clusterName'));
+      } else if (e.response.status === 401) {
+        alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+        history.goBack();
+      } else {
+        alert('잘못된 요청입니다.');
+      }
+    } else alert('저장에 실패하였습니다.');
+    return e.response.status;
+  }
+};
+
 const StoreReviewList = ({ store, storeReviews, likes }) => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -115,23 +136,20 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
   const [loadingText, setLoadingText] = useState('');
 
   const deleteStoreReview = async (review) => {
+    let status = 200;
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('삭제중..');
-      try {
-        const deleteReviewData = {
-          storeID: store.storeID,
-          storeName: store.storeName,
-          storeAddress: store.storeAddress,
-          clusterName: review.clusterName,
-          reviewID: review.reviewID,
-        };
-        await deleteReview(deleteReviewData);
-        history.go(0);
-      } catch (error) {
-        console.error(error);
-        alert('에러가 발생했습니다. 잠시 뒤 다시 시도해주세요.');
-      }
+      const deleteReviewData = {
+        storeID: store.storeID,
+        storeName: store.storeName,
+        storeAddress: store.storeAddress,
+        clusterName: review.clusterName,
+        reviewID: review.reviewID,
+      };
+      do {
+        status = await deleteReview(deleteReviewData);
+      } while (status !== 200 || status !== 403);
       setLoading((loading) => !loading);
     }
   };

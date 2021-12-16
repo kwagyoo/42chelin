@@ -8,6 +8,8 @@ import AntModal from '../common/Modal';
 import { updateReview } from '../lib/api/review';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
+import { fetchRefresh } from '../lib/api/auth';
+import TokenVerify from '../common/TokenVerify';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -101,6 +103,40 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
+const updateStoreReview = async (path, data, history) => {
+  try {
+    const newImages = uploadImagesToS3(
+      data.storeImages.filter((image) => image.imageURL === undefined),
+    );
+    await updateReview(path, {
+      ...data,
+      reviewImages: [
+        ...data.storeImages
+          .filter((image) => image.imageURL)
+          .map((image) => image.image),
+        ...newImages,
+      ],
+    });
+    history.push(
+      `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+    );
+    return 200;
+  } catch (e) {
+    if (e.response.status < 500) {
+      if (e.response.status === 403) {
+        console.error('Token is expired.');
+        await TokenVerify(sessionStorage.getItem('clusterName'));
+      } else if (e.response.status === 401) {
+        alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+        history.goBack();
+      } else {
+        alert('잘못된 요청입니다.');
+      }
+    } else alert('저장에 실패하였습니다.');
+    return e.response.status;
+  }
+};
+
 const ReviewUpdatePage = ({ history }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
@@ -114,45 +150,21 @@ const ReviewUpdatePage = ({ history }) => {
     (value) => value.length < 1000,
   );
 
-  const UpdateStoreReview = async (path, data) => {
-    try {
-      const newImages = uploadImagesToS3(
-        data.storeImages.filter((image) => image.imageURL === undefined),
-      );
-      await updateReview(path, {
-        ...data,
-        reviewImages: [
-          ...data.storeImages
-            .filter((image) => image.imageURL)
-            .map((image) => image.image),
-          ...newImages,
-        ],
-      });
-      history.push(
-        `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
-      );
-    } catch (e) {
-      if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
-      else alert('저장에 실패하였습니다.');
-      console.error(e.response.data.message);
-    }
-  };
-
   const handleSubmitBtn = async (data) => {
+    let status = 200;
     if (!loading) {
       setLoading((loading) => true);
       setLoadingText('수정중..');
-      try {
-        await UpdateStoreReview(
+      do {
+        status = await updateStoreReview(
           {
             storeID: review.storeID,
             reviewID: review.review.reviewID,
           },
           { ...data, storeImages: files },
+          history,
         );
-      } catch (e) {
-        alert(e.response.data.message);
-      }
+      } while (status !== 200 && status !== 403 && status !== 401);
       setLoading((loading) => false);
     }
   };

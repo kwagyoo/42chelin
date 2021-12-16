@@ -13,6 +13,7 @@ import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router';
+import TokenVerify from '../common/TokenVerify';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -136,7 +137,6 @@ const ReviewWritePage = ({ location }) => {
   const sendReview = async (data) => {
     try {
       const imageNames = uploadImagesToS3(data.images);
-      console.log(data);
       await writeReview({
         ...data,
         images: imageNames,
@@ -144,23 +144,31 @@ const ReviewWritePage = ({ location }) => {
       history.push(
         `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
       );
+      return 200;
     } catch (e) {
-      if (e.response?.status) {
-        alert('저장에 실패했습니다.');
-        console.error(e.response.data.errorMessage);
-      } else {
-        alert('내부 문제가 발생했습니다.');
-        console.error(e.message);
-      }
+      if (e.response.status < 500) {
+        if (e.response.status === 403) {
+          console.error('Token is expired.');
+          await TokenVerify(sessionStorage.getItem('clusterName'));
+        } else if (e.response.status === 401) {
+          alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+        } else {
+          alert('잘못된 요청입니다.');
+        }
+      } else alert('저장에 실패하였습니다.');
+      return e.response.status;
     }
   };
 
   const handleSubmitBtn = async (data) => {
+    let status = 200;
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
       if (store) {
-        await sendReview({ ...data, images: files });
+        do {
+          status = await sendReview({ ...data, images: files });
+        } while (status !== 200 && status !== 403 && status !== 401);
       }
       setLoading((loading) => !loading);
     }

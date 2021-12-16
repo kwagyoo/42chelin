@@ -190,6 +190,7 @@ const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   //Todo : selector 가 랜더링 시점마다 계속 불리는 문제
   const checkAutoLogin = async (clusterName) => {
+    console.log('a');
     try {
       const res = await fetchRefresh(clusterName);
       const refToken = res.data.refresh_token;
