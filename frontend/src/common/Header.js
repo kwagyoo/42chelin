@@ -191,19 +191,7 @@ const Header = () => {
   useEffect(() => {
     if (name) {
       setIsLogin(true);
-      const accToken = getCookie('accToken');
-      const refToken = getCookie('refToken');
-      if (accToken && refToken) {
-        const clusterName = jwt.decode(
-          accToken,
-          process.env.REACT_APP_JWT_SECRET_KEY,
-        ).clusterName;
-        //재발급 요청
-      } else {
-        //쿠키 다 지우고 로그인 요구해야지
-        removeCookie('accToken');
-        removeCookie('refToken');
-      }
+      //재발급 요청
     } else setIsLogin(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
