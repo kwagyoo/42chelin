@@ -11,6 +11,7 @@ import RandomStore from './pages/RandomStore';
 import Footer from './common/Footer';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import PrivateRoute from './common/PrivateRoute';
 
 const App = () => {
   AWS.config.update({
@@ -24,10 +25,10 @@ const App = () => {
     <>
       <Route exact path="/" component={StorelistPage} />
       <Route path="/detail" component={StoreDetailPage} />
-      <Route path="/update" component={ReviewUpdatePage} />
-      <Route path="/write" component={ReviewWritePage} />
+      <PrivateRoute path="/update" component={ReviewUpdatePage} />
+      <PrivateRoute path="/write" component={ReviewWritePage} />
       <Route path="/search" component={SearchPage} />
-      <Route path="/storeSearch" component={KakaoSearchPage} />
+      <PrivateRoute path="/storeSearch" component={KakaoSearchPage} />
       <Route path="/random" component={RandomStore} />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />

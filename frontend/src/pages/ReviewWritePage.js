@@ -152,6 +152,7 @@ const ReviewWritePage = ({ location }) => {
           await TokenVerify(sessionStorage.getItem('clusterName'));
         } else if (e.response.status === 401) {
           alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+          history.goBack();
         } else {
           alert('잘못된 요청입니다.');
         }

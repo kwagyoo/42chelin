@@ -10,8 +10,7 @@ import {
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
-import { fetchRefresh } from '../lib/api/auth';
-import { getCookie, removeCookie, setCookie } from './Cookie';
+import { getCookie, removeCookie } from './Cookie';
 import jwt from 'jsonwebtoken';
 
 const HeaderBlock = styled.header`
@@ -188,28 +187,6 @@ const Header = () => {
   const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  //Todo : selector 가 랜더링 시점마다 계속 불리는 문제
-  const checkAutoLogin = async (clusterName) => {
-    console.log('a');
-    try {
-      const res = await fetchRefresh(clusterName);
-      const refToken = res.data.refresh_token;
-      if (refToken) {
-        setCookie('refToken', refToken, {
-          path: '/',
-          secure: true,
-          sameSite: 'none',
-        });
-      }
-      //access token 가져와서 decode해서
-      //sessionStrage에 username을 넣어야함
-      sessionStorage.setItem('clusterName', clusterName);
-      setName(clusterName);
-      setIsLogin(true);
-    } catch (err) {
-      console.error('auto login failed');
-    }
-  };
 
   useEffect(() => {
     if (name) {
@@ -221,7 +198,6 @@ const Header = () => {
           accToken,
           process.env.REACT_APP_JWT_SECRET_KEY,
         ).clusterName;
-        checkAutoLogin(clusterName);
         //재발급 요청
       } else {
         //쿠키 다 지우고 로그인 요구해야지
