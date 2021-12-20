@@ -15,6 +15,9 @@ export const fetchKakaoApi = (query) =>
 export const getStoreInfoKakao = async (request) => {
   try {
     const res = await client.get(`/store/${request.id}/kakao`, {
+      headers: {
+        Authorization: `Bearer ${getCookie('accToken')}`,
+      },
       params: {
         storeName: request.placeName,
       },

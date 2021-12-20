@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import { useEffect, useState } from 'react';
 import { useRef } from 'react';
-import { useHistory } from 'react-router';
+import history from '../hoc/history';
 import styled from 'styled-components';
 import Header from '../common/Header';
 import TokenVerify from '../common/TokenVerify';
@@ -194,7 +194,6 @@ const RandomStore = () => {
     storeID: '',
     storeAddress: '',
   });
-  const history = useHistory();
   const SampleStore = [
     '연스시',
     '스파게티 스토리',

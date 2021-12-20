@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router';
+import history from '../hoc/history';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
@@ -53,7 +53,6 @@ const StoreReviewDetail = ({
   likeButtonDisable,
 }) => {
   const clusterName = sessionStorage.getItem('clusterName');
-  const history = useHistory();
   const GoWritePage = () => {
     history.push(
       `/write?placeName=${storeList.storeName}&id=${storeList.storeID}`,

@@ -12,8 +12,8 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useHistory } from 'react-router';
-import TokenVerify from '../common/TokenVerify';
+import TokenVerify, { checkTokenVerify } from '../common/TokenVerify';
+import history from '../hoc/history';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -122,8 +122,6 @@ function formatDate(date) {
 }
 
 const ReviewWritePage = ({ location }) => {
-  const history = useHistory();
-
   const [store, setStore] = useState(null);
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
@@ -152,7 +150,7 @@ const ReviewWritePage = ({ location }) => {
           await TokenVerify(sessionStorage.getItem('clusterName'));
         } else if (e.response.status === 401) {
           alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
-          history.goBack();
+          history.go('/');
         } else {
           alert('잘못된 요청입니다.');
         }
@@ -176,6 +174,10 @@ const ReviewWritePage = ({ location }) => {
   };
 
   useEffect(() => {
+    checkTokenVerify();
+  }, []);
+
+  useEffect(() => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
       getStoreInfoKakao(query)
@@ -184,7 +186,8 @@ const ReviewWritePage = ({ location }) => {
             placeName: res.place_name,
             address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
             id: res.id,
-            category: res.category_group_code,
+            category_code: res.category_group_code,
+            category_name: res.category_name,
             x: res.x,
             y: res.y,
           });
@@ -203,7 +206,8 @@ const ReviewWritePage = ({ location }) => {
     setValue('x', store?.x);
     setValue('y', store?.y);
     setValue('storeID', store?.id);
-    setValue('storeCategory', store?.category);
+    setValue('storeCategory', store?.category_code);
+    setValue('storeCategoryName', store?.category_name);
     setValue('reviewDate', formatDate(Date.now()));
   }, [store, setValue]);
 
@@ -269,7 +273,7 @@ const ReviewWritePage = ({ location }) => {
             <Button
               name="cancel"
               disabled={loading}
-              onClick={() => history.goBack()}
+              onClick={() => history.go('/')}
             ></Button>
           </div>
         </StyledForm>

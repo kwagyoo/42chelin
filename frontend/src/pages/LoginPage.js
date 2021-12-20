@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import history from '../hoc/history';
 import SignBlock from '../block/SignBlock';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
@@ -10,7 +10,6 @@ import { setIsLogin } from '../module/users';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
   const dispatch = useDispatch();
   const [inputs, setInputs] = useState({
     id: '',

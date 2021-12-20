@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useState, useEffect } from 'react';
+import history from '../hoc/history';
 import styled from 'styled-components';
 import StoreInfoBlock from '../block/StoreInfoBlock';
 import { fetchKakaoApi } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { checkTokenVerify } from '../common/TokenVerify';
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -45,7 +46,6 @@ const StoreInfoWarp = styled.div`
 `;
 
 const KakaoSearchPage = () => {
-  const history = useHistory();
   const [text, setText] = useState('');
   const [searchstoreList, setSearchstoreList] = useState([]);
 
@@ -76,6 +76,10 @@ const KakaoSearchPage = () => {
     });
   };
   // Todo : onchange 될때마다 계속 실행됌 아마 컴포넌트의 업데이트를 감지해서 그런듯??
+
+  useEffect(() => {
+    checkTokenVerify();
+  }, []);
 
   return (
     <Wrapper>

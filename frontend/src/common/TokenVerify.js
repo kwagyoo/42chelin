@@ -38,4 +38,12 @@ const TokenVerify = async () => {
   });
 };
 
+export const checkTokenVerify = async () => {
+  try {
+    await TokenVerify();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export default TokenVerify;

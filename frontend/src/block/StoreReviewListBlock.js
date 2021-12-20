@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { deleteReview } from '../lib/api/review';
 import ReviewImgView from '../block/ReviewImgViewBlock';
-import { useHistory } from 'react-router';
+import history from '../hoc/history';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
@@ -130,7 +130,6 @@ const deleteStoreReview = async (deleteReviewData, history) => {
 };
 
 const StoreReviewList = ({ store, storeReviews, likes }) => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
