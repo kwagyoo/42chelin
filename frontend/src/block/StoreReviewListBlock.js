@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { deleteReview } from '../lib/api/review';
 import ReviewImgView from '../block/ReviewImgViewBlock';
-import history from '../hoc/history';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
 import { useState } from 'react';
 import TokenVerify from '../common/TokenVerify';
+import { useHistory } from 'react-router-dom';
 
 const Wrapper = styled.div`
   font-size: 15px;
@@ -109,18 +109,13 @@ const ImgContainer = styled.div`
   }
 `;
 
-const deleteStoreReview = async (deleteReviewData, history) => {
+const manageDeleteReview = async (deleteReviewData, history) => {
   try {
     await deleteReview(deleteReviewData);
-    return 200;
   } catch (e) {
     if (e.response.status < 500) {
-      if (e.response.status === 403) {
-        console.error('Token is expired.');
-        await TokenVerify(sessionStorage.getItem('clusterName'));
-      } else if (e.response.status === 401) {
-        alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
-        history.goBack();
+      if (e.response.status === 401) {
+        alert('기능을 사용할 권한이 없습니다.');
       } else {
         alert('잘못된 요청입니다.');
       }
@@ -133,9 +128,9 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
+  const history = useHistory();
 
   const deleteStoreReview = async (review) => {
-    let status = 200;
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('삭제중..');
@@ -146,16 +141,15 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
         clusterName: review.clusterName,
         reviewID: review.reviewID,
       };
-      do {
-        status = await deleteReview(deleteReviewData);
-      } while (status !== 200 || status !== 403);
+      await TokenVerify();
+      await manageDeleteReview(deleteReviewData);
       setLoading((loading) => !loading);
     }
   };
 
   const goUpdatePage = (review) => {
-    const { storeID, storeAddress } = store;
-    dispatch(setReview({ storeID, storeAddress, review }));
+    const { storeID, storeAddress, storeName } = store;
+    dispatch(setReview({ storeID, storeName, storeAddress, review }));
     history.push('/update');
   };
 

@@ -5,7 +5,7 @@ import Header from '../common/Header';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import AntModal from '../common/Modal';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { writeReview } from '../lib/api/store';
 import { getStoreInfoKakao } from '../lib/api/kakao';
 import { uploadImagesToS3 } from '../lib/api/aws';
@@ -13,7 +13,6 @@ import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import TokenVerify, { checkTokenVerify } from '../common/TokenVerify';
-import history from '../hoc/history';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -127,7 +126,7 @@ const ReviewWritePage = ({ location }) => {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
-
+  const history = useHistory();
   const { register, handleSubmit, setValue } = useForm();
 
   const review = useInput('', (value) => value.length < 300);
@@ -145,12 +144,9 @@ const ReviewWritePage = ({ location }) => {
       return 200;
     } catch (e) {
       if (e.response.status < 500) {
-        if (e.response.status === 403) {
-          console.error('Token is expired.');
-          await TokenVerify(sessionStorage.getItem('clusterName'));
-        } else if (e.response.status === 401) {
+        if (e.response.status === 401) {
           alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
-          history.go('/');
+          history.push('/');
         } else {
           alert('잘못된 요청입니다.');
         }
@@ -160,17 +156,13 @@ const ReviewWritePage = ({ location }) => {
   };
 
   const handleSubmitBtn = async (data) => {
-    let status = 200;
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
-      if (store) {
-        do {
-          status = await sendReview({ ...data, images: files });
-        } while (status !== 200 && status !== 403 && status !== 401);
-      }
-      setLoading((loading) => !loading);
+      await TokenVerify();
+      await sendReview({ ...data, images: files });
     }
+    setLoading((loading) => !loading);
   };
 
   useEffect(() => {
@@ -281,4 +273,5 @@ const ReviewWritePage = ({ location }) => {
     </Body>
   );
 };
+
 export default ReviewWritePage;

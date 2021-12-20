@@ -2,16 +2,11 @@ import client from './client';
 import { getCookie } from '../../common/Cookie';
 
 export const writeReview = (request) =>
-  client.post(
-    `/store/${request.storeID}/review`,
-    request,
-    { refresh_token: getCookie('refToken') },
-    {
-      headers: {
-        Authorization: `Bearer ${getCookie('accToken')}`,
-      },
+  client.post(`/store/${request.storeID}/review`, request, {
+    headers: {
+      Authorization: `Bearer ${getCookie('accToken')}`,
     },
-  );
+  });
 
 export const searchStore = (storeName) =>
   client.get(`store/search`, {

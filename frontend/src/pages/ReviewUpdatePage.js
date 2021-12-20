@@ -8,7 +8,6 @@ import AntModal from '../common/Modal';
 import { updateReview } from '../lib/api/review';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
-import { fetchRefresh } from '../lib/api/auth';
 import TokenVerify from '../common/TokenVerify';
 
 const Body = styled.div`
@@ -108,6 +107,7 @@ const updateStoreReview = async (path, data, history) => {
     const newImages = uploadImagesToS3(
       data.storeImages.filter((image) => image.imageURL === undefined),
     );
+    console.log('update 요청');
     await updateReview(path, {
       ...data,
       reviewImages: [
@@ -123,12 +123,11 @@ const updateStoreReview = async (path, data, history) => {
     return 200;
   } catch (e) {
     if (e.response.status < 500) {
-      if (e.response.status === 403) {
-        console.error('Token is expired.');
-        await TokenVerify(sessionStorage.getItem('clusterName'));
-      } else if (e.response.status === 401) {
+      if (e.response.status === 401) {
         alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
-        history.goBack();
+        history.push(
+          `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+        );
       } else {
         alert('잘못된 요청입니다.');
       }
@@ -151,20 +150,18 @@ const ReviewUpdatePage = ({ history }) => {
   );
 
   const handleSubmitBtn = async (data) => {
-    let status = 200;
     if (!loading) {
       setLoading((loading) => true);
       setLoadingText('수정중..');
-      do {
-        status = await updateStoreReview(
-          {
-            storeID: review.storeID,
-            reviewID: review.review.reviewID,
-          },
-          { ...data, storeImages: files },
-          history,
-        );
-      } while (status !== 200 && status !== 403 && status !== 401);
+      await TokenVerify();
+      await updateStoreReview(
+        {
+          storeID: review.storeID,
+          reviewID: review.review.reviewID,
+        },
+        { ...data, storeImages: files },
+        history,
+      );
       setLoading((loading) => false);
     }
   };

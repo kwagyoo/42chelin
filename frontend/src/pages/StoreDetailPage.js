@@ -9,6 +9,7 @@ import { getStoreDetail } from '../lib/api/store';
 import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
+import TokenVerify from '../common/TokenVerify';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -169,6 +170,7 @@ const StoreDetailPage = ({ location }) => {
       isLike: !isLike,
     };
     try {
+      await TokenVerify();
       const res = await toggleLikeStore(data);
       console.log(res);
       setLikes(res.data.likes);

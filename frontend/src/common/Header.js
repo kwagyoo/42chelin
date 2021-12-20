@@ -10,8 +10,7 @@ import {
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
-import { getCookie, removeCookie } from './Cookie';
-import jwt from 'jsonwebtoken';
+import { removeCookie } from './Cookie';
 
 const HeaderBlock = styled.header`
   position: fixed;

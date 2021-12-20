@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import StoreDetailPage from './pages/StoreDetailPage';
 import StorelistPage from './pages/StorelistPage';
 import ReviewUpdatePage from './pages/ReviewUpdatePage';
@@ -13,7 +13,6 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
-import Header from './common/Header';
 
 const App = () => {
   AWS.config.update({
@@ -29,7 +28,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <Switch>
       <Route exact path="/" component={StorelistPage} />
       <Route path="/detail" component={StoreDetailPage} />
       <PrivateRoute path="/update" component={ReviewUpdatePage} />
@@ -40,7 +39,7 @@ const App = () => {
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
       <Footer />
-    </>
+    </Switch>
   );
 };
 

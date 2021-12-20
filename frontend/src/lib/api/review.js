@@ -4,7 +4,7 @@ import { getCookie } from '../../common/Cookie';
 export const updateReview = (path, request) =>
   client.put(`/store/${path.storeID}/review/${path.reviewID}`, request, {
     headers: {
-      Authorization: `Bearer sdf${getCookie('accToken')}`,
+      Authorization: `Bearer ${getCookie('accToken')}`,
     },
   });
 

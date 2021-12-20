@@ -1,8 +1,8 @@
-import history from '../hoc/history';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from 'react-router-dom';
 
 const StoreItemBlock = styled.div`
   width: 100%;
@@ -52,13 +52,13 @@ const StoreReviewDetail = ({
   isLike,
   likeButtonDisable,
 }) => {
+  const history = useHistory();
   const clusterName = sessionStorage.getItem('clusterName');
   const GoWritePage = () => {
     history.push(
       `/write?placeName=${storeList.storeName}&id=${storeList.storeID}`,
     );
   };
-
   return (
     <StoreItemBlock>
       <StoreHeader>

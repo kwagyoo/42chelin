@@ -3,12 +3,12 @@ import SignBlock from '../block/SignBlock';
 import logo from '../image/Logo.png';
 import queryString from 'query-string';
 import { fetchRegister } from '../lib/api/auth';
-import history from '../hoc/history';
+import { useHistory } from 'react-router-dom';
 
 const RegisterPage = ({ location }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const history = useHistory();
   const [inputs, setInputs] = useState({
     email: '',
     password: '',

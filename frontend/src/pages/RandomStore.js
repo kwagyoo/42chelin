@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/heading-has-content */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRef } from 'react';
-import history from '../hoc/history';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import TokenVerify from '../common/TokenVerify';
 import { fetchRandomStore } from '../lib/api/store';
 
 const MainBody = styled.div`
@@ -206,6 +205,7 @@ const RandomStore = () => {
     '부산어묵',
     '이삭토스트',
   ];
+  const history = useHistory();
 
   const reset = () => {
     displaySlot.current.style.display = 'block';

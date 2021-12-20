@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import store from './module/store';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
+import history from './hoc/history';
 
 Sentry.init({
   dsn: 'https://3fc703a2984645aa91f00d13ae243bed@o1039410.ingest.sentry.io/6008337',
@@ -19,7 +20,8 @@ Sentry.init({
 });
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    {/* https://github.com/remix-run/history/issues/822 */}
+    <BrowserRouter history={history}>
       <App />
     </BrowserRouter>
   </Provider>,

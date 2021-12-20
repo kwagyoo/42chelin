@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import history from '../hoc/history';
 import styled from 'styled-components';
 import StoreInfoBlock from '../block/StoreInfoBlock';
 import { fetchKakaoApi } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { checkTokenVerify } from '../common/TokenVerify';
+import { useHistory } from 'react-router-dom';
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -48,7 +48,7 @@ const StoreInfoWarp = styled.div`
 const KakaoSearchPage = () => {
   const [text, setText] = useState('');
   const [searchstoreList, setSearchstoreList] = useState([]);
-
+  const history = useHistory();
   const onChange = (e) => {
     setText(e.target.value);
   };
