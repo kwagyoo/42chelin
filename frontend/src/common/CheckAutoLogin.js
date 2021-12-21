@@ -3,7 +3,10 @@ import jwt from 'jsonwebtoken';
 import TokenVerify from './TokenVerify';
 
 const checkAutoLogin = async () => {
-  if (localStorage.getItem('autoLogin') === 'true') {
+  if (
+    localStorage.getItem('autoLogin') === 'true' &&
+    !sessionStorage.getItem('clusterName')
+  ) {
     const accToken = getCookie('accToken');
     if (accToken) {
       let todayDate = Date.now();
@@ -15,7 +18,7 @@ const checkAutoLogin = async () => {
       console.log('auto');
 
       if (todayDate > decoded.exp) {
-        //갱신 요청
+        //갱신요청
         await TokenVerify();
       } else {
         //강제 로그아웃

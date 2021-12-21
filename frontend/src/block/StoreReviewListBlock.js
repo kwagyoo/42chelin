@@ -163,7 +163,11 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
       {storeReviews &&
         storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
-            <div className="review_user_name">{review.clusterName}</div>
+            <div className="review_user_name">
+              {review.clusterName.substr(0, 1) +
+                '*'.repeat(review.clusterName.length - 2) +
+                review.clusterName.substr(review.clusterName.length - 1, 1)}
+            </div>
             <ReviewDetail>
               <div className="review_info">
                 <div className="Date">{review.reviewDate}</div>

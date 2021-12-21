@@ -59,6 +59,9 @@ const StoreReviewDetail = ({
       `/write?placeName=${storeList.storeName}&id=${storeList.storeID}`,
     );
   };
+
+  console.log(storeList);
+
   return (
     <StoreItemBlock>
       <StoreHeader>
@@ -86,7 +89,11 @@ const StoreReviewDetail = ({
         </div>
       </StoreHeader>
       <StoreInfoBlock>
-        <span>{storeList.storeAddress}</span>
+        {/* 테이블을 쓰는게 나아보임 */}
+        <span>주소 : {storeList.storeAddress}</span>
+        <span>분류 : {storeList.storeCategoryName}</span>
+        <span>영업시간 : </span>
+        <span>메뉴</span>
       </StoreInfoBlock>
     </StoreItemBlock>
   );

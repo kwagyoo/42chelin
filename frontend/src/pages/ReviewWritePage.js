@@ -141,17 +141,15 @@ const ReviewWritePage = ({ location }) => {
       history.push(
         `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
       );
-      return 200;
     } catch (e) {
       if (e.response.status < 500) {
         if (e.response.status === 401) {
-          alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
-          history.push('/');
+          alert('기능을 사용할 권한이 없습니다. 새로고침을 진행합니다.');
+          history.go(0);
         } else {
           alert('잘못된 요청입니다.');
         }
-      } else alert('저장에 실패하였습니다.');
-      return e.response.status;
+      } else alert('서버에 문제가 발생하였습니다.');
     }
   };
 

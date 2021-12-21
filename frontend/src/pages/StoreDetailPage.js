@@ -9,7 +9,8 @@ import { getStoreDetail } from '../lib/api/store';
 import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
-import TokenVerify from '../common/TokenVerify';
+import { checkTokenVerify } from '../common/TokenVerify';
+import { useHistory } from 'react-router-dom';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -105,6 +106,7 @@ const getImageURLsFromS3 = async (storeList) => {
 };
 
 const StoreDetailPage = ({ location }) => {
+  const history = useHistory();
   const [storeList, setStoreList] = useState(null);
   const [isLike, setIsLike] = useState(false);
   const [likes, setLikes] = useState(0);
@@ -114,12 +116,27 @@ const StoreDetailPage = ({ location }) => {
   });
 
   const getStore = async () => {
+    const clusterName = localStorage.getItem('clusterName');
+    let res;
+
     try {
-      const clusterName = localStorage.getItem('clusterName');
-      const res = await getStoreDetail({ ...query, clusterName });
+      res = await getStoreDetail({ ...query, clusterName });
       setStoreList(await getImageURLsFromS3(res.data));
       setLikes(res.data.storeLikes);
       setIsLike(res.data.isLike);
+    } catch (e) {
+      if (e.response.status < 500) {
+        if (e.response.status === 403) {
+          alert('토큰이 만료되었습니다. 새로고침을 진행합니다.');
+          history.go(0);
+        } else {
+          alert('잘못된 요청입니다.');
+        }
+      } else alert('서버에 문제가 발생하였습니다.');
+      return e.response.status;
+    }
+
+    try {
       const storeLocation = res.data.storeLocation;
       var container = document.getElementById('map');
       var options = {
@@ -142,10 +159,12 @@ const StoreDetailPage = ({ location }) => {
       });
       marker.setMap(map);
     } catch (e) {
-      alert(e.response.data.message);
+      console.error(e);
     }
   };
+
   useEffect(() => {
+    checkTokenVerify();
     getStore();
     return () => {
       setStoreList('');
@@ -170,12 +189,13 @@ const StoreDetailPage = ({ location }) => {
       isLike: !isLike,
     };
     try {
-      await TokenVerify();
       const res = await toggleLikeStore(data);
       console.log(res);
       setLikes(res.data.likes);
     } catch (e) {
-      alert(e.response.data.message);
+      console.error(e.response.data.message);
+      if (e.response.status === 403) checkTokenVerify();
+      setIsLike(isLike);
     }
   };
 
