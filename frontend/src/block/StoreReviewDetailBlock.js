@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
-import { useHistory } from 'react-router-dom';
 
 const StoreItemBlock = styled.div`
   width: 100%;
@@ -36,13 +35,13 @@ const StoreHeader = styled.div`
     align-items: center;
     background-color: #fafafa;
   }
-  .btn-reviewWrite {
-    font-size: 18px;
-    background-color: #fafafa;
-  }
   .store-header-title {
     display: flex;
     align-items: center;
+  }
+  .btn-review-detail {
+    font-size: 18px;
+    background-color: #fafafa;
   }
 `;
 
@@ -52,13 +51,7 @@ const StoreReviewDetail = ({
   isLike,
   likeButtonDisable,
 }) => {
-  const history = useHistory();
   const clusterName = sessionStorage.getItem('clusterName');
-  const GoWritePage = () => {
-    history.push(
-      `/write?placeName=${storeList.storeName}&id=${storeList.storeID}`,
-    );
-  };
 
   console.log(storeList);
 
@@ -82,17 +75,14 @@ const StoreReviewDetail = ({
             </button>
           )}
         </div>
-        <div>
-          <button className="btn-reviewWrite" onClick={GoWritePage}>
-            리뷰작성
-          </button>
-        </div>
+        <button className="btn-review-detail">가게정보 작성</button>
       </StoreHeader>
+
       <StoreInfoBlock>
         {/* 테이블을 쓰는게 나아보임 */}
         <span>주소 : {storeList.storeAddress}</span>
         <span>분류 : {storeList.storeCategoryName}</span>
-        <span>영업시간 : </span>
+        <span>전화번호 : </span>
         <span>메뉴</span>
       </StoreInfoBlock>
     </StoreItemBlock>

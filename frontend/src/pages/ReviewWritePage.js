@@ -13,6 +13,7 @@ import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import TokenVerify, { checkTokenVerify } from '../common/TokenVerify';
+import MenuItems from '../common/MenuItems';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -172,6 +173,7 @@ const ReviewWritePage = ({ location }) => {
     if (Object.keys(query).length !== 0) {
       getStoreInfoKakao(query)
         .then((res) => {
+          console.log(res);
           setStore({
             placeName: res.place_name,
             address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
@@ -180,6 +182,7 @@ const ReviewWritePage = ({ location }) => {
             category_name: res.category_name,
             x: res.x,
             y: res.y,
+            phoneNumber: res.phone,
           });
         })
         .catch((err) => {
@@ -199,6 +202,7 @@ const ReviewWritePage = ({ location }) => {
     setValue('storeCategory', store?.category_code);
     setValue('storeCategoryName', store?.category_name);
     setValue('reviewDate', formatDate(Date.now()));
+    setValue('phoneNumber', store?.phoneNumber);
   }, [store, setValue]);
 
   return (
@@ -238,6 +242,7 @@ const ReviewWritePage = ({ location }) => {
               </Link>
             </div>
           </TargetStoreSearch>
+          <MenuItems />
           <div>
             리뷰(1000자 미만)
             <br />
@@ -263,7 +268,7 @@ const ReviewWritePage = ({ location }) => {
             <Button
               name="cancel"
               disabled={loading}
-              onClick={() => history.go('/')}
+              onClick={() => history.push('/')}
             ></Button>
           </div>
         </StyledForm>

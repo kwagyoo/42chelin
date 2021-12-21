@@ -30,9 +30,23 @@ const ReviewList = styled.div`
 const ReviewListHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  text-align: center;
   overflow: hidden;
   margin-bottom: 20px;
   margin-top: 20px;
+  .btn-review-write {
+    font-size: 18px;
+    background-color: #fafafa;
+  }
+  button {
+    border: none;
+    background-color: white;
+    :hover {
+      color: gray;
+      cursor: pointer;
+    }
+  }
 `;
 
 const ReviewDetail = styled.div`
@@ -153,12 +167,21 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
     history.push('/update');
   };
 
+  const GoWritePage = () => {
+    history.push(`/write?placeName=${store.storeName}&id=${store.storeID}`);
+  };
+
   return (
     <Wrapper>
       <AntModal visible={loading} loadingText={loadingText} />
       <ReviewListHeader>
         <div>리뷰</div>
-        <div>좋아요를 받은 개수 : {likes}</div>
+        <div>
+          <button className="btn-review-write" onClick={GoWritePage}>
+            리뷰작성
+          </button>
+          <div className="review-likes">좋아요 : {likes}</div>
+        </div>
       </ReviewListHeader>
       {storeReviews &&
         storeReviews.map((review, idx) => (

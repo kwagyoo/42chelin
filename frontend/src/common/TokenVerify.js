@@ -14,6 +14,7 @@ const TokenVerify = async () => {
           if (err.name === 'TokenExpiredError') {
             const res = await fetchRefresh(id);
             const accToken = res.data.access_token;
+            const refToken = res.data.refresh_token;
             if (accToken) {
               setCookie('accToken', accToken, {
                 path: '/',
@@ -21,6 +22,13 @@ const TokenVerify = async () => {
                 sameSite: 'none',
               });
               console.log('재발급');
+            }
+            if (refToken !== getCookie('refToken')) {
+              setCookie('refToken', refToken, {
+                path: '/',
+                secure: true,
+                sameSite: 'none',
+              });
             }
             reject('refresh');
           } else {
