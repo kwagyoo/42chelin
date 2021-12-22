@@ -6,7 +6,6 @@ import App from './App';
 import { Provider } from 'react-redux';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
-import history from './hoc/history';
 import { persistStore } from 'redux-persist'; // 추가
 import { PersistGate } from 'redux-persist/integration/react'; // 추가
 import store from './module/store';
@@ -26,7 +25,7 @@ ReactDOM.render(
   <Provider store={store}>
     {/* https://github.com/remix-run/history/issues/822 */}
     <PersistGate persistor={persistor}>
-      <BrowserRouter history={history}>
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </PersistGate>

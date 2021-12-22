@@ -4,8 +4,9 @@ import StoreInfoBlock from '../block/StoreInfoBlock';
 import { fetchKakaoApi } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { checkTokenVerify } from '../common/TokenVerify';
+import TokenVerify from '../common/TokenVerify';
 import { useHistory } from 'react-router-dom';
+import { removeCookie } from '../common/Cookie';
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -75,10 +76,24 @@ const KakaoSearchPage = () => {
       search: `?placeName=${placeName}&id=${id}`,
     });
   };
-  // Todo : onchange 될때마다 계속 실행됌 아마 컴포넌트의 업데이트를 감지해서 그런듯??
+
+  const checkTokenVerify = async () => {
+    try {
+      await TokenVerify();
+    } catch (err) {
+      if (err.message !== 'refresh') {
+        console.error(err.message);
+        sessionStorage.removeItem('clusterName');
+        removeCookie('accToken');
+        removeCookie('refToken');
+        history.goBack();
+      }
+    }
+  };
 
   useEffect(() => {
     checkTokenVerify();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

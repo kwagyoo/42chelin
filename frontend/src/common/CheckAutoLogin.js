@@ -19,7 +19,14 @@ const checkAutoLogin = async () => {
 
       if (todayDate > decoded.exp) {
         //갱신요청
-        await TokenVerify();
+        try {
+          await TokenVerify();
+        } catch (err) {
+          //   alert('자동 로그인에 문제가 발생하였습니다.');
+          //   sessionStorage.removeItem('clusterName');
+          //   removeCookie('accToken');
+          //   removeCookie('refToken');
+        }
       } else {
         //강제 로그아웃
         alert('자동 로그인에 문제가 발생하였습니다.');

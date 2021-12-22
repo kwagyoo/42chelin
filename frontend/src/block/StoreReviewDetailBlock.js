@@ -53,8 +53,6 @@ const StoreReviewDetail = ({
 }) => {
   const clusterName = sessionStorage.getItem('clusterName');
 
-  console.log(storeList);
-
   return (
     <StoreItemBlock>
       <StoreHeader>

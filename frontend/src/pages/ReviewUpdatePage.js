@@ -8,7 +8,6 @@ import AntModal from '../common/Modal';
 import { updateReview } from '../lib/api/review';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
-import { checkTokenVerify } from '../common/TokenVerify';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -178,10 +177,6 @@ const ReviewUpdatePage = ({ history }) => {
       history.goBack();
     }
   }, [history, review, setValue]);
-
-  useEffect(() => {
-    checkTokenVerify();
-  }, []);
 
   return (
     <Body>

@@ -219,7 +219,6 @@ const RandomStore = () => {
       const res = await fetchRandomStore();
       displaySlot.current.style.display = 'none';
       btnGo.current.style.display = 'block';
-      console.log(res);
       setStore(res.data);
       if (resetNum === 0) store_print.current.style.display = 'block';
     } catch (e) {

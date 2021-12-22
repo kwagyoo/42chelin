@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
 import { removeCookie } from './Cookie';
+import TokenVerify from './TokenVerify';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -189,18 +190,40 @@ const Header = () => {
 
   useEffect(() => {
     if (name) {
+      console.log(name, isLogin);
       setIsLogin(true);
       //재발급 요청
-    } else setIsLogin(false);
+    } else {
+      console.log('2', name, isLogin);
+      setIsLogin(false);
+    }
+  }, [name]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogin, name]);
+  const checkTokenVerify = async () => {
+    try {
+      await TokenVerify();
+      if (sessionStorage.getItem('clusterName'))
+        setName(sessionStorage.getItem('clusterName'));
+      setTimeout(() => {
+        checkTokenVerify();
+      }, 1000 * 60 * 15 + 1000);
+    } catch (err) {
+      if (err.message !== 'refresh') {
+        console.error(err.message);
+        sessionStorage.removeItem('clusterName');
+        removeCookie('accToken');
+        removeCookie('refToken');
+      }
+      setName('');
+    }
+  };
 
-  useEffect(() => {
-    if (sessionStorage.getItem('clusterName'))
-      setName(sessionStorage.getItem('clusterName'));
-    else setName('');
-  }, []);
+  // useEffect(() => {
+  //   const timer = setInterval(() => checkTokenVerify()}, 10000)
+  //   return ()=>{
+  //     clearInterval(timer)
+  //   }
+  // }, []);
 
   const onLogout = () => {
     if (isLogin) {

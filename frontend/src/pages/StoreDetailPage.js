@@ -9,8 +9,8 @@ import { getStoreDetail } from '../lib/api/store';
 import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
-import { checkTokenVerify } from '../common/TokenVerify';
 import { useHistory } from 'react-router-dom';
+import TokenVerify from '../common/TokenVerify';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -164,7 +164,6 @@ const StoreDetailPage = ({ location }) => {
   };
 
   useEffect(() => {
-    checkTokenVerify();
     getStore();
     return () => {
       setStoreList('');
@@ -190,11 +189,10 @@ const StoreDetailPage = ({ location }) => {
     };
     try {
       const res = await toggleLikeStore(data);
-      console.log(res);
       setLikes(res.data.likes);
     } catch (e) {
       console.error(e.response.data.message);
-      if (e.response.status === 403) checkTokenVerify();
+      if (e.response.status === 403) TokenVerify();
       setIsLike(isLike);
     }
   };

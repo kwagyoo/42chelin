@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import Button from '../common/Button';
+import SButton from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
 import AntModal from '../common/Modal';
 import { Link, useHistory } from 'react-router-dom';
@@ -12,8 +12,9 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import TokenVerify, { checkTokenVerify } from '../common/TokenVerify';
-import MenuItems from '../common/MenuItems';
+import TokenVerify from '../common/TokenVerify';
+import { Form, Input, Button, Space } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -22,7 +23,7 @@ const Body = styled.div`
   min-height: 100vh;
 `;
 
-const StyledForm = styled.form`
+const StyledForm = styled(Form)`
   margin: 10px auto 0px;
   width: 550px;
   padding: 0 10px 0 10px;
@@ -154,26 +155,22 @@ const ReviewWritePage = ({ location }) => {
     }
   };
 
-  const handleSubmitBtn = async (data) => {
+  const handleSubmitBtn = async (data, values) => {
+    const combineData = { ...data, menus: [...values.menus] };
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
       await TokenVerify();
-      await sendReview({ ...data, images: files });
+      await sendReview({ ...combineData, images: files });
     }
     setLoading((loading) => !loading);
   };
-
-  useEffect(() => {
-    checkTokenVerify();
-  }, []);
 
   useEffect(() => {
     const query = querystring.parse(location.search);
     if (Object.keys(query).length !== 0) {
       getStoreInfoKakao(query)
         .then((res) => {
-          console.log(res);
           setStore({
             placeName: res.place_name,
             address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
@@ -210,7 +207,11 @@ const ReviewWritePage = ({ location }) => {
       <Header />
       <main>
         {loading && <AntModal visible="true" loadingText={loadingText} />}
-        <StyledForm onSubmit={handleSubmit(handleSubmitBtn)}>
+        <StyledForm
+          name="dynamic_form_nest_item"
+          autoComplete="off"
+          onFinish={handleSubmit(handleSubmitBtn)}
+        >
           <div className="write_page_header">
             <h1>리뷰 작성</h1>
           </div>
@@ -242,7 +243,47 @@ const ReviewWritePage = ({ location }) => {
               </Link>
             </div>
           </TargetStoreSearch>
-          <MenuItems />
+          <StyledForm.List name="menus">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                  <Space key={key} align="baseline">
+                    <StyledForm.Item
+                      {...restField}
+                      name={[name, 'menu']}
+                      fieldKey={[fieldKey, 'menu']}
+                      rules={[
+                        { required: true, message: '메뉴명을 입력해주세요' },
+                      ]}
+                    >
+                      <Input placeholder="메뉴명" />
+                    </StyledForm.Item>
+                    <StyledForm.Item
+                      {...restField}
+                      name={[name, 'price']}
+                      fieldKey={[fieldKey, 'price']}
+                      rules={[
+                        { required: true, message: '가격을 입력해주세요' },
+                      ]}
+                    >
+                      <Input placeholder="가격" />
+                    </StyledForm.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <StyledForm.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add field
+                  </Button>
+                </StyledForm.Item>
+              </>
+            )}
+          </StyledForm.List>
           <div>
             리뷰(1000자 미만)
             <br />
@@ -264,12 +305,12 @@ const ReviewWritePage = ({ location }) => {
             />
           </div>
           <div className="btn-group">
-            <Button name="submit" disabled={loading}></Button>
-            <Button
+            <SButton name="submit" disabled={loading}></SButton>
+            <SButton
               name="cancel"
               disabled={loading}
               onClick={() => history.push('/')}
-            ></Button>
+            ></SButton>
           </div>
         </StyledForm>
       </main>

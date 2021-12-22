@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import SignBlock from '../block/SignBlock';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
+import TokenVerify from '../common/TokenVerify';
 import logo from '../image/Logo.png';
 import { fetchLogin } from '../lib/api/auth';
 import { setIsLogin } from '../module/users';
@@ -55,6 +56,10 @@ const LoginPage = () => {
           expires: e.target.autoLogin.checked ? expires : '',
         });
       }
+      setTimeout(() => {
+        console.log('hello');
+        TokenVerify();
+      }, 1000 * 60 * 15 + 1000);
       localStorage.setItem('autoLogin', e.target.autoLogin.checked);
       history.push('/');
     } catch (e) {
