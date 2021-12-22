@@ -15,7 +15,6 @@ const checkAutoLogin = async () => {
       });
 
       sessionStorage.setItem('clusterName', decoded.clusterName);
-      console.log('auto');
 
       if (todayDate > decoded.exp) {
         //갱신요청

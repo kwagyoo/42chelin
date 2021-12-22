@@ -160,7 +160,6 @@ const ReviewWritePage = ({ location }) => {
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
-      await TokenVerify();
       await sendReview({ ...combineData, images: files });
     }
     setLoading((loading) => !loading);

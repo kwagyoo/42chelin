@@ -29,16 +29,10 @@ const TokenVerify = async () => {
             sameSite: 'none',
           });
         }
-        setTimeout(() => {
-          try {
-            console.log('hello');
-            TokenVerify();
-          } catch (err) {}
-        }, 1000 * 60 * 15 + 1000);
+        return Promise.resolve();
       } catch (err) {
         throw new Error('refresh failed');
       }
-      throw new Error('refresh');
     } else {
       throw new Error(err.message);
     }

@@ -1,4 +1,9 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+import React, {
+  useLayoutEffect,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -188,42 +193,39 @@ const Header = () => {
   const [isMenuClick, setIsMenuClick] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
 
-  useEffect(() => {
-    if (name) {
-      console.log(name, isLogin);
-      setIsLogin(true);
-      //재발급 요청
-    } else {
-      console.log('2', name, isLogin);
-      setIsLogin(false);
-    }
-  }, [name]);
-
-  const checkTokenVerify = async () => {
+  const checkTokenVerify = useCallback(async () => {
     try {
+      console.log('called');
       await TokenVerify();
-      if (sessionStorage.getItem('clusterName'))
-        setName(sessionStorage.getItem('clusterName'));
-      setTimeout(() => {
-        checkTokenVerify();
-      }, 1000 * 60 * 15 + 1000);
+      console.log('refresh success');
     } catch (err) {
       if (err.message !== 'refresh') {
-        console.error(err.message);
+        console.error('갱신 실패 ', err.message);
         sessionStorage.removeItem('clusterName');
         removeCookie('accToken');
         removeCookie('refToken');
+        setName('');
+        setIsLogin(false);
       }
-      setName('');
     }
-  };
+  }, []);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => checkTokenVerify()}, 10000)
-  //   return ()=>{
-  //     clearInterval(timer)
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isLogin) {
+      //checkTokenVerify();
+      //   const timer = setInterval(() => checkTokenVerify(), 1000 * 60 * 5);
+      //   return () => {
+      //     clearInterval(timer);
+      //     console.log('종료');
+      //   };
+    } else {
+      const user = sessionStorage.getItem('clusterName');
+      if (user) {
+        setIsLogin(true);
+        setName(user);
+      }
+    }
+  }, [isLogin, checkTokenVerify]);
 
   const onLogout = () => {
     if (isLogin) {
