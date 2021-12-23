@@ -28,12 +28,4 @@ export const fetchLogin = (id, password) =>
   });
 
 export const fetchRefresh = (id) =>
-  client.post(
-    `/user/${id}/refresh`,
-    { refresh_token: getCookie('refToken') },
-    {
-      headers: {
-        Authorization: `Bearer ${getCookie('accToken')}`,
-      },
-    },
-  );
+  client.post(`/user/${id}/refresh`, { refresh_token: getCookie('refToken') });

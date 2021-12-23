@@ -12,6 +12,7 @@ import {
 import logo from '../image/Logo.png';
 import { removeCookie } from './Cookie';
 import TokenVerify from './TokenVerify';
+import client from '../lib/api/client';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -226,6 +227,7 @@ const Header = () => {
     if (isLogin) {
       localStorage.removeItem('autoLogin');
       sessionStorage.removeItem('clusterName');
+      client.defaults.headers.common['Authorization'] = '';
       setIsLogin(false);
       removeCookie('accToken');
       removeCookie('refToken');

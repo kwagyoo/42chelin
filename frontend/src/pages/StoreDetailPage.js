@@ -125,8 +125,9 @@ const StoreDetailPage = ({ location }) => {
       setLikes(res.data.storeLikes);
       setIsLike(res.data.isLike);
     } catch (e) {
-      if (e.response.status < 500) {
-        if (e.response.status === 403) {
+      console.log('여기', e);
+      if (e.response?.status < 500) {
+        if (e.response?.status === 403) {
           alert('토큰이 만료되었습니다. 새로고침을 진행합니다.');
           history.go(0);
         } else {

@@ -1,6 +1,7 @@
 import { getCookie, setCookie } from './Cookie';
 import jwt from 'jsonwebtoken';
 import { fetchRefresh } from '../lib/api/auth';
+import client from '../lib/api/client';
 
 const TokenVerify = async () => {
   const id = sessionStorage.getItem('clusterName');
@@ -26,6 +27,9 @@ const TokenVerify = async () => {
             sameSite: 'none',
             expires: expires,
           });
+          client.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accToken}`;
           console.log('재발급');
         }
         if (refToken !== getCookie('refToken')) {

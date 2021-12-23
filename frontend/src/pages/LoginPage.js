@@ -7,6 +7,7 @@ import Header from '../common/Header';
 import TokenVerify from '../common/TokenVerify';
 import logo from '../image/Logo.png';
 import { fetchLogin } from '../lib/api/auth';
+import client from '../lib/api/client';
 import { setIsLogin } from '../module/users';
 
 const LoginPage = () => {
@@ -48,6 +49,7 @@ const LoginPage = () => {
           sameSite: 'none',
           expires: expires,
         });
+        client.defaults.headers.common['Authorization'] = `Bearer ${accToken}`;
       }
       if (refToken) {
         setCookie('refToken', refToken, {

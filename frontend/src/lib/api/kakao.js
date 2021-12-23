@@ -3,9 +3,6 @@ import { getCookie } from '../../common/Cookie';
 
 export const fetchKakaoApi = (query) =>
   client.get(`store/search/kakao`, {
-    headers: {
-      Authorization: `Bearer ${getCookie('accToken')}`,
-    },
     params: {
       storeName: query,
     },
@@ -15,9 +12,6 @@ export const fetchKakaoApi = (query) =>
 export const getStoreInfoKakao = async (request) => {
   try {
     const res = await client.get(`/store/${request.id}/kakao`, {
-      headers: {
-        Authorization: `Bearer ${getCookie('accToken')}`,
-      },
       params: {
         storeName: request.placeName,
       },
