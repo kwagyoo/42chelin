@@ -14,11 +14,17 @@ const TokenVerify = async () => {
         const res = await fetchRefresh(id);
         const accToken = res.data.access_token;
         const refToken = res.data.refresh_token;
+        const expires = new Date();
+        if (localStorage.getItem('autoLogin') === 'true')
+          expires.setDate(expires.getDate() + 7);
+        else expires.setMinutes(expires.getMinutes() + 20);
+
         if (accToken) {
           setCookie('accToken', accToken, {
             path: '/',
             secure: true,
             sameSite: 'none',
+            expires: expires,
           });
           console.log('재발급');
         }
@@ -27,14 +33,17 @@ const TokenVerify = async () => {
             path: '/',
             secure: true,
             sameSite: 'none',
+            expires:
+              localStorage.getItem('autoLogin') === 'true' ? expires : '',
           });
         }
         return Promise.resolve();
       } catch (err) {
-        throw new Error('refresh failed');
+        console.log(err);
+        return Promise.reject('refresh failed');
       }
     } else {
-      throw new Error(err.message);
+      return Promise.reject(err.message);
     }
   }
 };

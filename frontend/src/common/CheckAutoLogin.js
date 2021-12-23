@@ -14,24 +14,19 @@ const checkAutoLogin = async () => {
         ignoreExpiration: true,
       });
 
-      sessionStorage.setItem('clusterName', decoded.clusterName);
-
       if (todayDate > decoded.exp) {
         //갱신요청
         try {
           await TokenVerify();
+          sessionStorage.setItem('clusterName', decoded.clusterName);
         } catch (err) {
-          //   alert('자동 로그인에 문제가 발생하였습니다.');
-          //   sessionStorage.removeItem('clusterName');
-          //   removeCookie('accToken');
-          //   removeCookie('refToken');
+          alert('자동 로그인에 문제가 발생하였습니다.');
+          removeCookie('accToken');
+          removeCookie('refToken');
         }
       } else {
-        //강제 로그아웃
-        alert('자동 로그인에 문제가 발생하였습니다.');
-        sessionStorage.removeItem('clusterName');
-        removeCookie('accToken');
-        removeCookie('refToken');
+        //로그인 유지
+        sessionStorage.setItem('clusterName', decoded.clusterName);
       }
     }
   }

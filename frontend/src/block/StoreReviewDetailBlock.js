@@ -31,13 +31,19 @@ const StoreHeader = styled.div`
   }
   .btn-like {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: row-reverse;
     align-items: center;
     background-color: #fafafa;
+    .like-num {
+      margin-left: 5px;
+    }
   }
   .store-header-title {
     display: flex;
     align-items: center;
+    .store-name {
+      font-size: 25px;
+    }
   }
   .btn-review-detail {
     font-size: 18px;
@@ -52,19 +58,19 @@ const StoreReviewDetail = ({
   likeButtonDisable,
 }) => {
   const clusterName = sessionStorage.getItem('clusterName');
-
+  console.log(storeList);
   return (
     <StoreItemBlock>
       <StoreHeader>
         <div className="store-header-title">
-          <h2>{storeList.storeName}</h2>
+          <div className="store-name">{storeList.storeName}</div>
           {clusterName && (
             <button
               onClick={ToggleLike}
               disabled={likeButtonDisable}
               className="btn-like"
             >
-              <p>좋아요</p>
+              <div className="like-num">{storeList.storeLikes}</div>
               {isLike ? (
                 <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
               ) : (
@@ -73,11 +79,10 @@ const StoreReviewDetail = ({
             </button>
           )}
         </div>
-        <button className="btn-review-detail">가게정보 작성</button>
+        {/* 이후 필요해지면 다시 살리기 <button className="btn-review-detail">가게정보 작성</button> */}
       </StoreHeader>
 
       <StoreInfoBlock>
-        {/* 테이블을 쓰는게 나아보임 */}
         <span>주소 : {storeList.storeAddress}</span>
         <span>분류 : {storeList.storeCategoryName}</span>
         <span>전화번호 : </span>

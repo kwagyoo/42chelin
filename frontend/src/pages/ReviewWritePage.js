@@ -12,7 +12,6 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import TokenVerify from '../common/TokenVerify';
 import { Form, Input, Button, Space } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -251,9 +250,6 @@ const ReviewWritePage = ({ location }) => {
                       {...restField}
                       name={[name, 'menu']}
                       fieldKey={[fieldKey, 'menu']}
-                      rules={[
-                        { required: true, message: '메뉴명을 입력해주세요' },
-                      ]}
                     >
                       <Input placeholder="메뉴명" />
                     </StyledForm.Item>
@@ -261,9 +257,6 @@ const ReviewWritePage = ({ location }) => {
                       {...restField}
                       name={[name, 'price']}
                       fieldKey={[fieldKey, 'price']}
-                      rules={[
-                        { required: true, message: '가격을 입력해주세요' },
-                      ]}
                     >
                       <Input placeholder="가격" />
                     </StyledForm.Item>

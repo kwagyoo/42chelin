@@ -1,9 +1,4 @@
-import React, {
-  useLayoutEffect,
-  useEffect,
-  useState,
-  useCallback,
-} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -229,8 +224,9 @@ const Header = () => {
 
   const onLogout = () => {
     if (isLogin) {
+      localStorage.removeItem('autoLogin');
       sessionStorage.removeItem('clusterName');
-      setName('');
+      setIsLogin(false);
       removeCookie('accToken');
       removeCookie('refToken');
       alert('로그아웃 되었습니다.');

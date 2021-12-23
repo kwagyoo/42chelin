@@ -28,18 +28,20 @@ const App = () => {
   }, []);
 
   return (
-    <Switch>
-      <Route exact path="/" component={StorelistPage} />
-      <Route path="/detail" component={StoreDetailPage} />
-      <PrivateRoute path="/update" component={ReviewUpdatePage} />
-      <PrivateRoute path="/write" component={ReviewWritePage} />
-      <Route path="/search" component={SearchPage} />
-      <PrivateRoute path="/storeSearch" component={KakaoSearchPage} />
-      <Route path="/random" component={RandomStore} />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/register" component={RegisterPage} />
+    <>
+      <Switch>
+        <Route exact path="/" component={StorelistPage} />
+        <Route path="/detail" component={StoreDetailPage} />
+        <PrivateRoute path="/update" component={ReviewUpdatePage} />
+        <PrivateRoute path="/write" component={ReviewWritePage} />
+        <Route path="/search" component={SearchPage} />
+        <PrivateRoute path="/storeSearch" component={KakaoSearchPage} />
+        <Route path="/random" component={RandomStore} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
+      </Switch>
       <Footer />
-    </Switch>
+    </>
   );
 };
 

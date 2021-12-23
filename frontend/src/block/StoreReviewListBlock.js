@@ -10,6 +10,8 @@ import { useState } from 'react';
 import TokenVerify from '../common/TokenVerify';
 import { useHistory } from 'react-router-dom';
 
+import { Image } from 'antd';
+
 const Wrapper = styled.div`
   font-size: 15px;
 `;
@@ -51,6 +53,7 @@ const ReviewListHeader = styled.div`
 
 const ReviewDetail = styled.div`
   width: 70%;
+  height: 250px;
   display: flex;
   flex-grow: 1;
   flex-direction: row;
@@ -66,6 +69,9 @@ const ReviewDetail = styled.div`
   .review_info {
     flex-grow: 1;
     width: 90%;
+    .review_img {
+      height: 150px;
+    }
   }
   .review_info .review_text {
     height: 50px;
@@ -123,7 +129,11 @@ const ImgContainer = styled.div`
   }
 `;
 
-const manageDeleteReview = async (deleteReviewData, history) => {
+const HiddenImg = styled(Image)`
+  display: none;
+`;
+
+const manageDeleteReview = async (deleteReviewData) => {
   try {
     await deleteReview(deleteReviewData);
   } catch (e) {
@@ -138,11 +148,12 @@ const manageDeleteReview = async (deleteReviewData, history) => {
   }
 };
 
-const StoreReviewList = ({ store, storeReviews, likes }) => {
+const StoreReviewList = ({ store, storeReviews }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
   const history = useHistory();
+  const [visible, setVisible] = useState(false);
 
   const deleteStoreReview = async (review) => {
     if (!loading) {
@@ -158,6 +169,7 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
       await TokenVerify();
       await manageDeleteReview(deleteReviewData);
       setLoading((loading) => !loading);
+      history.push(0);
     }
   };
 
@@ -180,7 +192,6 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
           <button className="btn-review-write" onClick={GoWritePage}>
             리뷰작성
           </button>
-          <div className="review-likes">좋아요 : {likes}</div>
         </div>
       </ReviewListHeader>
       {storeReviews &&
@@ -195,13 +206,32 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
               <div className="review_info">
                 <div className="Date">{review.reviewDate}</div>
                 <div className="review_text">{review.reviewText}</div>
-
-                <ImgContainer>
+                <div className="review_img">
                   {review.images &&
-                    review.images.map((image, idx) => (
-                      <ReviewImgView image={image.imageURL} key={idx} />
-                    ))}
-                </ImgContainer>
+                    review.images.map((image, idx) => {
+                      <div>
+                        <Image
+                          width={200}
+                          src={image.imageURL}
+                          preview={{ visible: false }}
+                          onClick={() => setVisible(true)}
+                        />
+                        <Image.PreviewGroup
+                          preview={{
+                            visible,
+                            onVisibleChange: (vis) => setVisible(vis),
+                          }}
+                        >
+                          <HiddenImg
+                            width={200}
+                            height={150}
+                            src={image.imageURL}
+                            key={idx}
+                          />
+                        </Image.PreviewGroup>
+                      </div>;
+                    })}
+                </div>
               </div>
               <div className="review_detail_buttons">
                 <button

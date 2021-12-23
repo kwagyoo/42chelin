@@ -218,7 +218,6 @@ const StoreDetailPage = ({ location }) => {
             <StoreReviewListBlock
               store={storeList}
               storeReviews={storeList.storeReviews}
-              likes={likes}
             />
           </ContentsWrapper>
         )}

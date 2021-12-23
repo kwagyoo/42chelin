@@ -39,13 +39,14 @@ const LoginPage = () => {
       const refToken = res.data.refresh_token;
       dispatch(setIsLogin(true));
       const expires = new Date();
-      expires.setDate(expires.getDate() + 2);
+      if (e.target.autoLogin.checked) expires.setDate(expires.getDate() + 7);
+      else expires.setMinutes(expires.getMinutes() + 20);
       if (accToken) {
         setCookie('accToken', accToken, {
           path: '/',
           secure: true,
           sameSite: 'none',
-          expires: e.target.autoLogin.checked ? expires : '',
+          expires: expires,
         });
       }
       if (refToken) {
