@@ -209,27 +209,29 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div className="review_img">
                   {review.images &&
                     review.images.map((image, idx) => {
-                      <div>
+                      <>
                         <Image
                           width={200}
                           src={image.imageURL}
                           preview={{ visible: false }}
                           onClick={() => setVisible(true)}
                         />
-                        <Image.PreviewGroup
-                          preview={{
-                            visible,
-                            onVisibleChange: (vis) => setVisible(vis),
-                          }}
-                        >
-                          <HiddenImg
-                            width={200}
-                            height={150}
-                            src={image.imageURL}
-                            key={idx}
-                          />
-                        </Image.PreviewGroup>
-                      </div>;
+                        <div style={{ display: 'none' }}>
+                          <Image.PreviewGroup
+                            preview={{
+                              visible,
+                              onVisibleChange: (vis) => setVisible(vis),
+                            }}
+                          >
+                            <Image
+                              width={200}
+                              height={150}
+                              src={image.imageURL}
+                              key={idx}
+                            />
+                          </Image.PreviewGroup>
+                        </div>
+                      </>;
                     })}
                 </div>
               </div>
