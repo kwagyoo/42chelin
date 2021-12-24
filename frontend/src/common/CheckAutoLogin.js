@@ -1,6 +1,7 @@
 import { getCookie, removeCookie } from './Cookie';
 import jwt from 'jsonwebtoken';
 import TokenVerify from './TokenVerify';
+import client from '../lib/api/client';
 
 const checkAutoLogin = async () => {
   if (
@@ -17,12 +18,17 @@ const checkAutoLogin = async () => {
       if (todayDate > decoded.exp) {
         //갱신요청
         try {
+          client.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accToken}`;
+          console.log('재발급');
           await TokenVerify();
           sessionStorage.setItem('clusterName', decoded.clusterName);
         } catch (err) {
           alert('자동 로그인에 문제가 발생하였습니다.');
           removeCookie('accToken');
           removeCookie('refToken');
+          client.defaults.headers.common['Authorization'] = null;
         }
       } else {
         //로그인 유지

@@ -227,7 +227,7 @@ const Header = () => {
     if (isLogin) {
       localStorage.removeItem('autoLogin');
       sessionStorage.removeItem('clusterName');
-      client.defaults.headers.common['Authorization'] = '';
+      client.defaults.headers.common['Authorization'] = null;
       setIsLogin(false);
       removeCookie('accToken');
       removeCookie('refToken');
