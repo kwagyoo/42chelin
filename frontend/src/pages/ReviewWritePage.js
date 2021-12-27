@@ -197,7 +197,7 @@ const ReviewWritePage = ({ location }) => {
     setValue('storeCategory', store?.category_code);
     setValue('storeCategoryName', store?.category_name);
     setValue('reviewDate', formatDate(Date.now()));
-    setValue('phoneNumber', store?.phoneNumber);
+    setValue('storePhoneNumber', store?.phoneNumber);
   }, [store, setValue]);
 
   return (

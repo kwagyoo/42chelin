@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import StoreDetailPage from './pages/StoreDetailPage';
 import StorelistPage from './pages/StorelistPage';
@@ -13,6 +13,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
+import TokenVerify from './common/TokenVerify';
 
 const App = () => {
   AWS.config.update({
@@ -22,9 +23,16 @@ const App = () => {
     }),
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     //자동로그인 시 header가 더 먼저 렌더링이 되어 useEffect보다 먼저 실행되는 layoutEffect를 사용해야함
-    checkAutoLogin();
+    if (sessionStorage.getItem('clusterName')) {
+      const checkToken = setInterval(() => {
+        TokenVerify();
+      }, 1000 * 60 * 15 + 1000);
+      return () => {
+        clearInterval(checkToken);
+      };
+    } else checkAutoLogin();
   }, []);
 
   return (

@@ -209,12 +209,20 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div className="review_img">
                   {review.images.length > 0 && (
                     <>
-                      <Image
-                        width={200}
-                        src={review.images[0].imageURL}
-                        preview={{ visible: false }}
-                        onClick={() => setVisible(true)}
-                      />
+                      {review.images.map((image, idx) => {
+                        if (idx >= 3) return null;
+                        else {
+                          return (
+                            <Image
+                              width={200}
+                              src={image.imageURL}
+                              preview={{ visible: false }}
+                              onClick={() => setVisible(true)}
+                              key={idx}
+                            />
+                          );
+                        }
+                      })}
                       <div style={{ display: 'none' }}>
                         <Image.PreviewGroup
                           preview={{
@@ -223,39 +231,20 @@ const StoreReviewList = ({ store, storeReviews }) => {
                           }}
                         >
                           {review.images.map((image, idx) => {
-                            if (idx === 0) return null;
-                            else {
-                              return (
-                                <Image
-                                  width={200}
-                                  height={150}
-                                  src={image.imageURL}
-                                  key={idx}
-                                />
-                              );
-                            }
+                            return (
+                              <Image
+                                width={200}
+                                height={150}
+                                src={image.imageURL}
+                                key={idx}
+                              />
+                            );
                           })}
                         </Image.PreviewGroup>
                       </div>
                     </>
                   )}
                 </div>
-                {/* 
-				review.images.map((image, idx) =>
-                      {
-						  return(
-                        
-                          >
-                            <Image
-                              width={200}
-                              height={150}
-                              src={image.imageURL}
-                              key={idx}
-                            />
-                          </Image.PreviewGroup>
-                        </div>);
-                      }
-                      ) */}
               </div>
               <div className="review_detail_buttons">
                 <button
