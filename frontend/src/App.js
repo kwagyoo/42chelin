@@ -14,6 +14,7 @@ import LoginPage from './pages/LoginPage';
 import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
 import TokenVerify from './common/TokenVerify';
+import StoreInfoUpdate from './pages/StoreInfoUpdate';
 
 const App = () => {
   AWS.config.update({
@@ -41,6 +42,7 @@ const App = () => {
         <Route exact path="/" component={StorelistPage} />
         <Route path="/detail" component={StoreDetailPage} />
         <PrivateRoute path="/update" component={ReviewUpdatePage} />
+        <PrivateRoute path="/storeupdate" component={StoreInfoUpdate} />
         <PrivateRoute path="/write" component={ReviewWritePage} />
         <Route path="/search" component={SearchPage} />
         <PrivateRoute path="/storeSearch" component={KakaoSearchPage} />

@@ -4,6 +4,7 @@ import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
 
 const checkAutoLogin = async () => {
+  console.log('auto login 실행');
   if (
     localStorage.getItem('autoLogin') === 'true' &&
     !sessionStorage.getItem('clusterName')
@@ -25,10 +26,11 @@ const checkAutoLogin = async () => {
           await TokenVerify();
           sessionStorage.setItem('clusterName', decoded.clusterName);
         } catch (err) {
+          console.log('auto login catch');
           alert('자동 로그인에 문제가 발생하였습니다.');
           removeCookie('accToken');
           removeCookie('refToken');
-          client.defaults.headers.common['Authorization'] = null;
+          delete client.defaults.headers.common['Authorization'];
         }
       } else {
         //로그인 유지

@@ -1,5 +1,4 @@
 import client from './client';
-import { getCookie } from '../../common/Cookie';
 
 export const updateReview = (path, request) =>
   client.put(`/store/${path.storeID}/review/${path.reviewID}`, request);

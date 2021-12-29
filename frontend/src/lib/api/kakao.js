@@ -1,5 +1,4 @@
 import client from './client';
-import { getCookie } from '../../common/Cookie';
 
 export const fetchKakaoApi = (query) =>
   client.get(`store/search/kakao`, {

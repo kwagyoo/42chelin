@@ -26,4 +26,18 @@ client.interceptors.response.use(
   },
 );
 
+client.interceptors.request.use(
+  async (config) => {
+    if (getCookie('accToken')) {
+      config.headers = {
+        Authorization: `Bearer ${getCookie('accToken')}`,
+      };
+    }
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  },
+);
+
 export default client;

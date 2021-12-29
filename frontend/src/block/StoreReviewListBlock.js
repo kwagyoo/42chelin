@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { deleteReview } from '../lib/api/review';
-import ReviewImgView from '../block/ReviewImgViewBlock';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
@@ -115,23 +114,23 @@ const ReviewDetail = styled.div`
     }
   }
 `;
-const ImgContainer = styled.div`
-  display: flex;
-  width: 90%;
-  flex-wrap: nowrap;
-  overflow: auto;
-  overflow-x: auto;
-  overflow-y: none;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  -webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
-`;
+// const ImgContainer = styled.div`
+//   display: flex;
+//   width: 90%;
+//   flex-wrap: nowrap;
+//   overflow: auto;
+//   overflow-x: auto;
+//   overflow-y: none;
+//   -ms-overflow-style: none; /* IE and Edge */
+//   scrollbar-width: none; /* Firefox */
+//   -webkit-scrollbar {
+//     display: none; /* Chrome, Safari, Opera*/
+//   }
+// `;
 
-const HiddenImg = styled(Image)`
-  display: none;
-`;
+// const HiddenImg = styled(Image)`
+//   display: none;
+// `;
 
 const manageDeleteReview = async (deleteReviewData) => {
   try {

@@ -1,8 +1,10 @@
 import client from './client';
-import { getCookie } from '../../common/Cookie';
 
 export const writeReview = (request) =>
   client.post(`/store/${request.storeID}/review`, request);
+
+export const updateStoreDetail = (request) =>
+  client.put(`/store/${request.storeID}`, request);
 
 export const searchStore = (storeName) =>
   client.get(`store/search`, {

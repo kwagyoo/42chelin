@@ -144,12 +144,10 @@ const ReviewUpdatePage = ({ history }) => {
   const { review } = useSelector((state) => state.review);
   const [loadingText, setLoadingText] = useState('');
   const { register, handleSubmit, setValue } = useForm();
-
   const reviewText = useInput(
     review ? review.review.reviewText : '',
     (value) => value.length < 1000,
   );
-
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
@@ -219,12 +217,12 @@ const ReviewUpdatePage = ({ history }) => {
             />
           </div>
           <div className="btn-group">
-            <Button name="submit" disabled={loading}></Button>
+            <Button name="submit" disabled={loading} />
             <Button
               name="cancel"
               disabled={loading}
               onClick={() => history.push('/')}
-            ></Button>
+            />
           </div>
         </StyledForm>
       </main>
