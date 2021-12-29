@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
@@ -157,40 +157,92 @@ const StorelistPage = ({ history }) => {
   const [text, setText] = useState('');
   const [change, setChange] = useState(true);
   const [stores, setStores] = useState([]);
+  const [lastEval, setLastEval] = useState(undefined);
   const dispatch = useDispatch();
 
-  const getAllStoreData = async ({ dispatch }) => {
+  const getStoreData = async () => {
     try {
-      const res = await searchStore();
+      if (stores.length > 0 && !lastEval) return;
+      //const res = await searchStore({ lastEvaluatedKey: lastEval });
+      const res = {
+        data: {
+          body: [
+            {
+              storeID: Math.random(),
+              storeName: '얌샘김밥',
+              storeAddress: '서울 강서구',
+              storeImage: 'q60lto0mpt.png',
+              storeReviews: 1,
+              storeLikes: 1,
+              storeLocation: ['126.84057207065645', '37.567448293231685'],
+            },
+            {
+              storeID: Math.random(),
+              storeName: '테스그릭',
+              storeAddress: '제주특별자치도 제주시',
+              storeReviews: 1,
+              storeLikes: 0,
+              storeLocation: ['126.54225854157136', '33.47009353213114'],
+            },
+          ],
+          LastEvaluatedKey: undefined,
+        },
+      };
       const data = res.data.body;
-      setStores(data);
+      console.log(stores, [...stores, ...data]);
+      setStores([...stores, ...data]);
+      setLastEval(res.data.LastEvaluatedKey);
       dispatch(getList(data));
     } catch (e) {
-      alert(e.response.data.message);
-    }
-  };
-
-  const onChange = (e) => {
-    setText(e.target.value);
-  };
-
-  const ChangeList = (e) => {
-    if (e.target.id === 'btnradio1') setChange(true);
-    else setChange(false);
-  };
-
-  const onKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      history.push({
-        pathname: '/search',
-        search: `?storeName=${text}`,
-      });
+      if (e.response) alert(e.response.data.message);
+      else {
+        console.error(e);
+      }
     }
   };
 
   useEffect(() => {
-    getAllStoreData({ dispatch });
-  }, [dispatch]);
+    console.log('Fruit', [...stores]);
+  }, [stores]);
+
+  const onChange = useCallback((e) => {
+    setText(e.target.value);
+  }, []);
+
+  const ChangeList = useCallback((e) => {
+    if (e.target.id === 'btnradio1') setChange(true);
+    else setChange(false);
+  }, []);
+
+  const onKeyPress = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        history.push({
+          pathname: '/search',
+          search: `?storeName=${text}`,
+        });
+      }
+    },
+    [history, text],
+  );
+
+  const scrollRef = useRef(null);
+  /* 인터섹션 callback */
+  const onIntersect = async ([entry], observer) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target);
+      await getStoreData();
+      setTimeout(() => {
+        observer.observe(entry.target);
+      }, 1500);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+    observer.observe(scrollRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const goDetail = (stores) => {
     if (!stores) return;
@@ -283,25 +335,30 @@ const StorelistPage = ({ history }) => {
           </ul>
         </div>
         {change === true ? (
-          <Row gutter={[16, 16]}>
-            {stores &&
-              stores.map((store, index) => (
-                <Col
-                  key={index}
-                  xs={24}
-                  md={12}
-                  lg={8}
-                  xl={6}
-                  onClick={() => goDetail(stores[index])}
-                >
-                  <PostBlock
-                    src={store.storeImage}
-                    delay={store.delay}
-                    store={stores[index]}
-                  />
-                </Col>
-              ))}
-          </Row>
+          <>
+            <Row gutter={[16, 16]}>
+              {stores &&
+                stores.map((store, index) => (
+                  <Col
+                    key={index}
+                    xs={24}
+                    md={12}
+                    lg={8}
+                    xl={6}
+                    onClick={() => goDetail(stores[index])}
+                  >
+                    <PostBlock
+                      src={store.storeImage}
+                      delay={store.delay}
+                      store={stores[index]}
+                    />
+                  </Col>
+                ))}
+            </Row>
+            <div className="infinite-scroll-area" ref={scrollRef}>
+              여기
+            </div>
+          </>
         ) : (
           <StoreMap storeList={stores} history={history} />
         )}

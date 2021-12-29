@@ -28,7 +28,7 @@ const checkAutoLogin = async () => {
           alert('자동 로그인에 문제가 발생하였습니다.');
           removeCookie('accToken');
           removeCookie('refToken');
-          client.defaults.headers.common['Authorization'] = null;
+          delete client.defaults.headers.common['Authorization'];
         }
       } else {
         //로그인 유지

@@ -4,10 +4,11 @@ import { getCookie } from '../../common/Cookie';
 export const writeReview = (request) =>
   client.post(`/store/${request.storeID}/review`, request);
 
-export const searchStore = (storeName) =>
+export const searchStore = ({ storeName, lastEvaluatedKey }) =>
   client.get(`store/search`, {
     params: {
       storeName: storeName,
+      lastEvaluatedKey,
     },
   });
 
