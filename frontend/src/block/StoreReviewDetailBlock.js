@@ -144,9 +144,9 @@ const StoreReviewDetail = ({
             <td>
               <ul>
                 {storeList.storeMenus.length > 0 ? (
-                  storeList.storeMenus.map((menu) => {
+                  storeList.storeMenus.map((menu, idx) => {
                     return (
-                      <li key={menu.menu}>
+                      <li key={idx}>
                         <span>{menu.menu}</span>
                         <span
                           style={{
