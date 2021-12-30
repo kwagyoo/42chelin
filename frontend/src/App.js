@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import StoreDetailPage from './pages/StoreDetailPage';
 import StorelistPage from './pages/StorelistPage';
@@ -23,16 +23,9 @@ const App = () => {
     }),
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     //자동로그인 시 header가 더 먼저 렌더링이 되어 useEffect보다 먼저 실행되는 layoutEffect를 사용해야함
-    if (sessionStorage.getItem('clusterName')) {
-      const checkToken = setInterval(() => {
-        TokenVerify();
-      }, 1000 * 60 * 15 + 1000);
-      return () => {
-        clearInterval(checkToken);
-      };
-    } else checkAutoLogin();
+    if (!sessionStorage.getItem('clusterName')) checkAutoLogin();
   }, []);
 
   return (

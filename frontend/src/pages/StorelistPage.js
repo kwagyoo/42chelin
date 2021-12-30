@@ -158,52 +158,21 @@ const StorelistPage = ({ history }) => {
   const [change, setChange] = useState(true);
   const [stores, setStores] = useState([]);
   const [lastEval, setLastEval] = useState(undefined);
+  const [endScroll, setEndScroll] = useState(false);
   const dispatch = useDispatch();
 
-  const getStoreData = async () => {
-    try {
+  useEffect(() => {
+    const apiTest = async () => {
       if (stores.length > 0 && !lastEval) return;
-      //const res = await searchStore({ lastEvaluatedKey: lastEval });
-      const res = {
-        data: {
-          body: [
-            {
-              storeID: Math.random(),
-              storeName: '얌샘김밥',
-              storeAddress: '서울 강서구',
-              storeImage: 'q60lto0mpt.png',
-              storeReviews: 1,
-              storeLikes: 1,
-              storeLocation: ['126.84057207065645', '37.567448293231685'],
-            },
-            {
-              storeID: Math.random(),
-              storeName: '테스그릭',
-              storeAddress: '제주특별자치도 제주시',
-              storeReviews: 1,
-              storeLikes: 0,
-              storeLocation: ['126.54225854157136', '33.47009353213114'],
-            },
-          ],
-          LastEvaluatedKey: undefined,
-        },
-      };
+      const res = await searchStore({ lastEvaluatedKey: lastEval });
       const data = res.data.body;
-      console.log(stores, [...stores, ...data]);
-      setStores([...stores, ...data]);
+      setStores((prev) => [...prev, ...data]);
       setLastEval(res.data.LastEvaluatedKey);
       dispatch(getList(data));
-    } catch (e) {
-      if (e.response) alert(e.response.data.message);
-      else {
-        console.error(e);
-      }
-    }
-  };
-
-  useEffect(() => {
-    console.log('Fruit', [...stores]);
-  }, [stores]);
+      setEndScroll(false);
+    };
+    if (endScroll) apiTest();
+  }, [endScroll]);
 
   const onChange = useCallback((e) => {
     setText(e.target.value);
@@ -231,7 +200,7 @@ const StorelistPage = ({ history }) => {
   const onIntersect = async ([entry], observer) => {
     if (entry.isIntersecting) {
       observer.unobserve(entry.target);
-      await getStoreData();
+      setEndScroll(true);
       setTimeout(() => {
         observer.observe(entry.target);
       }, 1500);
@@ -239,9 +208,14 @@ const StorelistPage = ({ history }) => {
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-    observer.observe(scrollRef.current);
-    return () => observer.disconnect();
+    let observer;
+    if (scrollRef) {
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 0.5,
+      });
+      observer.observe(scrollRef.current);
+    }
+    return () => observer && observer.disconnect();
   }, []);
 
   const goDetail = (stores) => {
@@ -251,7 +225,7 @@ const StorelistPage = ({ history }) => {
     );
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
-  const LikeSort = () => {
+  const LikeSort = async () => {
     const sortItem = [...stores];
     setStores(sortItem.sort((a, b) => b.storeLikes - a.storeLikes));
   };

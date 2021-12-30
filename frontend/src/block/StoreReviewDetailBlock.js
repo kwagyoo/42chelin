@@ -58,7 +58,7 @@ const StoreReviewDetail = ({
   likeButtonDisable,
 }) => {
   const clusterName = sessionStorage.getItem('clusterName');
-  console.log(storeList);
+
   return (
     <StoreItemBlock>
       <StoreHeader>
