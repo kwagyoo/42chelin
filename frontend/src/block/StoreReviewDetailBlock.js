@@ -85,6 +85,8 @@ const StoreReviewDetail = ({
       `/storeupdate?placeName=${storeList.storeName}&id=${storeList.storeID}`,
     );
   };
+
+  console.log(storeList);
   return (
     <StoreItemBlock>
       <StoreHeader>
