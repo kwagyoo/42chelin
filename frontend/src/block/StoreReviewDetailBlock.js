@@ -86,7 +86,6 @@ const StoreReviewDetail = ({
     );
   };
 
-  console.log(storeList);
   return (
     <StoreItemBlock>
       <StoreHeader>

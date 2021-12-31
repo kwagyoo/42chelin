@@ -6,10 +6,11 @@ export const writeReview = (request) =>
 export const updateStoreDetail = (request) =>
   client.put(`/store/${request.storeID}`, request);
 
-export const searchStore = (storeName) =>
+export const searchStore = ({ storeName, lastEvaluatedKey }) =>
   client.get(`store/search`, {
     params: {
       storeName: storeName,
+      lastEvaluatedKey,
     },
   });
 

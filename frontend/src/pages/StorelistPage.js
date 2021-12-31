@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
@@ -157,40 +157,66 @@ const StorelistPage = ({ history }) => {
   const [text, setText] = useState('');
   const [change, setChange] = useState(true);
   const [stores, setStores] = useState([]);
+  const [lastEval, setLastEval] = useState(undefined);
+  const [endScroll, setEndScroll] = useState(false);
   const dispatch = useDispatch();
 
-  const getAllStoreData = async ({ dispatch }) => {
-    try {
-      const res = await searchStore();
+  useEffect(() => {
+    const apiTest = async () => {
+      if (stores.length > 0 && !lastEval) return;
+      const res = await searchStore({ lastEvaluatedKey: lastEval });
       const data = res.data.body;
-      setStores(data);
+      setStores((prev) => [...prev, ...data]);
+      setLastEval(res.data.LastEvaluatedKey);
       dispatch(getList(data));
-    } catch (e) {
-      alert(e.response.data.message);
-    }
-  };
+      setEndScroll(false);
+    };
+    if (endScroll) apiTest();
+  }, [endScroll]);
 
-  const onChange = (e) => {
+  const onChange = useCallback((e) => {
     setText(e.target.value);
-  };
+  }, []);
 
-  const ChangeList = (e) => {
+  const ChangeList = useCallback((e) => {
     if (e.target.id === 'btnradio1') setChange(true);
     else setChange(false);
-  };
+  }, []);
 
-  const onKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      history.push({
-        pathname: '/search',
-        search: `?storeName=${text}`,
-      });
+  const onKeyPress = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        history.push({
+          pathname: '/search',
+          search: `?storeName=${text}`,
+        });
+      }
+    },
+    [history, text],
+  );
+
+  const scrollRef = useRef(null);
+  /* 인터섹션 callback */
+  const onIntersect = async ([entry], observer) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target);
+      setEndScroll(true);
+      setTimeout(() => {
+        observer.observe(entry.target);
+      }, 1500);
     }
   };
 
   useEffect(() => {
-    getAllStoreData({ dispatch });
-  }, [dispatch]);
+    let observer;
+    if (scrollRef) {
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 0.5,
+      });
+      observer.observe(scrollRef.current);
+    }
+    return () => observer && observer.disconnect();
+  }, []);
 
   const goDetail = (stores) => {
     if (!stores) return;
@@ -199,7 +225,7 @@ const StorelistPage = ({ history }) => {
     );
   };
   // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
-  const LikeSort = () => {
+  const LikeSort = async () => {
     const sortItem = [...stores];
     setStores(sortItem.sort((a, b) => b.storeLikes - a.storeLikes));
   };
@@ -283,25 +309,30 @@ const StorelistPage = ({ history }) => {
           </ul>
         </div>
         {change === true ? (
-          <Row gutter={[16, 16]}>
-            {stores &&
-              stores.map((store, index) => (
-                <Col
-                  key={index}
-                  xs={24}
-                  md={12}
-                  lg={8}
-                  xl={6}
-                  onClick={() => goDetail(stores[index])}
-                >
-                  <PostBlock
-                    src={store.storeImage}
-                    delay={store.delay}
-                    store={stores[index]}
-                  />
-                </Col>
-              ))}
-          </Row>
+          <>
+            <Row gutter={[16, 16]}>
+              {stores &&
+                stores.map((store, index) => (
+                  <Col
+                    key={index}
+                    xs={24}
+                    md={12}
+                    lg={8}
+                    xl={6}
+                    onClick={() => goDetail(stores[index])}
+                  >
+                    <PostBlock
+                      src={store.storeImage}
+                      delay={store.delay}
+                      store={stores[index]}
+                    />
+                  </Col>
+                ))}
+            </Row>
+            <div className="infinite-scroll-area" ref={scrollRef}>
+              여기
+            </div>
+          </>
         ) : (
           <StoreMap storeList={stores} history={history} />
         )}

@@ -191,35 +191,35 @@ const Header = () => {
 
   const checkTokenVerify = useCallback(async () => {
     try {
-      console.log('called');
+      if (!isLogin) return;
       await TokenVerify();
       console.log('refresh success');
     } catch (err) {
-      if (err.message !== 'refresh') {
-        console.error('갱신 실패 ', err.message);
-        sessionStorage.removeItem('clusterName');
-        removeCookie('accToken');
-        removeCookie('refToken');
-        setName('');
-        setIsLogin(false);
-      }
+      console.error('갱신 실패 ', err.message);
+      sessionStorage.removeItem('clusterName');
+      removeCookie('accToken');
+      removeCookie('refToken');
+      setName('');
+      setIsLogin(false);
     }
-  }, []);
+  }, [isLogin]);
 
   useEffect(() => {
-    if (isLogin) {
-      //checkTokenVerify();
-      //   const timer = setInterval(() => checkTokenVerify(), 1000 * 60 * 5);
-      //   return () => {
-      //     clearInterval(timer);
-      //     console.log('종료');
-      //   };
-    } else {
+    if (!isLogin) {
       const user = sessionStorage.getItem('clusterName');
       if (user) {
         setIsLogin(true);
         setName(user);
       }
+    } else {
+      const timer = setInterval(async () => {
+        console.log('hi');
+        checkTokenVerify();
+      }, 1000 * 10);
+      return () => {
+        clearInterval(timer);
+        console.log('종료');
+      };
     }
   }, [isLogin, checkTokenVerify]);
 
