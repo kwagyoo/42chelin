@@ -13,7 +13,6 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
-import TokenVerify from './common/TokenVerify';
 import StoreInfoUpdate from './pages/StoreInfoUpdate';
 
 const App = () => {

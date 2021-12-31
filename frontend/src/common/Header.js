@@ -29,7 +29,6 @@ const Wrapper = styled.div`
   display: flex;
   overflow: auto;
   align-items: center;
-  font-family: 'Do Hyeon', sans-serif;
   font-size: 20px;
   font-style: bold;
   .title {
@@ -212,13 +211,11 @@ const Header = () => {
         setName(user);
       }
     } else {
-      const timer = setInterval(async () => {
-        console.log('hi');
+      const timer = setInterval(() => {
         checkTokenVerify();
-      }, 1000 * 10);
+      }, 1000 * 60);
       return () => {
         clearInterval(timer);
-        console.log('종료');
       };
     }
   }, [isLogin, checkTokenVerify]);

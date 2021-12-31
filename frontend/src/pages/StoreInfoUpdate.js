@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Header from '../common/Header';
 import SButton from '../common/Button';
@@ -25,7 +24,6 @@ const StyledForm = styled(Form)`
   margin: 10px auto 0px;
   width: 550px;
   padding: 0 10px 0 10px;
-  font-family: 'Do Hyeon', sans-serif;
   @media (max-width: 550px) {
     margin-top: 10px;
     width: 100vw;
@@ -90,7 +88,7 @@ const StoreInfoUpdate = ({ location }) => {
   const history = useHistory();
   const menus = useSelector((state) => state.menus);
   const [fields] = useState({
-    menus: [{ key: 0, menu: '1', price: '2' }],
+    menus: [],
   });
   const [form] = Form.useForm();
   useEffect(() => {
@@ -98,12 +96,19 @@ const StoreInfoUpdate = ({ location }) => {
       return { key: idx, menu: item.menu, price: item.price };
     });
     form.setFieldsValue({ menus: menu });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sendReview = async (data) => {
-    const menus = data.menus.map((item) => {
-      return { menu: item.menu, price: item.price };
-    });
+    const menus = data.menus
+      .map((item) => {
+        return { menu: item.menu, price: item.price };
+      })
+      .filter(
+        (menu, index, self) =>
+          index === self.findIndex((t) => t.menu === menu.menu),
+      );
+    console.log(menus);
     const combineData = {
       menus,
       storeID: store.id,
@@ -215,7 +220,7 @@ const StoreInfoUpdate = ({ location }) => {
                       name={[field.name, 'price']}
                       rules={[{ required: true, message: 'Missing price' }]}
                     >
-                      <Input placeholder="가격" />
+                      <Input placeholder="가격" type="number" />
                     </StyledForm.Item>
                     <MinusCircleOutlined onClick={() => remove(field.name)} />
                   </Space>

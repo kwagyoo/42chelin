@@ -12,7 +12,6 @@ const Wrapper = styled.div`
   min-height: 100vh;
 `;
 const SearchInput = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
   position: relative;
   overflow: hidden;
   height: 58px;
@@ -37,8 +36,6 @@ const SearchInput = styled.div`
 `;
 
 const StoreInfoWarp = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
-
   margin-bottom: 0;
   padding: 0;
   border: 0;

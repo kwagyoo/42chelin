@@ -20,7 +20,6 @@ const StoreCompactInfo = styled.div`
   }
   .storeInfo {
     width: 100%;
-    font-family: 'Do Hyeon', sans-serif;
     padding: 5%;
     /* border-top: 1px solid;
     border-color: #778899; */

@@ -31,13 +31,11 @@ const SearchInput = styled.div`
     outline: none;
   }
   input::placeholder {
-    font-family: 'Do Hyeon', sans-serif;
   }
 `;
 const MainBody = styled.div`
   width: 80%;
   margin: 0 auto;
-  font-family: 'Do Hyeon', sans-serif;
 `;
 
 const SearchPage = ({ history, location }) => {

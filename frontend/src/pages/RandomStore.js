@@ -13,7 +13,6 @@ const MainBody = styled.div`
   background-color: #fafafa;
 `;
 const Container = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
   width: 100vw;
   height: 100%;
   display: flex;

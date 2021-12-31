@@ -40,7 +40,6 @@ const SearchInput = styled.div`
     outline: none;
   }
   input::placeholder {
-    font-family: 'Do Hyeon', sans-serif;
   }
 `;
 
@@ -60,7 +59,6 @@ const MainBody = styled.div`
   width: 80%;
   min-height: 100vh;
   margin: 0 auto;
-  font-family: 'Do Hyeon', sans-serif;
   .sort-opt {
     display: flex;
     ul {
@@ -172,6 +170,7 @@ const StorelistPage = ({ history }) => {
       setEndScroll(false);
     };
     if (endScroll) apiTest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endScroll]);
 
   const onChange = useCallback((e) => {
@@ -252,9 +251,6 @@ const StorelistPage = ({ history }) => {
         />
       </SearchInput>
       <MainBody>
-        <OptionList>
-          <div className="store-count">가게 개수 : {stores.length}</div>
-        </OptionList>
         <div className="sort-opt">
           <ToggleButton className="list-mode">
             <div

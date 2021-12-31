@@ -19,7 +19,6 @@ const StyledForm = styled.form`
   margin: 10px auto 0px;
   width: 550px;
   padding: 0 10px 0 10px;
-  font-family: 'Do Hyeon', sans-serif;
   @media (max-width: 550px) {
     margin-top: 10px;
     width: 100vw;
