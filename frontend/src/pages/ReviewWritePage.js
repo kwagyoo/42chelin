@@ -154,7 +154,10 @@ const ReviewWritePage = ({ location }) => {
   };
 
   const handleSubmitBtn = async (data, values) => {
-    const combineData = { ...data, menus: [...values.menus] };
+    const combineData = {
+      ...data,
+      menus: values.menus ? [...values.menus] : [],
+    };
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('게시글 저장중..');
