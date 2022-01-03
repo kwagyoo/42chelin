@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 `;
 const ReviewList = styled.div`
   display: flex;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1px solid #d9d9d9;
   margin-top: 20px;
   .review_user_name {
     width: 15%;
