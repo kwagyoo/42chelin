@@ -108,7 +108,6 @@ const StoreInfoUpdate = ({ location }) => {
         (menu, index, self) =>
           index === self.findIndex((t) => t.menu === menu.menu),
       );
-    console.log(menus);
     const combineData = {
       menus,
       storeID: store.id,

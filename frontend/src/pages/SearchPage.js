@@ -20,6 +20,8 @@ const SearchInput = styled.div`
   background-color: #ffffff;
   border-radius: 25px;
   border: 1.5px solid #550055;
+  margin-bottom: 5px;
+
   input {
     margin-left: 30px;
     margin-top: 5px;

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import SignBlock from '../block/SignBlock';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
+import AntModal from '../common/Modal';
 import TokenVerify from '../common/TokenVerify';
 import logo from '../image/Logo.png';
 import { fetchLogin } from '../lib/api/auth';
@@ -20,6 +21,8 @@ const LoginPage = () => {
   });
   const { id, password } = inputs; // 비구조화 할당을 통해 값 추출
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+  const PwURL =
+    'https://api.intra.42.fr/oauth/authorize?client_id=a39797236e27fca852dea7a924abfedddc02aa178765598d3be2e4f47a56aecb&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Freset&response_type=code';
   const [isError, setIsError] = useState(false);
 
   const onChange = (e) => {
@@ -34,6 +37,7 @@ const LoginPage = () => {
     try {
       e.preventDefault();
       setIsError(false);
+      setLoading(true);
       const res = await fetchLogin(id, password);
       sessionStorage.setItem('clusterName', id);
       const accToken = res.data.access_token;
@@ -60,21 +64,23 @@ const LoginPage = () => {
         });
       }
       setTimeout(() => {
-        console.log('hello');
         TokenVerify();
       }, 1000 * 60 * 15 + 1000);
       localStorage.setItem('autoLogin', e.target.autoLogin.checked);
       history.push('/');
     } catch (e) {
-      console.error('1', e);
       setIsError(true);
-      setLoading((loading) => !loading);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   };
 
   return (
     <>
       <Header />
+      {loading && <AntModal visible="true" loadingText={'로그인중..'} />}
       <SignBlock onSubmit={onLogin}>
         <img src={logo} alt="logo" />
         <div className="idForm">
@@ -109,8 +115,10 @@ const LoginPage = () => {
             textAlign: 'left',
           }}
         >
-          <input type="checkbox" name="autoLogin" />
-          <label style={{ marginLeft: '5px' }}>로그인 상태 유지</label>
+          <input type="checkbox" name="autoLogin" id="autoLogin" />
+          <label htmlFor="autoLogin" style={{ marginLeft: '5px' }}>
+            로그인 상태 유지
+          </label>
         </div>
 
         <div
@@ -122,7 +130,9 @@ const LoginPage = () => {
           Login
         </button>
         <div>
-          <a href={URL}>Don't you have ID?</a>
+          <a href={URL}>아이디가 없으신가요?</a>
+          <br />
+          <a href={PwURL}>비밀번호 초기화</a>
         </div>
       </SignBlock>
     </>

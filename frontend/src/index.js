@@ -9,6 +9,7 @@ import { Integrations } from '@sentry/tracing';
 import { persistStore } from 'redux-persist'; // 추가
 import { PersistGate } from 'redux-persist/integration/react'; // 추가
 import store from './module/store';
+import ScrollToTop from './common/ScrollRestoration';
 
 Sentry.init({
   dsn: 'https://3fc703a2984645aa91f00d13ae243bed@o1039410.ingest.sentry.io/6008337',
@@ -26,6 +27,7 @@ ReactDOM.render(
     {/* https://github.com/remix-run/history/issues/822 */}
     <PersistGate persistor={persistor}>
       <BrowserRouter>
+        <ScrollToTop />
         <App />
       </BrowserRouter>
     </PersistGate>

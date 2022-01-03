@@ -11,6 +11,7 @@ import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons';
 import StoreMap from '../common/StoreMap';
 import Header from '../common/Header';
+import SkeletonDiv from '../common/Skeleton';
 
 const ListBody = styled.div`
   background-color: #fafafa;
@@ -29,6 +30,8 @@ const SearchInput = styled.div`
   background-color: #ffffff;
   border-radius: 25px;
   border: 1.5px solid gray;
+  margin-bottom: 5px;
+
   input {
     margin-left: 30px;
     margin-top: 5px;
@@ -40,18 +43,6 @@ const SearchInput = styled.div`
     outline: none;
   }
   input::placeholder {
-  }
-`;
-
-const OptionList = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 80vw;
-  height: 30px;
-  margin-top: 5px;
-
-  .store-count {
-    width: 100px;
   }
 `;
 
@@ -157,21 +148,10 @@ const StorelistPage = ({ history }) => {
   const [stores, setStores] = useState([]);
   const [lastEval, setLastEval] = useState(undefined);
   const [endScroll, setEndScroll] = useState(false);
-  const dispatch = useDispatch();
+  const [isLoad, setIsLoad] = useState(false);
 
-  useEffect(() => {
-    const apiTest = async () => {
-      if (stores.length > 0 && !lastEval) return;
-      const res = await searchStore({ lastEvaluatedKey: lastEval });
-      const data = res.data.body;
-      setStores((prev) => [...prev, ...data]);
-      setLastEval(res.data.LastEvaluatedKey);
-      dispatch(getList(data));
-      setEndScroll(false);
-    };
-    if (endScroll) apiTest();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endScroll]);
+  const dispatch = useDispatch();
+  const scrollRef = useRef(null);
 
   const onChange = useCallback((e) => {
     setText(e.target.value);
@@ -193,8 +173,6 @@ const StorelistPage = ({ history }) => {
     },
     [history, text],
   );
-
-  const scrollRef = useRef(null);
   /* 인터섹션 callback */
   const onIntersect = async ([entry], observer) => {
     if (entry.isIntersecting) {
@@ -205,6 +183,23 @@ const StorelistPage = ({ history }) => {
       }, 1500);
     }
   };
+
+  useEffect(() => {
+    const apiTest = async () => {
+      if (stores.length > 0 && !lastEval) {
+        setEndScroll(false);
+        return;
+      }
+      const res = await searchStore({ lastEvaluatedKey: lastEval });
+      const data = res.data.body;
+      setStores((prev) => [...prev, ...data]);
+      setLastEval(res.data.LastEvaluatedKey);
+      dispatch(getList(data));
+      setEndScroll(false);
+    };
+    if (endScroll) apiTest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endScroll]);
 
   useEffect(() => {
     let observer;
@@ -326,7 +321,7 @@ const StorelistPage = ({ history }) => {
                 ))}
             </Row>
             <div className="infinite-scroll-area" ref={scrollRef}>
-              여기
+              {endScroll ? <SkeletonDiv /> : ''}
             </div>
           </>
         ) : (

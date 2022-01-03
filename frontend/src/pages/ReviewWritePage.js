@@ -125,7 +125,6 @@ const ReviewWritePage = ({ location }) => {
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState('');
   const history = useHistory();
   const { register, handleSubmit, setValue } = useForm();
 
@@ -142,6 +141,14 @@ const ReviewWritePage = ({ location }) => {
         `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
       );
     } catch (e) {
+      console.error(e.response);
+      if (
+        e.response.data.errorMessage === 'Cannot post two reviews in one day.'
+      ) {
+        alert('동일한가게에는 하루 한개의 리뷰만 올릴 수 있습니다');
+        history.goBack();
+        return;
+      }
       if (e.response.status < 500) {
         if (e.response.status === 401) {
           alert('기능을 사용할 권한이 없습니다. 새로고침을 진행합니다.');
@@ -160,7 +167,6 @@ const ReviewWritePage = ({ location }) => {
     };
     if (!loading) {
       setLoading((loading) => !loading);
-      setLoadingText('게시글 저장중..');
       await sendReview({ ...combineData, images: files });
     }
     setLoading((loading) => !loading);
@@ -206,7 +212,7 @@ const ReviewWritePage = ({ location }) => {
     <Body>
       <Header />
       <main>
-        {loading && <AntModal visible="true" loadingText={loadingText} />}
+        {loading && <AntModal visible="true" loadingText={'게시글 저장중..'} />}
         <StyledForm
           name="dynamic_form_nest_item"
           autoComplete="off"

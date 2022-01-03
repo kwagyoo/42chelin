@@ -221,7 +221,7 @@ const Header = () => {
   }, [isLogin, checkTokenVerify]);
 
   const onLogout = () => {
-    console.log('logout event');
+    console.log('logout');
     if (isLogin) {
       localStorage.removeItem('autoLogin');
       sessionStorage.removeItem('clusterName');
