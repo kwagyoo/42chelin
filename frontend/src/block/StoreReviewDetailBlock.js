@@ -8,13 +8,13 @@ import { setMenu } from '../module/posts';
 
 const StoreItemBlock = styled.div`
   width: 100%;
-  padding-top: 5rem;
+  padding-top: 2rem;
 `;
 const StoreHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1px solid #969696;
   button {
     border: none;
     background-color: white;
@@ -25,30 +25,40 @@ const StoreHeader = styled.div`
   }
   .btn-like {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     align-items: center;
     background-color: #fafafa;
     .like-num {
+      display: flex;
+      justify-contents: center;
       margin-left: 5px;
+      font-size: 1rem;
     }
   }
   .store-header-title {
     display: flex;
     align-items: center;
-    .store-name {
-      font-size: 25px;
-    }
   }
   .btn-review-detail {
-    font-size: 18px;
+    font-size: 1rem;
     background-color: #fafafa;
+  }
+  h2,
+  p {
+    display: block;
+    margin: 0;
   }
 `;
 
 const StyledTable = styled.table`
   padding: 10px 0;
   display: block;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1px solid #969696;
+  .menu-list-li {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+  }
   th {
     /* margin-bottom: 10px; */
   }
@@ -90,19 +100,23 @@ const StoreReviewDetail = ({
     <StoreItemBlock>
       <StoreHeader>
         <div className="store-header-title">
-          <div className="store-name">{storeList.storeName}</div>
+          <div className="store-name">
+            <h2>{storeList.storeName}</h2>
+          </div>
           {clusterName ? (
             <button
               onClick={ToggleLike}
               disabled={likeButtonDisable}
               className="btn-like"
             >
-              <div className="like-num">{storeList.storeLikes}</div>
               {isLike ? (
                 <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#c0c0c0" />
               ) : (
                 <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
               )}
+              <div className="like-num">
+                <p>{storeList.storeLikes}</p>
+              </div>
             </button>
           ) : (
             <button className="btn-like">
@@ -147,15 +161,9 @@ const StoreReviewDetail = ({
                 {storeList.storeMenus.length > 0 ? (
                   storeList.storeMenus.map((menu, idx) => {
                     return (
-                      <li key={idx}>
-                        <span>{menu.menu}</span>
-                        <span
-                          style={{
-                            paddingLeft: '25px',
-                          }}
-                        >
-                          {menu.price}
-                        </span>
+                      <li key={idx} className="menu-list-li">
+                        <div>김밥</div>
+                        <div>3000원</div>
                       </li>
                     );
                   })
