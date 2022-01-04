@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import Carousel from '../common/Carousel';
+import Carousel from '../common/Carousel copy';
 import StoreReviewDetailBlock from '../block/StoreReviewDetailBlock';
 import StoreReviewListBlock from '../block/StoreReviewListBlock';
 import { getStoreDetail } from '../lib/api/store';
@@ -23,6 +23,11 @@ const FlexWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  #map {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 15%;
+  }
 
   @media (max-width: 960px) {
     width: 100%;
@@ -204,7 +209,14 @@ const StoreDetailPage = ({ location }) => {
           <ContentsWrapper>
             <StoreListBlock>
               <FlexWrapper className="flexwrapper">
-                <Carousel images={storeList.storeImages} />
+                <Carousel
+                  images={storeList.storeImages.slice(
+                    0,
+                    storeList.storeImages.length > 10
+                      ? 10
+                      : storeList.storeImages.length,
+                  )}
+                />
                 <div id="map" />
               </FlexWrapper>
               <StoreReviewDetailBlock
