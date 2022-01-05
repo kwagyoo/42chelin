@@ -1,7 +1,10 @@
 import { Divider, Drawer, Space, Tabs } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
+import { useState } from 'react';
 import styled from 'styled-components';
 import StoreBlock from '../block/StoreBlock';
+import { updatePassword } from '../lib/api/auth';
+import PasswordModal from './PasswordModal';
 
 const StyledContent = styled(Content)`
   width: 330px;
@@ -36,7 +39,26 @@ const StyledTabs = styled(Tabs)``;
 
 const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
   const { TabPane } = Tabs;
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const visited = JSON.parse(localStorage.getItem('visited'));
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  const onChange = async (values) => {
+    const data = {
+      currPassword: values.currPassword,
+      prevPassword: values.prevPassword,
+      clusterName: sessionStorage.getItem('clusterName'),
+    };
+    try {
+      await updatePassword(data);
+      alert('비밀번호 변경을 성공했습니다.');
+      setIsModalVisible(false);
+    } catch {
+      alert('비밀번호 변경을 실패했습니다.');
+    }
+  };
 
   return (
     <>
@@ -46,6 +68,13 @@ const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
         onClose={onClose}
         visible={visible}
       >
+        <PasswordModal
+          visible={isModalVisible}
+          onChange={onChange}
+          onCancel={() => {
+            setIsModalVisible(false);
+          }}
+        />
         <StyledSpace direction="vertical">
           <StyledContent>
             <div>클러스터 ID : {name}</div>
@@ -53,7 +82,7 @@ const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
           <StyledSpace>
             <StyledButton onClick={onLogout}>로그아웃</StyledButton>
             <Divider type="vertical" />
-            <StyledButton>비밀번호 변경</StyledButton>
+            <StyledButton onClick={showModal}>비밀번호 변경</StyledButton>
           </StyledSpace>
           <Divider />
           <StyledSpace>

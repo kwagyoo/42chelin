@@ -13,6 +13,12 @@ export const fetchUser = (token) =>
     },
   });
 
+export const updatePassword = (data) =>
+  client.put(`/user/${data.clusterName}/password`, {
+    prevPassword: data.prevPassword,
+    currPassword: data.currPassword,
+  });
+
 export const fetchRegister = (code, email, password) =>
   client.post(`/user/test`, {
     code: code,
