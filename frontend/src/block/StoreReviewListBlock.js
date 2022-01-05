@@ -208,7 +208,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div className="review_img">
                   {review.images.length > 0 && (
                     <>
-                      {review.images.map((image, idx) => {
+                      {/* {review.images.map((image, idx) => {
                         if (idx >= 3) return null;
                         else {
                           return (
@@ -221,26 +221,19 @@ const StoreReviewList = ({ store, storeReviews }) => {
                             />
                           );
                         }
-                      })}
-                      <div style={{ display: 'none' }}>
-                        <Image.PreviewGroup
-                          preview={{
-                            visible,
-                            onVisibleChange: (vis) => setVisible(vis),
-                          }}
-                        >
-                          {review.images.map((image, idx) => {
-                            return (
-                              <Image
-                                width={200}
-                                height={150}
-                                src={image.imageURL}
-                                key={idx}
-                              />
-                            );
-                          })}
-                        </Image.PreviewGroup>
-                      </div>
+                      })} */}
+                      <Image.PreviewGroup>
+                        {review.images.map((image, idx) => {
+                          return (
+                            <Image
+                              width={200}
+                              height={150}
+                              src={image.imageURL}
+                              key={idx}
+                            />
+                          );
+                        })}
+                      </Image.PreviewGroup>
                     </>
                   )}
                 </div>

@@ -35,3 +35,6 @@ export const fetchLogin = (id, password) =>
 
 export const fetchRefresh = (id) =>
   client.post(`/user/${id}/refresh`, { refresh_token: getCookie('refToken') });
+
+export const fetchResetPassword = (code) =>
+  client.post(`/user/reset`, { code });
