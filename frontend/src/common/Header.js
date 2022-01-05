@@ -13,6 +13,7 @@ import logo from '../image/Logo.png';
 import { removeCookie } from './Cookie';
 import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
+import DrawerDiv from './Drawer';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -187,6 +188,15 @@ const Header = () => {
   const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
 
   const checkTokenVerify = useCallback(async () => {
     try {
@@ -293,11 +303,14 @@ const Header = () => {
           <div className="header-right">
             {isLogin ? (
               <>
-                <UserName>
-                  <p>{name}</p>
-                </UserName>
                 <Button name="리뷰 작성" to="/write" />
-                <Button name="로그아웃" onClick={onLogout} />
+                <Button name={name} onClick={showDrawer} />
+                <DrawerDiv
+                  onClose={onClose}
+                  visible={visible}
+                  name={name}
+                  onLogout={onLogout}
+                />
               </>
             ) : (
               <>

@@ -1,11 +1,7 @@
 import QueryString from 'qs';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  height: 100vh;
-`;
+import Wrapper from '../common/Wrapper';
 
 const PwResetPage = ({ location }) => {
   const history = useHistory();

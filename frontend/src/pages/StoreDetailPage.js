@@ -110,17 +110,41 @@ const StoreDetailPage = ({ location }) => {
   const [isLike, setIsLike] = useState(false);
   const [likes, setLikes] = useState(0);
   const [likeButtonDisable, setLikeButtonDisable] = useState(false);
+  const [visited, setVisited] = useState(
+    JSON.parse(localStorage.getItem('visited') || '[]'),
+  );
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
 
+  useEffect(() => {
+    //array 타입을 string형태로 바꾸기 위해 json.stringfy를 사용한다.
+    localStorage.setItem('visited', JSON.stringify(visited));
+  }, [visited]);
+
   const getStore = async () => {
     const clusterName = localStorage.getItem('clusterName');
     let res;
-
     try {
       res = await getStoreDetail({ ...query, clusterName });
-      setStoreList(await getImageURLsFromS3(res.data));
+      const { storeName, storeAddress, storeID } = res.data;
+      const fixedImages = await getImageURLsFromS3(res.data);
+      const data = {
+        storeName,
+        storeAddress,
+        storeID,
+        storeImage: fixedImages.storeImages[0].imageURL,
+      };
+      const dupArr = [data, ...visited];
+      const filterData = dupArr.filter((item, index) => {
+        return (
+          dupArr.findIndex((item2, j) => {
+            return item.storeID === item2.storeID;
+          }) === index
+        );
+      });
+      setVisited(filterData);
+      setStoreList(fixedImages);
       setLikes(res.data.storeLikes);
       setIsLike(res.data.isLike);
     } catch (e) {
@@ -132,7 +156,7 @@ const StoreDetailPage = ({ location }) => {
           alert('잘못된 요청입니다.');
         }
       } else alert('서버에 문제가 발생하였습니다.');
-      return e.response.status;
+      return e.response?.status;
     }
 
     try {
@@ -164,6 +188,7 @@ const StoreDetailPage = ({ location }) => {
 
   useEffect(() => {
     getStore();
+
     return () => {
       setStoreList('');
     };

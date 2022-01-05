@@ -148,7 +148,6 @@ const StorelistPage = ({ history }) => {
   const [stores, setStores] = useState([]);
   const [lastEval, setLastEval] = useState(undefined);
   const [endScroll, setEndScroll] = useState(false);
-  const [isLoad, setIsLoad] = useState(false);
 
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
