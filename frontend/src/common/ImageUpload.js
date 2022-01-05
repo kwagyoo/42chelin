@@ -54,6 +54,8 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
   const uploadButton = useRef(null);
 
   const onDrop = (acceptedFiles) => {
+    if (count + acceptedFiles.length > 5)
+      acceptedFiles = acceptedFiles.slice(0, 5 - count);
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); //newArray가 배열이라서 이중 배열이 되기 때문에 flat으로 1차원배열로 변환
     setCount((prevCount) => prevCount + acceptedFiles.length);
   }; //files는 왜 의존 안해도 상관없는가... 값과 배열의 차이, usecallback 함수 재생성차이

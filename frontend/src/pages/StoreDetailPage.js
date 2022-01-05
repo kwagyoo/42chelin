@@ -36,6 +36,9 @@ const FlexWrapper = styled.div`
     .carousel {
       margin: auto;
     }
+    #map {
+      flex: 1;
+    }
   }
 `;
 
