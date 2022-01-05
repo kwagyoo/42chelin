@@ -8,7 +8,7 @@ const StyledDrop = styled.div`
   border-width: 1px;
   width: 110px;
   height: 110px;
-  .dropMsg {
+  .drop_msg {
     margin-top: 40px;
     width: 110px;
 
@@ -20,26 +20,23 @@ const StyledDrop = styled.div`
 const ThumbsContainer = styled.div`
   overflow: auto;
   width: 100%;
-  max-height: 110px;
+  height: 130px;
   display: flex;
+  flex-direction: row;
   margin: 5px 0px;
+  scroll
 `;
-
-const img = {
-  width: '100px',
-  height: '100px',
-};
 
 const Thumb = styled.div`
   display: inline-block;
-  border-radius: 2;
   border: 1px solid #eaeaea;
-  margin-bottom: 8;
-  margin-right: 8;
-  width: 110;
-  height: 110;
-  padding: 4;
+  width: 110px;
+  height: 110px;
   box-sizing: border-box;
+  img {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const thumbInner = {
@@ -82,7 +79,6 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
         >
           <img
             src={file.imageURL ?? URL.createObjectURL(file)}
-            style={img}
             alt="thumbnail"
           />
         </div>
@@ -109,7 +105,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
         <StyledDrop {...getRootProps()} ref={uploadButton} maxSize={100}>
           <input {...InputProps} />
           {isDragActive ? (
-            <p className="dropMsg">이제 이미지를 놓아주세요</p>
+            <p className="drop_msg">이제 이미지를 놓아주세요</p>
           ) : (
             <div
               style={{
@@ -117,7 +113,7 @@ const ImageUpload = ({ files, count, setFiles, setCount }) => {
                 height: '40%',
               }}
             >
-              <div className="dropMsg">이미지 드랍/클릭</div>
+              <div className="drop_msg">이미지 드랍/클릭</div>
             </div>
           )}
         </StyledDrop>

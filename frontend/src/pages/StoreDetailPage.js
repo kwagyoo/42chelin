@@ -30,14 +30,8 @@ const FlexWrapper = styled.div`
   }
 
   @media (max-width: 960px) {
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
     .carousel {
       margin: auto;
-    }
-    #map {
-      flex: 1;
     }
   }
 `;
@@ -54,38 +48,6 @@ const Wrapper = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: space-between;
-  #map {
-    width: 500px;
-    height: 200px;
-  }
-  @media (max-width: 1500px) {
-    #map {
-      width: 380px;
-    }
-  }
-
-  @media (max-width: 1000px) {
-    #map {
-      width: 330px;
-    }
-  }
-
-  @media (max-width: 960px) {
-    display: flex;
-    justify-content: center;
-    #map {
-      width: 350px;
-      margin: 50px auto;
-    }
-  }
-  @media (max-width: 400px) {
-    display: flex;
-    justify-content: center;
-    #map {
-      width: 300px;
-      margin: 50px auto;
-    }
-  }
 `;
 
 const getImageURLsFromS3 = async (storeList) => {

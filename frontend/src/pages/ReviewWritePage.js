@@ -179,7 +179,7 @@ const ReviewWritePage = ({ location }) => {
         .then((res) => {
           setStore({
             placeName: res.place_name,
-            address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+            address: res.road_address_name,
             id: res.id,
             category_code: res.category_group_code,
             category_name: res.category_name,
