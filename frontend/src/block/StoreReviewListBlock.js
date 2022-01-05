@@ -2,19 +2,21 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { deleteReview } from '../lib/api/review';
-import ReviewImgView from '../block/ReviewImgViewBlock';
-import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
 import { useState } from 'react';
+import TokenVerify from '../common/TokenVerify';
+import { useHistory } from 'react-router-dom';
+
+import { Image } from 'antd';
 
 const Wrapper = styled.div`
   font-size: 15px;
 `;
 const ReviewList = styled.div`
   display: flex;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1px solid #d9d9d9;
   margin-top: 20px;
   .review_user_name {
     width: 15%;
@@ -29,13 +31,28 @@ const ReviewList = styled.div`
 const ReviewListHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  text-align: center;
   overflow: hidden;
   margin-bottom: 20px;
   margin-top: 20px;
+  .btn-review-write {
+    font-size: 18px;
+    background-color: #fafafa;
+  }
+  button {
+    border: none;
+    background-color: white;
+    :hover {
+      color: gray;
+      cursor: pointer;
+    }
+  }
 `;
 
 const ReviewDetail = styled.div`
   width: 70%;
+  height: 250px;
   display: flex;
   flex-grow: 1;
   flex-direction: row;
@@ -51,6 +68,9 @@ const ReviewDetail = styled.div`
   .review_info {
     flex-grow: 1;
     width: 90%;
+    .review_img {
+      height: 150px;
+    }
   }
   .review_info .review_text {
     height: 50px;
@@ -94,53 +114,72 @@ const ReviewDetail = styled.div`
     }
   }
 `;
-const ImgContainer = styled.div`
-  display: flex;
-  width: 90%;
-  flex-wrap: nowrap;
-  overflow: auto;
-  overflow-x: auto;
-  overflow-y: none;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  -webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
-`;
+// const ImgContainer = styled.div`
+//   display: flex;
+//   width: 90%;
+//   flex-wrap: nowrap;
+//   overflow: auto;
+//   overflow-x: auto;
+//   overflow-y: none;
+//   -ms-overflow-style: none; /* IE and Edge */
+//   scrollbar-width: none; /* Firefox */
+//   -webkit-scrollbar {
+//     display: none; /* Chrome, Safari, Opera*/
+//   }
+// `;
 
-const StoreReviewList = ({ store, storeReviews, likes }) => {
-  const history = useHistory();
+// const HiddenImg = styled(Image)`
+//   display: none;
+// `;
+
+const manageDeleteReview = async (deleteReviewData) => {
+  try {
+    await deleteReview(deleteReviewData);
+  } catch (e) {
+    if (e.response.status < 500) {
+      if (e.response.status === 401) {
+        alert('기능을 사용할 권한이 없습니다.');
+      } else {
+        alert('잘못된 요청입니다.');
+      }
+    } else alert('저장에 실패하였습니다.');
+    return e.response.status;
+  }
+};
+
+const StoreReviewList = ({ store, storeReviews }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
+  const history = useHistory();
+  const [visible, setVisible] = useState(false);
 
   const deleteStoreReview = async (review) => {
     if (!loading) {
       setLoading((loading) => !loading);
       setLoadingText('삭제중..');
-      try {
-        const userToken = localStorage.getItem('token');
-        const deleteReviewData = {
-          token: userToken,
-          storeName: store.storeName,
-          storeAddress: store.storeAddress,
-          userName: review.userName,
-          reviewDate: review.reviewDate,
-        };
-        await deleteReview(deleteReviewData);
-        history.go(0);
-      } catch (error) {
-        console.error(error);
-        alert('에러가 발생했습니다. 잠시 뒤 다시 시도해주세요.');
-      }
+      const deleteReviewData = {
+        storeID: store.storeID,
+        storeName: store.storeName,
+        storeAddress: store.storeAddress,
+        clusterName: review.clusterName,
+        reviewID: review.reviewID,
+      };
+      await TokenVerify();
+      await manageDeleteReview(deleteReviewData);
       setLoading((loading) => !loading);
+      history.push(0);
     }
   };
 
   const goUpdatePage = (review) => {
-    const { storeName, storeAddress, userName } = store;
-    dispatch(setReview({ storeName, storeAddress, userName, review }));
+    const { storeID, storeAddress, storeName } = store;
+    dispatch(setReview({ storeID, storeName, storeAddress, review }));
     history.push('/update');
+  };
+
+  const GoWritePage = () => {
+    history.push(`/write?placeName=${store.storeName}&id=${store.storeID}`);
   };
 
   return (
@@ -148,30 +187,64 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
       <AntModal visible={loading} loadingText={loadingText} />
       <ReviewListHeader>
         <div>리뷰</div>
-        <div>좋아요를 받은 개수 : {likes}</div>
+        <div>
+          <button className="btn-review-write" onClick={GoWritePage}>
+            리뷰작성
+          </button>
+        </div>
       </ReviewListHeader>
       {storeReviews &&
         storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
-            <div className="review_user_name">{review.userName}</div>
+            <div className="review_user_name">
+              {review.clusterName.substr(0, 1) +
+                '*'.repeat(review.clusterName.length - 2) +
+                review.clusterName.substr(review.clusterName.length - 1, 1)}
+            </div>
             <ReviewDetail>
               <div className="review_info">
                 <div className="Date">{review.reviewDate}</div>
                 <div className="review_text">{review.reviewText}</div>
-
-                <ImgContainer>
-                  {review.images &&
-                    review.images.map((image, idx) => (
-                      <ReviewImgView image={image.imageURL} key={idx} />
-                    ))}
-                </ImgContainer>
+                <div className="review_img">
+                  {review.images.length > 0 && (
+                    <>
+                      {/* {review.images.map((image, idx) => {
+                        if (idx >= 3) return null;
+                        else {
+                          return (
+                            <Image
+                              width={200}
+                              src={image.imageURL}
+                              preview={{ visible: false }}
+                              onClick={() => setVisible(true)}
+                              key={idx}
+                            />
+                          );
+                        }
+                      })} */}
+                      <Image.PreviewGroup>
+                        {review.images.map((image, idx) => {
+                          return (
+                            <Image
+                              width={200}
+                              height={150}
+                              src={image.imageURL}
+                              key={idx}
+                            />
+                          );
+                        })}
+                      </Image.PreviewGroup>
+                    </>
+                  )}
+                </div>
               </div>
               <div className="review_detail_buttons">
                 <button
                   onClick={() => goUpdatePage(review)}
                   className={
                     'detail_button ' +
-                    (review.userName === localStorage.getItem('username')
+                    (review.clusterName ===
+                    sessionStorage.getItem('clusterName')
                       ? null
                       : 'hide')
                   }
@@ -188,7 +261,8 @@ const StoreReviewList = ({ store, storeReviews, likes }) => {
                   onClick={() => deleteStoreReview(review)}
                   className={
                     'detail_button ' +
-                    (review.userName === localStorage.getItem('username')
+                    (review.clusterName ===
+                    sessionStorage.getItem('clusterName')
                       ? null
                       : 'hide')
                   }

@@ -3,12 +3,12 @@ import SignBlock from '../block/SignBlock';
 import logo from '../image/Logo.png';
 import queryString from 'query-string';
 import { fetchRegister } from '../lib/api/auth';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
+import AntModal from '../common/Modal';
 
 const RegisterPage = ({ location }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
   const history = useHistory();
   const [inputs, setInputs] = useState({
     email: '',
@@ -45,59 +45,62 @@ const RegisterPage = ({ location }) => {
       return;
     } else setError('');
     try {
-      const response = await fetchRegister(code, email, password);
-      console.log(response);
-      history.push('/');
+      setLoading(true);
+      await fetchRegister(code, email, password);
+      history.push('/login');
     } catch (e) {
-      console.error(e.response);
+      if (e.response.data.errorMessage) alert('동일한 계정이 이미 존재합니다');
+      history.push('/login');
     }
     setLoading((loading) => !loading);
   };
   return (
-    <SignBlock onSubmit={registerUser}>
-      <img src={logo} alt="logo" />
-      <div className="idForm">
-        <input
-          name="email"
-          tpye="email"
-          placeholder="Email"
-          className="id"
-          onChange={onChange}
-          autoComplete="email"
-          value={email}
-          required
-        ></input>
-      </div>
-      <div className="pwForm">
-        <input
-          name="password"
-          type="password"
-          placeholder="pw"
-          className="pw"
-          onChange={onChange}
-          autoComplete="on"
-          value={password}
-          required
-        ></input>
-      </div>
-      <div className="pwConfirmForm">
-        <input
-          name="passwordConfirm"
-          type="password"
-          placeholder="pw 확인"
-          className="pwConfirm"
-          onChange={onChange}
-          autoComplete="on"
-          value={passwordConfirm}
-          required
-        ></input>
-      </div>
-      <div>{error}</div>
-      <button className="btn" disabled={loading}>
-        Register
-      </button>
-      <div>Don't you have ID?</div>
-    </SignBlock>
+    <>
+      {loading && <AntModal visible="true" loadingText={'회원가입 중..'} />}
+      <SignBlock onSubmit={registerUser}>
+        <img src={logo} alt="logo" />
+        <div className="idForm">
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            className="id"
+            onChange={onChange}
+            autoComplete="email"
+            value={email}
+            required
+          ></input>
+        </div>
+        <div className="pwForm">
+          <input
+            name="password"
+            type="password"
+            placeholder="pw"
+            className="pw"
+            onChange={onChange}
+            autoComplete="on"
+            value={password}
+            required
+          ></input>
+        </div>
+        <div className="pwConfirmForm">
+          <input
+            name="passwordConfirm"
+            type="password"
+            placeholder="pw 확인"
+            className="pwConfirm"
+            onChange={onChange}
+            autoComplete="on"
+            value={passwordConfirm}
+            required
+          ></input>
+        </div>
+        <div>{error}</div>
+        <button className="btn" disabled={loading}>
+          Register
+        </button>
+      </SignBlock>
+    </>
   );
 };
 

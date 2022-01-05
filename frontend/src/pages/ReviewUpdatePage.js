@@ -19,7 +19,6 @@ const StyledForm = styled.form`
   margin: 10px auto 0px;
   width: 550px;
   padding: 0 10px 0 10px;
-  font-family: 'Do Hyeon', sans-serif;
   @media (max-width: 550px) {
     margin-top: 10px;
     width: 100vw;
@@ -101,64 +100,73 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const ReviewUpdatePage = ({ history, location }) => {
+const updateStoreReview = async (path, data, history) => {
+  try {
+    const newImages = uploadImagesToS3(
+      data.storeImages.filter((image) => image.imageURL === undefined),
+    );
+    await updateReview(path, {
+      ...data,
+      reviewImages: [
+        ...data.storeImages
+          .filter((image) => image.imageURL)
+          .map((image) => image.image),
+        ...newImages,
+      ],
+    });
+    history.push(
+      `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+    );
+    return 200;
+  } catch (e) {
+    if (e.response.status < 500) {
+      if (e.response.status === 403) {
+        alert('토큰이 만료되었습니다. 새로고침을 진행합니다.');
+        history.go(0);
+      } else if (e.response.status === 401) {
+        alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+        history.push(
+          `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+        );
+      } else {
+        alert('잘못된 요청입니다.');
+      }
+    } else alert('저장에 실패하였습니다.');
+    return e.response.status;
+  }
+};
+
+const ReviewUpdatePage = ({ history }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
   const [loadingText, setLoadingText] = useState('');
-
   const { register, handleSubmit, setValue } = useForm();
-
   const reviewText = useInput(
     review ? review.review.reviewText : '',
     (value) => value.length < 1000,
   );
-
-  const UpdateStoreReview = async (data) => {
-    try {
-      const userToken = localStorage.getItem('token');
-      const newImages = uploadImagesToS3(
-        data.storeImages.filter((image) => image.imageURL === undefined),
-      );
-      await updateReview({
-        ...data,
-        token: userToken,
-        reviewImages: [
-          ...data.storeImages
-            .filter((image) => image.imageURL)
-            .map((image) => image.image),
-          ...newImages,
-        ],
-      });
-      history.push(
-        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
-      );
-    } catch (e) {
-      if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
-      else alert('저장에 실패하였습니다.');
-      console.error(e.response.data.message);
-    }
-  };
-
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
       setLoadingText('수정중..');
-      try {
-        await UpdateStoreReview({ ...data, storeImages: files });
-      } catch (e) {
-        alert(e.response.data.message);
-      }
+      await updateStoreReview(
+        {
+          storeID: review.storeID,
+          reviewID: review.review.reviewID,
+        },
+        { ...data, storeImages: files },
+        history,
+      );
       setLoading((loading) => false);
     }
   };
 
   useEffect(() => {
     if (review) {
-      setValue('userName', review.review.userName);
+      setValue('clusterName', review.review.clusterName);
       setValue('reviewDate', review.review.reviewDate);
-      setValue('storeName', review.storeName);
       setValue('storeAddress', review.storeAddress);
       setFiles(review.review.images);
     } else {
@@ -208,12 +216,12 @@ const ReviewUpdatePage = ({ history, location }) => {
             />
           </div>
           <div className="btn-group">
-            <Button name="submit" disabled={loading}></Button>
+            <Button name="submit" disabled={loading} />
             <Button
               name="cancel"
               disabled={loading}
               onClick={() => history.push('/')}
-            ></Button>
+            />
           </div>
         </StyledForm>
       </main>

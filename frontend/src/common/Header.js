@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -10,6 +10,9 @@ import {
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
+import { removeCookie } from './Cookie';
+import TokenVerify from './TokenVerify';
+import client from '../lib/api/client';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -26,7 +29,6 @@ const Wrapper = styled.div`
   display: flex;
   overflow: auto;
   align-items: center;
-  font-family: 'Do Hyeon', sans-serif;
   font-size: 20px;
   font-style: bold;
   .title {
@@ -182,23 +184,55 @@ const Spacer = styled.div`
 `;
 
 const Header = () => {
-  const name = localStorage.getItem('username');
-  const [isLogin, setisLogin] = useState('');
+  const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const checkTokenVerify = useCallback(async () => {
+    try {
+      if (!isLogin) return;
+      await TokenVerify();
+      console.log('refresh success');
+    } catch (err) {
+      console.error('갱신 실패 ', err.message);
+      sessionStorage.removeItem('clusterName');
+      removeCookie('accToken');
+      removeCookie('refToken');
+      setName('');
+      setIsLogin(false);
+    }
+  }, [isLogin]);
 
   useEffect(() => {
-    if (!isLogin) setisLogin(localStorage.getItem('token'));
-  }, [isLogin]);
-  const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+    if (!isLogin) {
+      const user = sessionStorage.getItem('clusterName');
+      if (user) {
+        setIsLogin(true);
+        setName(user);
+      }
+    } else {
+      const timer = setInterval(() => {
+        checkTokenVerify();
+      }, 1000 * 60);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [isLogin, checkTokenVerify]);
 
   const onLogout = () => {
+    console.log('logout');
     if (isLogin) {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      setisLogin('');
+      localStorage.removeItem('autoLogin');
+      sessionStorage.removeItem('clusterName');
+      delete client.defaults.headers.common['Authorization'];
+      setIsLogin(false);
+      removeCookie('accToken');
+      removeCookie('refToken');
       alert('로그아웃 되었습니다.');
     }
   };
+
   return (
     <React.Fragment>
       <HeaderBlock>
@@ -229,7 +263,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <a href={URL}>
+                <a href="/login">
                   <FontAwesomeIcon
                     icon={faSignInAlt}
                     style={{ color: 'black', width: '30px', height: '30px' }}
@@ -266,10 +300,9 @@ const Header = () => {
                 <Button name="로그아웃" onClick={onLogout} />
               </>
             ) : (
-              <Button
-                name="로그인"
-                onClick={() => window.location.replace(URL)}
-              />
+              <>
+                <Button name="로그인" to="/login" />
+              </>
             )}
           </div>
         </Wrapper>

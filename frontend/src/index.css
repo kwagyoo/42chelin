@@ -8,11 +8,60 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  font-family: 'Noto Sans CJK KR' !important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
+h2 {
+  display: block;
+  font-size: 1.3rem;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
 #root {
   min-width: 320px;
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: 100;
+  src: url('styles/fonts/NotoSansKR-Light.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Light.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Light.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: normal;
+  src: url('styles/fonts/NotoSansKR-Regular.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Regular.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Regular.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: 500;
+  src: url('styles/fonts/NotoSansKR-Medium.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Medium.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Medium.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: bold;
+  src: url('styles/fonts/NotoSansKR-Bold.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Bold.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Bold.otf') format('truetype');
 }

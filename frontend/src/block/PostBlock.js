@@ -20,21 +20,19 @@ const StoreCompactInfo = styled.div`
   }
   .storeInfo {
     width: 100%;
-    font-family: 'Do Hyeon', sans-serif;
     padding: 5%;
     /* border-top: 1px solid;
     border-color: #778899; */
     h2 {
       width: 100%;
-      height: 3vh;
       overflow: hidden;
+      margin-bottom: 0;
     }
     .storeAddress {
       color: gray;
     }
   }
   .storeCount {
-    font-size: 13px;
     display: flex;
     flex-direction: column;
     padding-right: 5px;
@@ -86,10 +84,15 @@ const PostBlock = ({ src, delay, store }) => {
           />
           <div className="storeCount">
             <span>
-              <FontAwesomeIcon icon={fasFaHeart} size="lg" color="#8E8E8E" />
-              {' ' + store.storeLikes}
+              <FontAwesomeIcon
+                icon={fasFaHeart}
+                size="lg"
+                color="#8E8E8E"
+                style={{ margin: '0 5px' }}
+              />
+              {store.storeLikes}
             </span>
-            <span>리뷰 ({store?.storeReviews})</span>
+            <span>리뷰 {store?.storeReviews}</span>
           </div>
         </div>
       </animated.article>

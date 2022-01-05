@@ -9,6 +9,8 @@ import { getStoreDetail } from '../lib/api/store';
 import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
+import { useHistory } from 'react-router-dom';
+import TokenVerify from '../common/TokenVerify';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -40,7 +42,6 @@ const ContentsWrapper = styled.div`
 `;
 
 const Wrapper = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
   background-color: #fafafa;
   min-height: 100vh;
   display: flex;
@@ -104,21 +105,38 @@ const getImageURLsFromS3 = async (storeList) => {
 };
 
 const StoreDetailPage = ({ location }) => {
+  const history = useHistory();
   const [storeList, setStoreList] = useState(null);
   const [isLike, setIsLike] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [likeButtonDisable, setLikeButtonDisable] = useState(false);
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
 
   const getStore = async () => {
+    const clusterName = localStorage.getItem('clusterName');
+    let res;
+
     try {
-      const userName = localStorage.getItem('username');
-      const res = await getStoreDetail({ ...query, userName });
-      setStoreList(await getImageURLsFromS3(res.data.body));
-      setLikes(res.data.body.storeLikes);
-      setIsLike(res.data.body.isLike);
-      const storeLocation = res.data.body.storeLocation;
+      res = await getStoreDetail({ ...query, clusterName });
+      setStoreList(await getImageURLsFromS3(res.data));
+      setLikes(res.data.storeLikes);
+      setIsLike(res.data.isLike);
+    } catch (e) {
+      if (e.response?.status < 500) {
+        if (e.response?.status === 403) {
+          alert('토큰이 만료되었습니다. 새로고침을 진행합니다.');
+          history.go(0);
+        } else {
+          alert('잘못된 요청입니다.');
+        }
+      } else alert('서버에 문제가 발생하였습니다.');
+      return e.response.status;
+    }
+
+    try {
+      const storeLocation = res.data.storeLocation;
       var container = document.getElementById('map');
       var options = {
         center: new kakao.maps.LatLng(
@@ -140,9 +158,10 @@ const StoreDetailPage = ({ location }) => {
       });
       marker.setMap(map);
     } catch (e) {
-      alert(e.response.data.message);
+      console.error(e);
     }
   };
+
   useEffect(() => {
     getStore();
     return () => {
@@ -152,19 +171,28 @@ const StoreDetailPage = ({ location }) => {
   }, []);
 
   const ToggleLike = async () => {
+    if (likeButtonDisable) return;
     setIsLike(!isLike);
+
+    setLikeButtonDisable(true);
+    setTimeout(() => {
+      setLikeButtonDisable(false);
+    }, 1000);
+
+    if (isLike) setLikes(likes - 1);
+    else setLikes(likes + 1);
     const data = {
-      token: localStorage.getItem('token'),
-      storeName: storeList.storeName,
-      storeAddress: storeList.storeAddress,
-      userName: localStorage.getItem('username'),
+      storeID: storeList.storeID,
+      clusterName: sessionStorage.getItem('clusterName'),
       isLike: !isLike,
     };
     try {
       const res = await toggleLikeStore(data);
-      setLikes(res.data.body.likes);
+      setLikes(res.data.likes);
     } catch (e) {
-      alert(e.response.data.message);
+      console.error(e.response.data.message);
+      if (e.response.status === 403) TokenVerify();
+      setIsLike(isLike);
     }
   };
 
@@ -183,12 +211,12 @@ const StoreDetailPage = ({ location }) => {
                 storeList={storeList}
                 ToggleLike={ToggleLike}
                 isLike={isLike}
+                likeButtonDisable={likeButtonDisable}
               />
             </StoreListBlock>
             <StoreReviewListBlock
               store={storeList}
               storeReviews={storeList.storeReviews}
-              likes={likes}
             />
           </ContentsWrapper>
         )}

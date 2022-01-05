@@ -1,3 +1,4 @@
+import { getCookie } from '../../common/Cookie';
 import client from './client';
 
 export const fetchToken = (code) =>
@@ -12,9 +13,22 @@ export const fetchUser = (token) =>
     },
   });
 
-export const fetchRegister = (code, id, password) =>
+export const fetchRegister = (code, email, password) =>
   client.post(`/user/test`, {
     code: code,
-    id: id,
+    email: email,
     password: password,
   });
+
+export const fetchLogin = (id, password) =>
+  client.get(`/user/${id}/login`, {
+    params: {
+      password,
+    },
+  });
+
+export const fetchRefresh = (id) =>
+  client.post(`/user/${id}/refresh`, { refresh_token: getCookie('refToken') });
+
+export const fetchResetPassword = (code) =>
+  client.post(`/user/reset`, { code });

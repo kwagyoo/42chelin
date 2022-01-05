@@ -31,13 +31,13 @@ const StyledLoginForm = styled.form`
   }
   .idForm {
     border-bottom: 2px solid #adadad;
-    margin: 30px;
+    margin: 15px 30px 15px 30px;
     padding: 10px 10px;
   }
 
   .pwForm {
     border-bottom: 2px solid #adadad;
-    margin: 30px;
+    margin: 15px 30px 15px 30px;
     padding: 10px 10px;
   }
   .pwConfirmForm {
@@ -80,7 +80,7 @@ const StyledLoginForm = styled.form`
     position: relative;
     left: 40%;
     transform: translateX(-50%);
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     width: 80%;
     height: 40px;
     background: linear-gradient(125deg, #81ecec, #6c5ce7, #81ecec);

@@ -114,7 +114,7 @@ const StoreMap = ({ storeList, history }) => {
         // 마커 위에 인포윈도우를 표시합니다
         if (!store) return;
         history.push(
-          `/detail?storeName=${store.storeName}&storeAddress=${store.storeAddress}`,
+          `/detail?storeID=${store.storeID}&storeAddress=${store.storeAddress}`,
         );
       });
     });

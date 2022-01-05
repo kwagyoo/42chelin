@@ -1,21 +1,23 @@
 import client from './client';
 
-export const createStore = (request) => client.post(`/stores/save`, request);
+export const writeReview = (request) =>
+  client.post(`/store/${request.storeID}/review`, request);
 
-export const getAllStore = () => client.get(`/stores`);
+export const updateStoreDetail = (request) =>
+  client.put(`/store/${request.storeID}`, request);
 
-export const searchStore = (storeName) =>
-  client.get(`/search`, {
+export const searchStore = ({ storeName, lastEvaluatedKey }) =>
+  client.get(`store/search`, {
     params: {
       storeName: storeName,
+      lastEvaluatedKey,
     },
   });
 
 export const getStoreDetail = (request) =>
-  client.get(`/stores/detail`, {
+  client.get(`/store/${request.storeID}/`, {
     params: {
-      userName: request.userName,
-      storeName: request.storeName,
+      clusterName: request.clusterName,
       storeAddress: request.storeAddress,
     },
   });
@@ -23,12 +25,9 @@ export const getStoreDetail = (request) =>
 export const fetchRandomStore = () => client.get(`/store/random`);
 
 export const toggleLikeStore = (request) => {
-  const { token, storeName, storeAddress, userName, isLike } = request;
-  return client.post(`/stores/like`, {
-    token: token,
-    storeName: storeName,
-    storeAddress: storeAddress,
-    userName: userName,
+  const { clusterName, isLike } = request;
+  return client.put(`/store/${request.storeID}/like`, {
+    clusterName: clusterName,
     isLike: isLike,
   });
 };
