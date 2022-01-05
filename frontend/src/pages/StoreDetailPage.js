@@ -116,7 +116,6 @@ const StoreDetailPage = ({ location }) => {
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
-
   useEffect(() => {
     //array 타입을 string형태로 바꾸기 위해 json.stringfy를 사용한다.
     localStorage.setItem('visited', JSON.stringify(visited));
@@ -127,13 +126,14 @@ const StoreDetailPage = ({ location }) => {
     let res;
     try {
       res = await getStoreDetail({ ...query, clusterName });
-      const { storeName, storeAddress, storeID } = res.data;
+      const { storeName, storeAddress, storeID, storeCategoryName } = res.data;
       const fixedImages = await getImageURLsFromS3(res.data);
       const data = {
         storeName,
         storeAddress,
         storeID,
-        storeImage: fixedImages.storeImages[0].imageURL,
+        storeCategoryName,
+        storeImage: fixedImages.storeImages[0]?.imageURL,
       };
       const dupArr = [data, ...visited];
       const filterData = dupArr.filter((item, index) => {
