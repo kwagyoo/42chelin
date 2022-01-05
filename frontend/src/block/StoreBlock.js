@@ -9,7 +9,8 @@ const StyledImg = styled.img`
 `;
 const StoreBlock = (store) => {
   const history = useHistory();
-  const { storeAddress, storeName, storeID, storeImage } = store.store;
+  const { storeAddress, storeName, storeID, storeImage, storeCategoryName } =
+    store.store;
   const goDetail = () => {
     history.push(`/detail?storeID=${storeID}&storeAddress=${storeAddress}`);
   };
@@ -20,7 +21,7 @@ const StoreBlock = (store) => {
       </Space>
       <Space direction="vertical">
         <div>{storeName}</div>
-        <div>{storeAddress}</div>
+        <div>{storeCategoryName}</div>
       </Space>
     </Space>
   );
