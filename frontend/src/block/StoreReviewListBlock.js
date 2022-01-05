@@ -154,7 +154,6 @@ const StoreReviewList = ({ store, storeReviews }) => {
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
   const history = useHistory();
-  const [visible, setVisible] = useState(false);
 
   const deleteStoreReview = async (review) => {
     if (!loading) {

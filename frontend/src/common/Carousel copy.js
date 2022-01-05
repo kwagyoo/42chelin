@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import CarouselImgBlock from '../block/CarouselImgBlock';
 import { useEffect, useState } from 'react';
-import { Carousel, Icon } from 'antd';
+import { Carousel } from 'antd';
 
 const Container = styled.div`
   width: 500px;

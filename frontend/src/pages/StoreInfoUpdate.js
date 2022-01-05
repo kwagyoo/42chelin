@@ -92,7 +92,7 @@ const StoreInfoUpdate = ({ location }) => {
   });
   const [form] = Form.useForm();
   useEffect(() => {
-    const menu = menus.menus.map((item, idx) => {
+    const menu = menus.menus?.map((item, idx) => {
       return { key: idx, menu: item.menu, price: item.price };
     });
     form.setFieldsValue({ menus: menu });

@@ -2,6 +2,7 @@ import QueryString from 'qs';
 import { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Wrapper from '../common/Wrapper';
+import { fetchResetPassword } from '../lib/api/auth';
 
 const PwResetPage = ({ location }) => {
   const history = useHistory();
