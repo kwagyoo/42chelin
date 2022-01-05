@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import Carousel from '../common/Carousel';
+import Carousel from '../common/Carousel copy';
 import StoreReviewDetailBlock from '../block/StoreReviewDetailBlock';
 import StoreReviewListBlock from '../block/StoreReviewListBlock';
 import { getStoreDetail } from '../lib/api/store';
@@ -23,11 +23,13 @@ const FlexWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  #map {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 15%;
+  }
 
   @media (max-width: 960px) {
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
     .carousel {
       margin: auto;
     }
@@ -46,38 +48,6 @@ const Wrapper = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: space-between;
-  #map {
-    width: 500px;
-    height: 200px;
-  }
-  @media (max-width: 1500px) {
-    #map {
-      width: 380px;
-    }
-  }
-
-  @media (max-width: 1000px) {
-    #map {
-      width: 330px;
-    }
-  }
-
-  @media (max-width: 960px) {
-    display: flex;
-    justify-content: center;
-    #map {
-      width: 350px;
-      margin: 50px auto;
-    }
-  }
-  @media (max-width: 400px) {
-    display: flex;
-    justify-content: center;
-    #map {
-      width: 300px;
-      margin: 50px auto;
-    }
-  }
 `;
 
 const getImageURLsFromS3 = async (storeList) => {
@@ -229,7 +199,14 @@ const StoreDetailPage = ({ location }) => {
           <ContentsWrapper>
             <StoreListBlock>
               <FlexWrapper className="flexwrapper">
-                <Carousel images={storeList.storeImages} />
+                <Carousel
+                  images={storeList.storeImages.slice(
+                    0,
+                    storeList.storeImages.length > 10
+                      ? 10
+                      : storeList.storeImages.length,
+                  )}
+                />
                 <div id="map" />
               </FlexWrapper>
               <StoreReviewDetailBlock

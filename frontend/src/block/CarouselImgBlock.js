@@ -6,9 +6,10 @@ const CardBox = styled.div`
 `;
 
 const CardImg = styled.img`
-  width: 100%;
+  margin: 0 auto;
   overflow-y: hidden;
   height: 200px;
+  width: 200px;
   object-fit: cover;
 `;
 

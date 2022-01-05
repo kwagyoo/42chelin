@@ -19,9 +19,9 @@ const ReviewList = styled.div`
   border-bottom: 1px solid #d9d9d9;
   margin-top: 20px;
   .review_user_name {
-    width: 15%;
-    font-size: 15px;
     flex-grow: 0;
+    flex-basis: 10%;
+    font-size: 15px;
     @media (max-width: 550px) {
       padding-right: 25%;
     }
@@ -61,14 +61,14 @@ const ReviewDetail = styled.div`
   .Date {
     color: #9b9b9b;
   }
-  img {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
   .review_info {
     flex-grow: 1;
     width: 90%;
     .review_img {
+      display: flex;
+      flex-direction: row;
+      overflow-x: scroll;
+      overflow-y: auto;
       height: 150px;
     }
   }
@@ -81,7 +81,9 @@ const ReviewDetail = styled.div`
     display: flex;
     flex-direction: row;
     flex-grow: 0;
+    flex-basis: 10%;
     align-items: start;
+    justify-content: flex-end;
   }
   .detail_button p {
     visibility: visible;
@@ -102,7 +104,7 @@ const ReviewDetail = styled.div`
     display: none;
   }
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 1200px) {
     .review_detail_buttons {
       width: 60px;
     }
@@ -208,20 +210,6 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div className="review_img">
                   {review.images.length > 0 && (
                     <>
-                      {/* {review.images.map((image, idx) => {
-                        if (idx >= 3) return null;
-                        else {
-                          return (
-                            <Image
-                              width={200}
-                              src={image.imageURL}
-                              preview={{ visible: false }}
-                              onClick={() => setVisible(true)}
-                              key={idx}
-                            />
-                          );
-                        }
-                      })} */}
                       <Image.PreviewGroup>
                         {review.images.map((image, idx) => {
                           return (
