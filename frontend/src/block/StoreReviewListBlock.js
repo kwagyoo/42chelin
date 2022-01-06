@@ -69,7 +69,7 @@ const ReviewDetail = styled.div`
       flex-direction: row;
       overflow-x: scroll;
       overflow-y: auto;
-      height: 150px;
+      height: 170px;
     }
   }
   .review_info .review_text {

@@ -78,6 +78,7 @@ const KakaoSearchPage = () => {
     try {
       await TokenVerify();
     } catch (err) {
+      console.log(err);
       if (err.message !== 'refresh') {
         console.error(err.message);
         sessionStorage.removeItem('clusterName');

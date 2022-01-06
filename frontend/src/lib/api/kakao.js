@@ -1,7 +1,7 @@
 import client from './client';
 
 export const fetchKakaoApi = (query) =>
-  client.get(`store/search/kakao`, {
+  client.get(`/store/search/kakao`, {
     params: {
       storeName: query,
     },

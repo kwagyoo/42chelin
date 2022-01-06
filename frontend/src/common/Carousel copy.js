@@ -22,11 +22,11 @@ const Container = styled.div`
       color: #708090;
     }
   }
-  @media (max-width: 1250px) {
-    width: 30%;
+  @media (max-width: 1350px) {
+    flex-basis: 40%;
   }
   @media (max-width: 960px) {
-    width: 20%;
+    flex-basis: 25%;
   }
 `;
 
@@ -67,9 +67,12 @@ const CarouselWrapper = ({ images }) => {
 
   const settings = {
     slidesToShow: 3,
+    autoplay: true,
+    infinite: true,
+    speed: 500,
     responsive: [
       {
-        breakpoint: 1250,
+        breakpoint: 1350,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,

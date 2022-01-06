@@ -8,8 +8,8 @@ const CardBox = styled.div`
 const CardImg = styled.img`
   margin: 0 auto;
   overflow-y: hidden;
-  height: 200px;
-  width: 200px;
+  height: 250px;
+  width: 250px;
   object-fit: cover;
 `;
 
