@@ -30,7 +30,7 @@ const StoreHeader = styled.div`
     background-color: #fafafa;
     .like-num {
       display: flex;
-      justify-contents: center;
+      justify-content: center;
       margin-left: 5px;
       font-size: 1rem;
     }
@@ -83,6 +83,7 @@ const StoreReviewDetail = ({
   storeList,
   ToggleLike,
   isLike,
+  likes,
   likeButtonDisable,
 }) => {
   const clusterName = sessionStorage.getItem('clusterName');
@@ -115,12 +116,12 @@ const StoreReviewDetail = ({
                 <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
               )}
               <div className="like-num">
-                <p>{storeList.storeLikes}</p>
+                <p>{likes}</p>
               </div>
             </button>
           ) : (
             <button className="btn-like">
-              <div className="like-num">{storeList.storeLikes}</div>
+              <div className="like-num">{likes}</div>
               <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
             </button>
           )}
@@ -162,8 +163,8 @@ const StoreReviewDetail = ({
                   storeList.storeMenus.map((menu, idx) => {
                     return (
                       <li key={idx} className="menu-list-li">
-                        <div>김밥</div>
-                        <div>3000원</div>
+                        <div>{menu.menu}</div>
+                        <div>{menu.price}원</div>
                       </li>
                     );
                   })

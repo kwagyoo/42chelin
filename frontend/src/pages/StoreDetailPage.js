@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import Carousel from '../common/Carousel copy';
+import Carousel from '../common/Carousel';
 import StoreReviewDetailBlock from '../block/StoreReviewDetailBlock';
 import StoreReviewListBlock from '../block/StoreReviewListBlock';
 import { getStoreDetail } from '../lib/api/store';
@@ -168,12 +168,10 @@ const StoreDetailPage = ({ location }) => {
   const ToggleLike = async () => {
     if (likeButtonDisable) return;
     setIsLike(!isLike);
-
     setLikeButtonDisable(true);
     setTimeout(() => {
       setLikeButtonDisable(false);
     }, 1000);
-
     if (isLike) setLikes(likes - 1);
     else setLikes(likes + 1);
     const data = {
@@ -213,6 +211,7 @@ const StoreDetailPage = ({ location }) => {
                 storeList={storeList}
                 ToggleLike={ToggleLike}
                 isLike={isLike}
+                likes={likes}
                 likeButtonDisable={likeButtonDisable}
               />
             </StoreListBlock>

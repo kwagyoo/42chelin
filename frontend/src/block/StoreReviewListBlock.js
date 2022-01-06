@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
 import { useState } from 'react';
-import TokenVerify from '../common/TokenVerify';
 import { useHistory } from 'react-router-dom';
 
 import { Image } from 'antd';
@@ -157,7 +156,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
 
   const deleteStoreReview = async (review) => {
     if (!loading) {
-      setLoading((loading) => !loading);
+      setLoading((loading) => true);
       setLoadingText('삭제중..');
       const deleteReviewData = {
         storeID: store.storeID,
@@ -166,10 +165,11 @@ const StoreReviewList = ({ store, storeReviews }) => {
         clusterName: review.clusterName,
         reviewID: review.reviewID,
       };
-      await TokenVerify();
       await manageDeleteReview(deleteReviewData);
-      setLoading((loading) => !loading);
-      history.push(0);
+      setLoading((loading) => false);
+      window.location.replace(
+        `/detail?storeID=${store.storeID}&storeAddress=${store.storeAddress}`,
+      );
     }
   };
 

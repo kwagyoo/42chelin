@@ -1,6 +1,6 @@
 import { Divider, Drawer, Space, Tabs } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import StoreBlock from '../block/StoreBlock';
 import { updatePassword } from '../lib/api/auth';
@@ -35,11 +35,15 @@ const StyledInfo = styled.div`
   overflow: hidden;
 `;
 
-const StyledTabs = styled(Tabs)``;
+const StyledTabs = styled(Tabs)`
+  min-width: 250px;
+`;
 
 const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
   const { TabPane } = Tabs;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isClear, setIsclear] = useState(false);
+
   const visited = JSON.parse(localStorage.getItem('visited'));
 
   const showModal = () => {
@@ -59,6 +63,10 @@ const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
       alert('비밀번호 변경을 실패했습니다.');
     }
   };
+
+  useEffect(() => {
+    setIsclear(false);
+  }, [isClear]);
 
   return (
     <>
@@ -89,7 +97,18 @@ const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
             <StyledTabs centered>
               <TabPane tab="좋아요 한 가게" key="1"></TabPane>
               <TabPane tab="최근 본 맛집" key="2">
-                {visited.map((store, idx) => {
+                <div style={{ textAlign: 'right' }}>
+                  <StyledButton
+                    style={{ color: 'gray', fontSize: '11px' }}
+                    onClick={() => {
+                      localStorage.clear();
+                      setIsclear(true);
+                    }}
+                  >
+                    clearAll
+                  </StyledButton>
+                </div>
+                {visited?.map((store, idx) => {
                   return (
                     <StyledInfo key={idx}>
                       <StoreBlock store={store} />

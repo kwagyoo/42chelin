@@ -278,7 +278,7 @@ const ReviewWritePage = ({ location }) => {
                     block
                     icon={<PlusOutlined />}
                   >
-                    Add field
+                    메뉴 추가
                   </Button>
                 </StyledForm.Item>
               </>

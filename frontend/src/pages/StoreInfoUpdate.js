@@ -146,7 +146,7 @@ const StoreInfoUpdate = ({ location }) => {
         .then((res) => {
           setStore({
             placeName: res.place_name,
-            address: res.road_address_name?.split(' ').slice(0, 2).join(' '),
+            address: res.road_address_name,
             id: res.id,
           });
         })
@@ -231,7 +231,7 @@ const StoreInfoUpdate = ({ location }) => {
                     block
                     icon={<PlusOutlined />}
                   >
-                    Add field
+                    메뉴 추가
                   </Button>
                 </StyledForm.Item>
               </>

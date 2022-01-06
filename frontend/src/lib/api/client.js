@@ -15,10 +15,11 @@ client.interceptors.response.use(
     } = error;
     console.log('axios after', error);
     if (status === 403) {
+      console.log('403 error');
       const originalRequest = config;
       await TokenVerify();
       originalRequest.headers.Authorization = `Bearer ${getCookie('accToken')}`;
-      console.log(originalRequest);
+      console.log('original', originalRequest);
       return axios(originalRequest);
     } else {
       return Promise.reject(error);

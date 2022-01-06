@@ -102,8 +102,9 @@ const useInput = (initialValue, validator) => {
 
 const updateStoreReview = async (path, data, history) => {
   try {
-    const newImages = uploadImagesToS3(
+    const newImages = await uploadImagesToS3(
       data.storeImages.filter((image) => image.imageURL === undefined),
+      path,
     );
     await updateReview(path, {
       ...data,
@@ -120,10 +121,7 @@ const updateStoreReview = async (path, data, history) => {
     return 200;
   } catch (e) {
     if (e.response.status < 500) {
-      if (e.response.status === 403) {
-        alert('토큰이 만료되었습니다. 새로고침을 진행합니다.');
-        history.go(0);
-      } else if (e.response.status === 401) {
+      if (e.response.status === 401) {
         alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
         history.push(
           `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,

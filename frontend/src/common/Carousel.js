@@ -1,13 +1,18 @@
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
 import styled from 'styled-components';
 import CarouselImgBlock from '../block/CarouselImgBlock';
 import { useEffect, useState } from 'react';
+import { Carousel } from 'antd';
 
 const Container = styled.div`
-  width: 1000px;
+  width: 500px;
+  flex-grow: 1;
+  flex-shrink: 1;
   .slick-dots {
+    margin: 0 10%;
+    li button {
+      height: 7px;
+      border: 1px solid black;
+    }
     .slick-active {
       button::before {
         color: #000000;
@@ -17,77 +22,56 @@ const Container = styled.div`
       color: #708090;
     }
   }
-  @media (max-width: 1900px) {
-    width: 60%;
-  }
-  @media (max-width: 1650px) {
-    width: 55%;
-  }
-
-  @media (max-width: 1500px) {
-    width: 50%;
-  }
-  @media (max-width: 1250px) {
-    width: 40%;
-  }
-  @media (max-width: 1070px) {
-    width: 400px;
+  @media (max-width: 1350px) {
+    flex-basis: 40%;
   }
   @media (max-width: 960px) {
-    width: 350px;
-  }
-  @media (max-width: 400px) {
-    width: 300px;
+    flex-basis: 25%;
   }
 `;
 
-// 슬라이드 CSS
-const StyledSlider = styled(Slider)`
-  width: 100%;
-  height: 100%;
-  .slick-list {
-    width: 100%;
-    margin: 0 auto;
-  }
+//   @media (max-width: 1900px) {
+//     width: 60%;
+//   }
+//   @media (max-width: 1650px) {
+//     width: 55%;
+//   }
 
-  .slick-slide div {
-    margin-left: 5px;
-    /* cursor: pointer; */
-  }
+//   @media (max-width: 1500px) {
+//     width: 50%;
+//   }
+//   @media (max-width: 1250px) {
+//     width: 40%;
+//   }
+//   @media (max-width: 1070px) {
+//     width: 400px;
+//   }
+//   @media (max-width: 960px) {
+//     width: 350px;
+//   }
+//   @media (max-width: 400px) {
+//     width: 300px;
+//   }
 
-  .slick-dots {
-  }
-
-  .slick-track {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-  .slick-prev,
-  .slick-next {
-    color: green;
-  }
-  .slick-prev:before,
-  .slick-next:before {
-    color: gray;
-  }
-`;
-
-const Carousel = ({ images }) => {
+const CarouselWrapper = ({ images }) => {
   const [modifiedImages, setModifiedImages] = useState(images);
+  useEffect(() => {
+    if (modifiedImages && modifiedImages.length < 3)
+      setModifiedImages([
+        ...modifiedImages,
+        ...Array(3 - images.length).fill('../image/default.png'),
+      ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images]);
 
   const settings = {
-    dots: true,
+    slidesToShow: 3,
+    autoplay: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true, // 자동 스크롤 사용 여부
-    autoplaySpeed: 10000, // 자동 스크롤 시 다음으로 넘어가는데 걸리는 시간 (ms)
-    draggable: true, //드래그 가능 여부
     responsive: [
       {
-        breakpoint: 1250,
+        breakpoint: 1350,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
@@ -102,26 +86,18 @@ const Carousel = ({ images }) => {
       },
     ],
   };
-  useEffect(() => {
-    if (images && images.length < 3)
-      setModifiedImages([
-        ...modifiedImages,
-        ...Array(3 - images.length).fill('../image/default.png'),
-      ]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
 
   return (
     <Container className="carousel">
-      <StyledSlider {...settings}>
+      <Carousel {...settings}>
         {modifiedImages
           ? modifiedImages.map((image, idx) => (
               <CarouselImgBlock image={image} key={idx} />
             ))
           : null}
-      </StyledSlider>
+      </Carousel>
     </Container>
   );
 };
 
-export default Carousel;
+export default CarouselWrapper;
