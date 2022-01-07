@@ -10,7 +10,6 @@ import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
 import { useHistory } from 'react-router-dom';
-import TokenVerify from '../common/TokenVerify';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -167,6 +166,8 @@ const StoreDetailPage = ({ location }) => {
 
   const ToggleLike = async () => {
     if (likeButtonDisable) return;
+    const like = likes;
+    const islike = isLike;
     setIsLike(!isLike);
     setLikeButtonDisable(true);
     setTimeout(() => {
@@ -184,11 +185,10 @@ const StoreDetailPage = ({ location }) => {
       setLikes(res.data.likes);
     } catch (e) {
       console.error(e.response.data.message);
-      if (e.response.status === 403) TokenVerify();
-      setIsLike(isLike);
+      setIsLike(islike);
+      setLikes(like);
     }
   };
-
   return (
     <>
       <Header />

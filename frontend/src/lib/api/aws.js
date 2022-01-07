@@ -3,8 +3,8 @@ import AWS from 'aws-sdk';
 export const uploadImagesToS3 = (images, path) => {
   const imageNames = images.map((image) => {
     const imageName =
-      //   path.storeID +
-      //   '/' +
+      path.storeID +
+      '/' +
       Math.random().toString(36).substr(2, 15) +
       image.name.slice(image.name.lastIndexOf('.'));
     const upload = new AWS.S3.ManagedUpload({

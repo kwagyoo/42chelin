@@ -132,7 +132,7 @@ const ReviewWritePage = ({ location }) => {
 
   const sendReview = async (data) => {
     try {
-      const imageNames = uploadImagesToS3(data.images);
+      const imageNames = uploadImagesToS3(data.images, data);
       await writeReview({
         ...data,
         images: imageNames,
