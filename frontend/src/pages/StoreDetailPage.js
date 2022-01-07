@@ -26,12 +26,26 @@ const FlexWrapper = styled.div`
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: 15%;
+    margin-left: 5px;
   }
 
   @media (max-width: 960px) {
     .carousel {
       margin: auto;
     }
+  }
+  @media (max-width: 768px) {
+    .carousel {
+      width: 300px;
+    }
+  }
+  @media (max-width: 425px) {
+    justify-content: center;
+    flex-direction: column;
+    #map {
+      flex-basis: 10%;
+    }
+    height: 600px;
   }
 `;
 

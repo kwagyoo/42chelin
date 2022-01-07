@@ -11,6 +11,10 @@ const CardImg = styled.img`
   height: 250px;
   width: 250px;
   object-fit: cover;
+  @media (max-width: 425px) {
+    height: 300px;
+    width: 300px;
+  }
 `;
 
 const CarouselImg = ({ image }) => {

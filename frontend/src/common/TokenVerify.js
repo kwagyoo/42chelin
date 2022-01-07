@@ -7,7 +7,7 @@ const TokenVerify = async () => {
   const id = sessionStorage.getItem('clusterName');
   try {
     const accessToken = getCookie('accToken');
-    if (!accessToken) return;
+    if (!accessToken) throw new Error('No accToken');
     jwt.verify(accessToken, process.env.REACT_APP_JWT_SECRET_KEY);
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
@@ -47,7 +47,7 @@ const TokenVerify = async () => {
         return Promise.reject('refresh failed');
       }
     } else {
-      return Promise.reject(err.message);
+      return Promise.reject(err);
     }
   }
 };

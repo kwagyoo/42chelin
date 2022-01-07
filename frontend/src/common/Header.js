@@ -204,10 +204,12 @@ const Header = () => {
       await TokenVerify();
       console.log('refresh success');
     } catch (err) {
-      console.error('갱신 실패 ', err.message);
+      console.error('갱신 실패 ', err);
       sessionStorage.removeItem('clusterName');
       removeCookie('accToken');
       removeCookie('refToken');
+      delete client.defaults.headers.common['Authorization'];
+
       setName('');
       setIsLogin(false);
     }

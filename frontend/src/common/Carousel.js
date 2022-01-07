@@ -28,30 +28,9 @@ const Container = styled.div`
   @media (max-width: 960px) {
     flex-basis: 25%;
   }
+  @media (max-width: 425px) {
+  }
 `;
-
-//   @media (max-width: 1900px) {
-//     width: 60%;
-//   }
-//   @media (max-width: 1650px) {
-//     width: 55%;
-//   }
-
-//   @media (max-width: 1500px) {
-//     width: 50%;
-//   }
-//   @media (max-width: 1250px) {
-//     width: 40%;
-//   }
-//   @media (max-width: 1070px) {
-//     width: 400px;
-//   }
-//   @media (max-width: 960px) {
-//     width: 350px;
-//   }
-//   @media (max-width: 400px) {
-//     width: 300px;
-//   }
 
 const CarouselWrapper = ({ images }) => {
   const [modifiedImages, setModifiedImages] = useState(images);
@@ -72,6 +51,13 @@ const CarouselWrapper = ({ images }) => {
     responsive: [
       {
         breakpoint: 1350,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1024,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,

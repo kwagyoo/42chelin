@@ -42,6 +42,7 @@ const StoreHeader = styled.div`
   .btn-review-detail {
     font-size: 1rem;
     background-color: #fafafa;
+    word-break: break-all;
   }
   h2,
   p {
@@ -127,7 +128,7 @@ const StoreReviewDetail = ({
           )}
         </div>
         <button className="btn-review-detail" onClick={goUpdatePage}>
-          가게정보 수정
+          메뉴 수정
         </button>
       </StoreHeader>
       {/* display block을 하면 table이 가로 전체를 차지하게 된다. */}
