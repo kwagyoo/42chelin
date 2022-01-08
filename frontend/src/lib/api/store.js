@@ -31,3 +31,6 @@ export const toggleLikeStore = (request) => {
     isLike: isLike,
   });
 };
+
+export const getMyStores = (request) =>
+  client.get(`/user/${request.clusterID}`);

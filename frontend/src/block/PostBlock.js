@@ -25,11 +25,14 @@ const StoreCompactInfo = styled.div`
     border-color: #778899; */
     h2 {
       width: 100%;
-      overflow: hidden;
       margin-bottom: 0;
     }
     .storeAddress {
       color: gray;
+    }
+    .storeName {
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
   .storeCount {
@@ -65,15 +68,15 @@ const PostBlock = ({ src, delay, store }) => {
     from: { y: '5px', opacity: 0 },
     to: { y: '0px', opacity: 1 },
     delay: delay,
-    config: { duration: 1000 },
+    config: { duration: 500 },
   });
   return (
     <StoreCompactInfo>
       <animated.article style={fadein}>
         <div className="storeInfo">
-          <span className="storeName">
+          <div className="storeName">
             <h2>{store?.storeName}</h2>
-          </span>
+          </div>
           <span className="storeAddress">{store?.storeAddress}</span>
           <br />
           <img

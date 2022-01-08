@@ -29,23 +29,16 @@ const FlexWrapper = styled.div`
     margin-left: 5px;
   }
 
-  @media (max-width: 960px) {
+  @media (max-width: 1023px) {
     .carousel {
       margin: auto;
     }
-  }
-  @media (max-width: 768px) {
-    .carousel {
-      width: 300px;
-    }
-  }
-  @media (max-width: 425px) {
-    justify-content: center;
-    flex-direction: column;
     #map {
-      flex-basis: 10%;
+      flex-basis: 35%;
     }
-    height: 600px;
+  }
+  @media (max-width: 728px) {
+    flex-direction: column;
   }
 `;
 

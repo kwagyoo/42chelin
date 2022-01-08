@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import { Carousel } from 'antd';
 
 const Container = styled.div`
-  width: 500px;
   flex-grow: 1;
   flex-shrink: 1;
+  flex-basis: 50%;
+  width: 50%;
   .slick-dots {
     margin: 0 10%;
     li button {
@@ -22,13 +23,11 @@ const Container = styled.div`
       color: #708090;
     }
   }
-  @media (max-width: 1350px) {
-    flex-basis: 40%;
+  @media (max-width: 1023px) {
+    flex-basis: 30%;
   }
-  @media (max-width: 960px) {
+  @media (max-width: 768px) {
     flex-basis: 25%;
-  }
-  @media (max-width: 425px) {
   }
 `;
 
@@ -58,13 +57,6 @@ const CarouselWrapper = ({ images }) => {
       },
       {
         breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 960,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
