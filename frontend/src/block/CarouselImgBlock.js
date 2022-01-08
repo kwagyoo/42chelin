@@ -8,12 +8,12 @@ const CardBox = styled.div`
 const CardImg = styled.img`
   margin: 0 auto;
   overflow-y: hidden;
-  height: 250px;
-  width: 250px;
+  height: 225px;
+  width: 225px;
   object-fit: cover;
-  @media (max-width: 425px) {
-    height: 300px;
-    width: 300px;
+  @media (max-width: 1024px) {
+    height: 250px;
+    width: 250px;
   }
 `;
 

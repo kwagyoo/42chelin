@@ -64,11 +64,21 @@ const ReviewDetail = styled.div`
     flex-grow: 1;
     width: 90%;
     .review_img {
+      height: 170px;
+    }
+    .review_img_container {
       display: flex;
       flex-direction: row;
-      overflow-x: scroll;
+      overflow-x: auto;
       overflow-y: auto;
-      height: 170px;
+      height: 100%;
+      .ant-image {
+        margin-right: 5px;
+      }
+      .ant-image-img {
+        width: 150px;
+        height: 150px;
+      }
     }
   }
   .review_info .review_text {
@@ -207,22 +217,24 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div className="Date">{review.reviewDate}</div>
                 <div className="review_text">{review.reviewText}</div>
                 <div className="review_img">
-                  {review.images.length > 0 && (
-                    <>
-                      <Image.PreviewGroup>
-                        {review.images.map((image, idx) => {
-                          return (
-                            <Image
-                              width={200}
-                              height={150}
-                              src={image.imageURL}
-                              key={idx}
-                            />
-                          );
-                        })}
-                      </Image.PreviewGroup>
-                    </>
-                  )}
+                  <div className="review_img_container">
+                    {review.images.length > 0 && (
+                      <>
+                        <Image.PreviewGroup>
+                          {review.images.map((image, idx) => {
+                            return (
+                              <Image
+                                width={150}
+                                height={150}
+                                src={image.imageURL}
+                                key={idx}
+                              />
+                            );
+                          })}
+                        </Image.PreviewGroup>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="review_detail_buttons">
