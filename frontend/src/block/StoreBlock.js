@@ -7,6 +7,7 @@ const StyledImg = styled.img`
   width: 86px;
   height: 86px;
 `;
+
 const StoreBlock = (store) => {
   const history = useHistory();
   const { storeAddress, storeName, storeID, storeImage, storeCategoryName } =
@@ -15,7 +16,7 @@ const StoreBlock = (store) => {
     history.push(`/detail?storeID=${storeID}&storeAddress=${storeAddress}`);
   };
   return (
-    <Space onClick={() => goDetail(store)}>
+    <Space style={{ textAlign: 'left' }} onClick={() => goDetail(store)}>
       <Space>
         <StyledImg src={storeImage ? storeImage : DefalutImg} alt="img" />
       </Space>

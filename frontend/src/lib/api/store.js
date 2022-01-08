@@ -21,6 +21,7 @@ export const getStoreDetail = (request) =>
       storeAddress: request.storeAddress,
     },
   });
+export const fetchMyStores = (clusterID) => client.get(`/user/${clusterID}`);
 
 export const fetchRandomStore = () => client.get(`/store/random`);
 

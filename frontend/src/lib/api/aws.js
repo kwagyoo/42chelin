@@ -25,7 +25,7 @@ export const loadImageFromS3 = async (image) => {
   return new Promise((resolve, reject) => {
     s3.getSignedUrlPromise('getObject', {
       Bucket: '42chelin-images',
-      Key: `original/${image}`, // ex) assets/
+      Key: `w_300/${image}`, // ex) assets/
     })
       .then((data) => {
         resolve(data);

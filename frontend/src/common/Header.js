@@ -14,6 +14,8 @@ import { removeCookie } from './Cookie';
 import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
 import DrawerDiv from './Drawer';
+import { fetchMyStores } from '../lib/api/store';
+import { loadImageFromS3 } from '../lib/api/aws';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -189,6 +191,7 @@ const Header = () => {
   const [isMenuClick, setIsMenuClick] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [faveriteStore, setfaveriteStore] = useState([]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -244,6 +247,26 @@ const Header = () => {
       alert('로그아웃 되었습니다.');
     }
   };
+
+  useEffect(() => {
+    if (visible) {
+      const myfaverit = async () => {
+        const res = await fetchMyStores(sessionStorage.getItem('clusterName'));
+        const fixedStore = await Promise.all(
+          res.data.map(async (store) => {
+            if (store.images) {
+              const fixImage = await loadImageFromS3(store.images);
+              return { ...store, storeImage: fixImage };
+            }
+            return store;
+          }),
+        );
+        setfaveriteStore(fixedStore);
+      };
+      myfaverit();
+    }
+    return () => {};
+  }, [visible]);
 
   return (
     <React.Fragment>
@@ -312,6 +335,7 @@ const Header = () => {
                   visible={visible}
                   name={name}
                   onLogout={onLogout}
+                  faveriteStore={faveriteStore}
                 />
               </>
             ) : (

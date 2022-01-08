@@ -39,11 +39,10 @@ const StyledTabs = styled(Tabs)`
   min-width: 250px;
 `;
 
-const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
+const DrawerDiv = ({ onClose, visible, name, onLogout, faveriteStore }) => {
   const { TabPane } = Tabs;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isClear, setIsclear] = useState(false);
-
   const visited = JSON.parse(localStorage.getItem('visited'));
 
   const showModal = () => {
@@ -95,7 +94,11 @@ const DrawerDiv = ({ onClose, visible, name, onLogout }) => {
           <Divider />
           <StyledSpace>
             <StyledTabs centered>
-              <TabPane tab="좋아요 한 가게" key="1"></TabPane>
+              <TabPane tab="좋아요 한 가게" key="1">
+                {faveriteStore.map((store) => {
+                  return <StoreBlock store={store} />;
+                })}
+              </TabPane>
               <TabPane tab="최근 본 맛집" key="2">
                 <div style={{ textAlign: 'right' }}>
                   <StyledButton
