@@ -37,6 +37,13 @@ const StyledInfo = styled.div`
 
 const StyledTabs = styled(Tabs)`
   min-width: 250px;
+  .ant-space {
+    display: flex;
+    flex-direction: row;
+    .ant-space-vertical {
+      flex-direction: column;
+    }
+  }
 `;
 
 const DrawerDiv = ({ onClose, visible, name, onLogout, faveriteStore }) => {
@@ -99,7 +106,7 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, faveriteStore }) => {
                   return <StoreBlock store={store} />;
                 })}
               </TabPane>
-              <TabPane tab="최근 본 맛집" key="2">
+              <TabPane className="hello" tab="최근 본 맛집" key="2">
                 <div style={{ textAlign: 'right' }}>
                   <StyledButton
                     style={{ color: 'gray', fontSize: '11px' }}
