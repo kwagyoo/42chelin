@@ -14,8 +14,7 @@ import { removeCookie } from './Cookie';
 import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
 import DrawerDiv from './Drawer';
-import { fetchMyStores } from '../lib/api/store';
-import { loadImageFromS3 } from '../lib/api/aws';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -193,6 +192,8 @@ const Header = () => {
   const [visible, setVisible] = useState(false);
   const [favoriteStore, setfavoriteStore] = useState([]);
 
+  console.log('hi');
+
   const showDrawer = () => {
     setVisible(true);
   };
@@ -224,6 +225,7 @@ const Header = () => {
       if (user) {
         setIsLogin(true);
         setName(user);
+        setfavoriteStore(JSON.parse(sessionStorage.getItem('favoriteStore')));
       }
     } else {
       const timer = setInterval(() => {

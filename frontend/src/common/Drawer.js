@@ -53,7 +53,6 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, favoriteStore }) => {
   const { TabPane } = Tabs;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [visited, setVisited] = useState([]);
-
   const showModal = () => {
     setIsModalVisible(true);
   };

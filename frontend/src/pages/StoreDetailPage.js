@@ -198,9 +198,31 @@ const StoreDetailPage = ({ location }) => {
     try {
       const res = await toggleLikeStore(data);
       setLikes(res.data.likes);
-      if(res.data.likes)
+      if (!islike) {
+        const parsedStore = JSON.parse(
+          sessionStorage.getItem('favoriteStore') || '[]',
+        );
+        parsedStore.push({
+          storeName: storeList.storeName,
+          storeAddress: storeList.storeAddress,
+          storeID: storeList.storeID,
+          storeImage: storeList.storeImages[0]?.storeImage,
+          storeImageURL: storeList.storeImages[0]?.storeImageURL,
+          storeCategoryName: storeList.storeCategoryName,
+        });
+        sessionStorage.setItem('favoriteStore', JSON.stringify(parsedStore));
+      } else
+        sessionStorage.setItem(
+          'favoriteStore',
+          JSON.stringify(
+            JSON.parse(sessionStorage.getItem('favoriteStore')).filter(
+              (x) => x.storeName !== storeList.storeName,
+            ),
+          ),
+        );
     } catch (e) {
-      console.error(e.response.data.message);
+      if (e.response) console.error(e.response.data.message);
+      else console.error(e.message);
       setIsLike(islike);
       setLikes(like);
     }

@@ -28,7 +28,9 @@ const App = () => {
 
   useEffect(() => {
     const myfavorite = async () => {
-      const res = await fetchMyStores(sessionStorage.getItem('clusterName'));
+      const clusterName = sessionStorage.getItem('clusterName');
+      if (!clusterName) return;
+      const res = await fetchMyStores(clusterName);
       const fixedStore = await Promise.all(
         res.data.map(async (store) => {
           if (store.images) {
