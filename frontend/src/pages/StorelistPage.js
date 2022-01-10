@@ -73,25 +73,6 @@ const MainBody = styled.div`
     ul > li > button:active {
       color: blue;
     }
-    .option-list-ul {
-      padding-left: 5px;
-      button {
-        cursor: pointer;
-      }
-      button:active {
-        color: #696969;
-      }
-    }
-    @media (max-width: 425px) {
-      .option-list-ul {
-        padding-bottom: 10px;
-      }
-    }
-    @media (max-width: 320px) {
-      .option-list-ul {
-        height: 50px;
-      }
-    }
   }
 `;
 
@@ -217,22 +198,6 @@ const StorelistPage = ({ history }) => {
       `/detail?storeID=${stores.storeID}&storeAddress=${stores.storeAddress}`,
     );
   };
-  // 지금 상태에서 image의 map 은 undefind가 없다는 보장을 줄 수 없음
-  const LikeSort = async () => {
-    const sortItem = [...stores];
-    setStores(sortItem.sort((a, b) => b.storeLikes - a.storeLikes));
-  };
-
-  const ReviewSort = () => {
-    const sortItem = [...stores];
-    setStores(sortItem.sort((a, b) => b.storeReviews - a.storeReviews));
-  };
-  const StoreSort = () => {
-    const sortItem = [...stores];
-    setStores(
-      sortItem.sort((a, b) => ('' + a.storeName).localeCompare(b.storeName)),
-    );
-  };
   return (
     <ListBody>
       <Header />
@@ -286,17 +251,6 @@ const StorelistPage = ({ history }) => {
               </div>
             </div>
           </ToggleButton>
-          <ul className="option-list-ul">
-            <li>
-              <button onClick={LikeSort}>좋아요순</button>
-            </li>
-            <li>
-              <button onClick={ReviewSort}>리뷰갯수순</button>
-            </li>
-            <li>
-              <button onClick={StoreSort}>이름순</button>
-            </li>
-          </ul>
         </div>
         {change === true ? (
           <>

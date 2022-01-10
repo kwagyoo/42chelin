@@ -59,7 +59,7 @@ const SearchPage = ({ history, location }) => {
 
   const SearchData = async (query) => {
     try {
-      const res = await searchStore(query.storeName);
+      const res = await searchStore({ storeName: query.storeName });
       setSearchstoreList(res.data.body);
     } catch (e) {
       console.error(e);

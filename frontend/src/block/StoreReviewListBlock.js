@@ -21,8 +21,7 @@ const ReviewList = styled.div`
     flex-grow: 0;
     flex-basis: 10%;
     font-size: 15px;
-    @media (max-width: 550px) {
-      padding-right: 25%;
+    @media (max-width: 425px) {
     }
   }
 `;
@@ -36,7 +35,7 @@ const ReviewListHeader = styled.div`
   margin-bottom: 20px;
   margin-top: 20px;
   .btn-review-write {
-    font-size: 18px;
+    font-size: 1rem;
     background-color: #fafafa;
   }
   button {
@@ -62,7 +61,8 @@ const ReviewDetail = styled.div`
   }
   .review_info {
     flex-grow: 1;
-    width: 90%;
+    flex-shrink: 1;
+    width: 50%;
     .review_img {
       height: 170px;
     }
@@ -200,7 +200,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
         <div>리뷰</div>
         <div>
           <button className="btn-review-write" onClick={GoWritePage}>
-            리뷰작성
+            리뷰 작성
           </button>
         </div>
       </ReviewListHeader>

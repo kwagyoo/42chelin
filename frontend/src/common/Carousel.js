@@ -29,6 +29,11 @@ const Container = styled.div`
   @media (max-width: 768px) {
     flex-basis: 25%;
   }
+  @media (max-width: 425px) {
+    width: 100%;
+    flex-basis: 30%;
+    padding-left: 10px;
+  }
 `;
 
 const CarouselWrapper = ({ images }) => {

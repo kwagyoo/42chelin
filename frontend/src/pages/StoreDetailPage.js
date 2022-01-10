@@ -41,7 +41,10 @@ const FlexWrapper = styled.div`
     flex-direction: column;
   }
   @media (max-width: 425px) {
-    height: 1200px;
+    #map {
+      flex-basis: 25%;
+    }
+    height: 500px;
     flex-direction: column;
   }
 `;

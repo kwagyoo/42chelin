@@ -7,6 +7,7 @@ import { updatePassword } from '../lib/api/auth';
 import PasswordModal from './PasswordModal';
 import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
+import SkeletonDiv from './Skeleton';
 
 const StyledContent = styled(Content)`
   width: 330px;
@@ -135,13 +136,17 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, favoriteStore }) => {
           <StyledSpace>
             <StyledTabs centered>
               <TabPane tab="좋아요 한 가게" key="1">
-                {favoriteStore.map((store, idx) => {
-                  return (
-                    <StyledInfo key={idx}>
-                      <StoreBlock store={store} />{' '}
-                    </StyledInfo>
-                  );
-                })}
+                {favoriteStore ? (
+                  favoriteStore.map((store, idx) => {
+                    return (
+                      <StyledInfo key={idx}>
+                        <StoreBlock store={store} />{' '}
+                      </StyledInfo>
+                    );
+                  })
+                ) : (
+                  <SkeletonDiv />
+                )}
               </TabPane>
               <TabPane className="hello" tab="최근 본 맛집" key="2">
                 <div style={{ textAlign: 'right' }}>
