@@ -191,7 +191,7 @@ const Header = () => {
   const [isMenuClick, setIsMenuClick] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [faveriteStore, setfaveriteStore] = useState([]);
+  const [favoriteStore, setfavoriteStore] = useState([]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -250,20 +250,20 @@ const Header = () => {
 
   useEffect(() => {
     if (visible) {
-      const myfaverit = async () => {
+      const myfavorite = async () => {
         const res = await fetchMyStores(sessionStorage.getItem('clusterName'));
         const fixedStore = await Promise.all(
           res.data.map(async (store) => {
             if (store.images) {
               const fixImage = await loadImageFromS3(store.images);
-              return { ...store, storeImage: fixImage };
+              return { ...store, storeImageURL: fixImage };
             }
             return store;
           }),
         );
-        setfaveriteStore(fixedStore);
+        setfavoriteStore(fixedStore);
       };
-      myfaverit();
+      myfavorite();
     }
     return () => {};
   }, [visible]);
@@ -335,7 +335,7 @@ const Header = () => {
                   visible={visible}
                   name={name}
                   onLogout={onLogout}
-                  faveriteStore={faveriteStore}
+                  favoriteStore={favoriteStore}
                 />
               </>
             ) : (

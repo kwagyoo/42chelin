@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import StoreBlock from '../block/StoreBlock';
 import { updatePassword } from '../lib/api/auth';
 import PasswordModal from './PasswordModal';
+import qs from 'qs';
+import { loadImageFromS3 } from '../lib/api/aws';
 
 const StyledContent = styled(Content)`
   width: 330px;
@@ -46,11 +48,11 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 
-const DrawerDiv = ({ onClose, visible, name, onLogout, faveriteStore }) => {
+const DrawerDiv = ({ onClose, visible, name, onLogout, favoriteStore }) => {
   const { TabPane } = Tabs;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isClear, setIsclear] = useState(false);
-  const visited = JSON.parse(localStorage.getItem('visited'));
+  const [visited, setVisited] = useState([]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -69,6 +71,37 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, faveriteStore }) => {
       alert('비밀번호 변경을 실패했습니다.');
     }
   };
+
+  useEffect(() => {
+    const checkThumbExpires = async () => {
+      const visitedStores = JSON.parse(localStorage.getItem('visited'));
+      if (!visitedStores) return;
+      const updateVisited = await Promise.all(
+        visitedStores?.map(async (store) => {
+          if (!store.storeImageURL) return store;
+          const query = qs.parse(store.storeImageURL, {
+            ignoreQueryPrefix: true,
+          });
+          const date = query['X-Amz-Date']
+            .split('')
+            .filter((x) => x.match(/\d/))
+            .join('');
+          const today = new Date()
+            .toISOString()
+            .split('.')[0]
+            .replace(/[^\d]/gi, '');
+          if (today > date) {
+            const newImageURL = await loadImageFromS3(store.storeImage);
+            return { ...store, storeImageURL: newImageURL };
+          }
+          return store;
+        }),
+      );
+      setVisited(updateVisited);
+    };
+    checkThumbExpires();
+    return () => {};
+  }, []);
 
   useEffect(() => {
     setIsclear(false);
@@ -102,8 +135,12 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, faveriteStore }) => {
           <StyledSpace>
             <StyledTabs centered>
               <TabPane tab="좋아요 한 가게" key="1">
-                {faveriteStore.map((store) => {
-                  return <StoreBlock store={store} />;
+                {favoriteStore.map((store, idx) => {
+                  return (
+                    <StyledInfo key={idx}>
+                      <StoreBlock store={store} />{' '}
+                    </StyledInfo>
+                  );
                 })}
               </TabPane>
               <TabPane className="hello" tab="최근 본 맛집" key="2">

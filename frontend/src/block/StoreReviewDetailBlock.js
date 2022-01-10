@@ -122,8 +122,8 @@ const StoreReviewDetail = ({
             </button>
           ) : (
             <button className="btn-like">
-              <div className="like-num">{likes}</div>
               <FontAwesomeIcon icon={farFaHeart} size="lg" color="#808080" />
+              <div className="like-num">{likes}</div>
             </button>
           )}
         </div>
