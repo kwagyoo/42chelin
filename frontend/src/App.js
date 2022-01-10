@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import StoreDetailPage from './pages/StoreDetailPage';
 import StorelistPage from './pages/StorelistPage';
@@ -15,6 +15,8 @@ import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
 import StoreInfoUpdate from './pages/StoreInfoUpdate';
 import PwResetPage from './pages/PwResetPage';
+import { fetchMyStores } from './lib/api/store';
+import { loadImageFromS3 } from './lib/api/aws';
 
 const App = () => {
   AWS.config.update({
@@ -23,6 +25,24 @@ const App = () => {
       IdentityPoolId: 'ap-northeast-2:9449a853-9bf7-437d-8205-a66cfc556ecd', // cognito 인증 풀에서 받아온 키를 문자열로 입력합니다. (Ex. "ap-northeast-2...")
     }),
   });
+
+  useEffect(() => {
+    const myfavorite = async () => {
+      const res = await fetchMyStores(sessionStorage.getItem('clusterName'));
+      const fixedStore = await Promise.all(
+        res.data.map(async (store) => {
+          if (store.images) {
+            const fixImage = await loadImageFromS3(store.images);
+            return { ...store, storeImageURL: fixImage };
+          }
+          return store;
+        }),
+      );
+      sessionStorage.setItem('favoriteStore', fixedStore);
+    };
+    myfavorite();
+    return () => {};
+  }, []);
 
   useLayoutEffect(() => {
     //자동로그인 시 header가 더 먼저 렌더링이 되어 useEffect보다 먼저 실행되는 layoutEffect를 사용해야함

@@ -52,7 +52,6 @@ const StyledTabs = styled(Tabs)`
 const DrawerDiv = ({ onClose, visible, name, onLogout, favoriteStore }) => {
   const { TabPane } = Tabs;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isClear, setIsclear] = useState(false);
   const [visited, setVisited] = useState([]);
 
   const showModal = () => {
@@ -102,11 +101,7 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, favoriteStore }) => {
     };
     checkThumbExpires();
     return () => {};
-  }, []);
-
-  useEffect(() => {
-    setIsclear(false);
-  }, [isClear]);
+  }, [visible]);
 
   return (
     <>
@@ -154,7 +149,7 @@ const DrawerDiv = ({ onClose, visible, name, onLogout, favoriteStore }) => {
                     style={{ color: 'gray', fontSize: '11px' }}
                     onClick={() => {
                       localStorage.clear();
-                      setIsclear(true);
+                      setVisited([]);
                     }}
                   >
                     clearAll

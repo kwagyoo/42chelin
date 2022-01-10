@@ -248,26 +248,6 @@ const Header = () => {
     }
   };
 
-  useEffect(() => {
-    if (visible) {
-      const myfavorite = async () => {
-        const res = await fetchMyStores(sessionStorage.getItem('clusterName'));
-        const fixedStore = await Promise.all(
-          res.data.map(async (store) => {
-            if (store.images) {
-              const fixImage = await loadImageFromS3(store.images);
-              return { ...store, storeImageURL: fixImage };
-            }
-            return store;
-          }),
-        );
-        setfavoriteStore(fixedStore);
-      };
-      myfavorite();
-    }
-    return () => {};
-  }, [visible]);
-
   return (
     <React.Fragment>
       <HeaderBlock>

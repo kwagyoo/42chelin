@@ -198,6 +198,7 @@ const StoreDetailPage = ({ location }) => {
     try {
       const res = await toggleLikeStore(data);
       setLikes(res.data.likes);
+      if(res.data.likes)
     } catch (e) {
       console.error(e.response.data.message);
       setIsLike(islike);
