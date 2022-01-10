@@ -40,6 +40,10 @@ const FlexWrapper = styled.div`
   @media (max-width: 728px) {
     flex-direction: column;
   }
+  @media (max-width: 425px) {
+    height: 1200px;
+    flex-direction: column;
+  }
 `;
 
 const ContentsWrapper = styled.div`
@@ -109,7 +113,8 @@ const StoreDetailPage = ({ location }) => {
         storeAddress,
         storeID,
         storeCategoryName,
-        storeImage: fixedImages.storeImages[0]?.imageURL,
+        storeImage: fixedImages.storeImages[0]?.image,
+        storeImageURL: fixedImages.storeImages[0]?.imageURL,
       };
       const dupArr = [data, ...visited];
       const filterData = dupArr.filter((item, index) => {
