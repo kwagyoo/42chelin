@@ -14,7 +14,6 @@ import { removeCookie } from './Cookie';
 import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
 import DrawerDiv from './Drawer';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -191,9 +190,6 @@ const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [visible, setVisible] = useState(false);
   const [favoriteStore, setfavoriteStore] = useState([]);
-
-  console.log('hi');
-
   const showDrawer = () => {
     setVisible(true);
   };
@@ -213,7 +209,6 @@ const Header = () => {
       removeCookie('accToken');
       removeCookie('refToken');
       delete client.defaults.headers.common['Authorization'];
-
       setName('');
       setIsLogin(false);
     }
@@ -236,6 +231,12 @@ const Header = () => {
       };
     }
   }, [isLogin, checkTokenVerify]);
+
+  useEffect(() => {
+    if (visible) {
+      setfavoriteStore(JSON.parse(sessionStorage.getItem('favoriteStore')));
+    }
+  }, [visible]);
 
   const onLogout = () => {
     console.log('logout');

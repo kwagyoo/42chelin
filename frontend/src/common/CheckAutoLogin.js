@@ -2,6 +2,25 @@ import { getCookie, removeCookie } from './Cookie';
 import jwt from 'jsonwebtoken';
 import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
+import { fetchMyStores } from '../lib/api/store';
+import { loadImageFromS3 } from '../lib/api/aws';
+
+export const getFavoriteStores = async () => {
+  console.log('myfavorite 함수 실행');
+  const clusterName = sessionStorage.getItem('clusterName');
+  if (!clusterName) return;
+  const res = await fetchMyStores(clusterName);
+  const fixedStore = await Promise.all(
+    res.data.map(async (store) => {
+      if (store.images) {
+        const fixImage = await loadImageFromS3(store.images);
+        return { ...store, storeImageURL: fixImage };
+      }
+      return store;
+    }),
+  );
+  sessionStorage.setItem('favoriteStore', JSON.stringify(fixedStore));
+};
 
 const checkAutoLogin = async () => {
   console.log('auto login 실행');
@@ -27,6 +46,7 @@ const checkAutoLogin = async () => {
             console.log('재발급');
             await TokenVerify();
             sessionStorage.setItem('clusterName', decoded.clusterName);
+            await getFavoriteStores();
           } catch (err) {
             console.log('auto login catch');
             alert('자동 로그인에 문제가 발생하였습니다.');
