@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import { useState } from 'react';
 import { useRef } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../common/Header';
-import { getRandomStore } from '../lib/api/store';
+import { fetchRandomStore } from '../lib/api/store';
 
 const MainBody = styled.div`
   min-height: 100vh;
@@ -13,7 +13,6 @@ const MainBody = styled.div`
   background-color: #fafafa;
 `;
 const Container = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
   width: 100vw;
   height: 100%;
   display: flex;
@@ -190,10 +189,9 @@ const RandomStore = () => {
   const btnGo = useRef();
   const [resetNum, setResetNum] = useState(0);
   const [store, setStore] = useState({
-    storeName: '',
+    storeID: '',
     storeAddress: '',
   });
-  const history = useHistory();
   const SampleStore = [
     '연스시',
     '스파게티 스토리',
@@ -206,6 +204,7 @@ const RandomStore = () => {
     '부산어묵',
     '이삭토스트',
   ];
+  const history = useHistory();
 
   const reset = () => {
     displaySlot.current.style.display = 'block';
@@ -216,19 +215,18 @@ const RandomStore = () => {
 
   const getStore = async () => {
     try {
-      const res = await getRandomStore();
+      const res = await fetchRandomStore();
       displaySlot.current.style.display = 'none';
       btnGo.current.style.display = 'block';
-      setStore(res.data.body);
+      setStore(res.data);
       if (resetNum === 0) store_print.current.style.display = 'block';
     } catch (e) {
       alert(e.response.data.message);
     }
   };
-
   const GoStore = () => {
     history.push(
-      `/detail?storeName=${store.storeName}&storeAddress=${store.storeAddress}`,
+      `/detail?storeID=${store.storeID}&storeAddress=${store.storeAddress}`,
     );
   };
 

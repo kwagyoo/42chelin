@@ -1,55 +1,37 @@
 import client from './client';
 
-export const saveStoreData = (request) =>
-  client.post(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/save`,
-    request,
-  );
+export const writeReview = (request) =>
+  client.post(`/store/${request.storeID}/review`, request);
 
-export const updateStoreReview = (request) =>
-  client.post(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/update`,
-    request,
-  );
+export const updateStoreDetail = (request) =>
+  client.put(`/store/${request.storeID}`, request);
 
-export const deleteStoreReview = (request) =>
-  client.post(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/delete`,
-    request,
-  );
-
-export const loadAllStoreData = () =>
-  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores`);
-
-export const searchStoreData = (storeName) =>
-  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/search`, {
+export const searchStore = ({ storeName, lastEvaluatedKey }) =>
+  client.get(`store/search`, {
     params: {
       storeName: storeName,
+      lastEvaluatedKey,
     },
   });
 
-export const getStoreDetailData = (request) =>
-  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/detail`, {
+export const getStoreDetail = (request) =>
+  client.get(`/store/${request.storeID}/`, {
     params: {
-      userName: request.userName,
-      storeName: request.storeName,
+      clusterName: request.clusterName,
       storeAddress: request.storeAddress,
     },
   });
+export const fetchMyStores = (clusterID) => client.get(`/user/${clusterID}`);
 
-export const getRandomStore = () =>
-  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/random`);
+export const fetchRandomStore = () => client.get(`/store/random`);
 
 export const toggleLikeStore = (request) => {
-  const { token, storeName, storeAddress, userName, isLike } = request;
-  return client.post(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/stores/like`,
-    {
-      token: token,
-      storeName: storeName,
-      storeAddress: storeAddress,
-      userName: userName,
-      isLike: isLike,
-    },
-  );
+  const { clusterName, isLike } = request;
+  return client.put(`/store/${request.storeID}/like`, {
+    clusterName: clusterName,
+    isLike: isLike,
+  });
 };
+
+export const getMyStores = (request) =>
+  client.get(`/user/${request.clusterID}`);

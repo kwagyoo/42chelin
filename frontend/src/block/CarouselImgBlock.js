@@ -6,10 +6,19 @@ const CardBox = styled.div`
 `;
 
 const CardImg = styled.img`
-  width: 100%;
+  margin: 0 auto;
   overflow-y: hidden;
-  height: 200px;
+  height: 225px;
+  width: 225px;
   object-fit: cover;
+  @media (max-width: 1024px) {
+    height: 250px;
+    width: 250px;
+  }
+  @media (max-width: 425px) {
+    height: 250px;
+    width: 330px;
+  }
 `;
 
 const CarouselImg = ({ image }) => {

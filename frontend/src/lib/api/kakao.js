@@ -1,23 +1,20 @@
 import client from './client';
 
-export const searchKakao = (query) =>
-  client.get(`${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/searchkakao`, {
+export const fetchKakaoApi = (query) =>
+  client.get(`/store/search/kakao`, {
     params: {
       storeName: query,
     },
   });
 
+// 어떤 동작인지 정확히 모르겠음.
 export const getStoreInfoKakao = async (request) => {
   try {
-    const res = await client.get(
-      `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/getstorekakao`,
-      {
-        params: {
-          id: request.id,
-          storeName: request.placeName,
-        },
+    const res = await client.get(`/store/${request.id}/kakao`, {
+      params: {
+        storeName: request.placeName,
       },
-    );
+    });
     return res.data.body;
   } catch (error) {
     return Promise.reject(error);

@@ -1,10 +1,10 @@
+import 'antd/dist/antd.css';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Header from '../common/Header';
 import { Col, Row } from 'antd';
 import PostBlock from '../block/PostBlock';
-import styled from 'styled-components';
-import 'antd/dist/antd.css';
-import { searchStoreData } from '../lib/api/store';
+import { searchStore } from '../lib/api/store';
 import qs from 'qs';
 
 const ListBody = styled.div`
@@ -20,6 +20,8 @@ const SearchInput = styled.div`
   background-color: #ffffff;
   border-radius: 25px;
   border: 1.5px solid #550055;
+  margin-bottom: 5px;
+
   input {
     margin-left: 30px;
     margin-top: 5px;
@@ -31,13 +33,11 @@ const SearchInput = styled.div`
     outline: none;
   }
   input::placeholder {
-    font-family: 'Do Hyeon', sans-serif;
   }
 `;
 const MainBody = styled.div`
   width: 80%;
   margin: 0 auto;
-  font-family: 'Do Hyeon', sans-serif;
 `;
 
 const SearchPage = ({ history, location }) => {
@@ -59,7 +59,7 @@ const SearchPage = ({ history, location }) => {
 
   const SearchData = async (query) => {
     try {
-      const res = await searchStoreData(query.storeName);
+      const res = await searchStore({ storeName: query.storeName });
       setSearchstoreList(res.data.body);
     } catch (e) {
       console.error(e);
@@ -81,7 +81,7 @@ const SearchPage = ({ history, location }) => {
   const goDetail = (storeList) => {
     if (!storeList) return;
     history.push(
-      `/detail?storeName=${storeList.storeName}&storeAddress=${storeList.storeAddress}`,
+      `/detail?storeID=${storeList.storeID}&storeAddress=${storeList.storeAddress}`,
     );
   };
 

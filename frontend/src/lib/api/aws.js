@@ -1,8 +1,10 @@
 import AWS from 'aws-sdk';
 
-export const uploadImagesToS3 = (images) => {
+export const uploadImagesToS3 = (images, path) => {
   const imageNames = images.map((image) => {
     const imageName =
+      path.storeID +
+      '/' +
       Math.random().toString(36).substr(2, 15) +
       image.name.slice(image.name.lastIndexOf('.'));
     const upload = new AWS.S3.ManagedUpload({
@@ -23,7 +25,8 @@ export const loadImageFromS3 = async (image) => {
   return new Promise((resolve, reject) => {
     s3.getSignedUrlPromise('getObject', {
       Bucket: '42chelin-images',
-      Key: `original/${image}`, // ex) assets/
+      Key: `w_300/${image}`, // ex) assets/
+      Expires: 3600 * 12,
     })
       .then((data) => {
         resolve(data);

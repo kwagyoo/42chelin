@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import StoreInfo from '../common/StoreInfo';
-import { searchKakao } from '../lib/api/kakao';
+import StoreInfoBlock from '../block/StoreInfoBlock';
+import { fetchKakaoApi } from '../lib/api/kakao';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import TokenVerify from '../common/TokenVerify';
+import { useHistory } from 'react-router-dom';
+import { removeCookie } from '../common/Cookie';
 
 const Wrapper = styled.div`
   min-height: 100vh;
 `;
 const SearchInput = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
   position: relative;
   overflow: hidden;
   height: 58px;
@@ -35,8 +36,6 @@ const SearchInput = styled.div`
 `;
 
 const StoreInfoWarp = styled.div`
-  font-family: 'Do Hyeon', sans-serif;
-
   margin-bottom: 0;
   padding: 0;
   border: 0;
@@ -45,10 +44,9 @@ const StoreInfoWarp = styled.div`
 `;
 
 const KakaoSearchPage = () => {
-  const history = useHistory();
   const [text, setText] = useState('');
   const [searchstoreList, setSearchstoreList] = useState([]);
-
+  const history = useHistory();
   const onChange = (e) => {
     setText(e.target.value);
   };
@@ -61,7 +59,7 @@ const KakaoSearchPage = () => {
 
   const SearchStoreEvent = async () => {
     try {
-      const res = await searchKakao(text);
+      const res = await fetchKakaoApi(text);
       const data = res.data.body;
       setSearchstoreList(data);
     } catch (e) {
@@ -75,7 +73,26 @@ const KakaoSearchPage = () => {
       search: `?placeName=${placeName}&id=${id}`,
     });
   };
-  // Todo : onchange 될때마다 계속 실행됌 아마 컴포넌트의 업데이트를 감지해서 그런듯??
+
+  const checkTokenVerify = async () => {
+    try {
+      await TokenVerify();
+    } catch (err) {
+      console.log(err);
+      if (err.message !== 'refresh') {
+        console.error(err.message);
+        sessionStorage.removeItem('clusterName');
+        removeCookie('accToken');
+        removeCookie('refToken');
+        history.goBack();
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkTokenVerify();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Wrapper>
@@ -97,7 +114,7 @@ const KakaoSearchPage = () => {
       <StoreInfoWarp>
         {searchstoreList &&
           searchstoreList.map((store, idx) => (
-            <StoreInfo
+            <StoreInfoBlock
               onClick={() => SubmitStoreData(store.place_name, store.id)}
               address={store.address_name}
               placeName={store.place_name}

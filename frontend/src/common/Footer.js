@@ -8,7 +8,9 @@ const StyledFooter = styled.footer`
   align-items: center;
   padding: 10px;
   padding-left: 5%;
-  margin-top: 10px;
+
+  // Todo: margin 이 필요한곳과 아닌곳을 따로 주는 방법 찾아야함
+  /* margin-top: 10px; */
   background-color: #333;
   color: #bbbbbb;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

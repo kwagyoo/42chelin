@@ -1,6 +1,5 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
+import React, { useLayoutEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import StoreDetailPage from './pages/StoreDetailPage';
 import StorelistPage from './pages/StorelistPage';
 import ReviewUpdatePage from './pages/ReviewUpdatePage';
@@ -8,9 +7,14 @@ import ReviewWritePage from './pages/ReviewWritePage';
 import KakaoSearchPage from './pages/KakaoSearchPage';
 import SearchPage from './pages/SearchPage';
 import AWS from 'aws-sdk';
-import Auth from './hoc/auth';
 import RandomStore from './pages/RandomStore';
 import Footer from './common/Footer';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import PrivateRoute from './common/PrivateRoute';
+import checkAutoLogin from './common/CheckAutoLogin';
+import StoreInfoUpdate from './pages/StoreInfoUpdate';
+import PwResetPage from './pages/PwResetPage';
 
 const App = () => {
   AWS.config.update({
@@ -20,16 +24,26 @@ const App = () => {
     }),
   });
 
+  useLayoutEffect(() => {
+    //자동로그인 시 header가 더 먼저 렌더링이 되어 useEffect보다 먼저 실행되는 layoutEffect를 사용해야함
+    if (!sessionStorage.getItem('clusterName')) checkAutoLogin();
+  }, []);
+
   return (
     <>
-      <Route path="/" component={StorelistPage} exact />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/detail" component={StoreDetailPage} />
-      <Route path="/update" component={ReviewUpdatePage} />
-      <Route path="/write" component={ReviewWritePage} />
-      <Route path="/search" component={SearchPage} />
-      <Route path="/storeSearch" component={Auth(KakaoSearchPage, true)} />
-      <Route path="/random" component={RandomStore} />
+      <Switch>
+        <Route exact path="/" component={StorelistPage} />
+        <Route path="/detail" component={StoreDetailPage} />
+        <PrivateRoute path="/update" component={ReviewUpdatePage} />
+        <PrivateRoute path="/storeupdate" component={StoreInfoUpdate} />
+        <PrivateRoute path="/write" component={ReviewWritePage} />
+        <Route path="/search" component={SearchPage} />
+        <PrivateRoute path="/storeSearch" component={KakaoSearchPage} />
+        <Route path="/random" component={RandomStore} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
+        <Route path="/reset" component={PwResetPage} />
+      </Switch>
       <Footer />
     </>
   );

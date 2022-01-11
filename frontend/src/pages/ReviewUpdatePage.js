@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../common/Header';
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import Header from '../common/Header';
 import Button from '../common/Button';
 import ImageUpload from '../common/ImageUpload';
-import { updateStoreReview } from '../lib/api/store';
+import AntModal from '../common/Modal';
+import { updateReview } from '../lib/api/review';
 import { uploadImagesToS3 } from '../lib/api/aws';
 import { useSelector } from 'react-redux';
-import AntModal from '../common/Modal';
 
 const Body = styled.div`
   background-color: #fafafa;
@@ -19,7 +19,6 @@ const StyledForm = styled.form`
   margin: 10px auto 0px;
   width: 550px;
   padding: 0 10px 0 10px;
-  font-family: 'Do Hyeon', sans-serif;
   @media (max-width: 550px) {
     margin-top: 10px;
     width: 100vw;
@@ -101,64 +100,71 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const ReviewUpdatePage = ({ history, location }) => {
+const updateStoreReview = async (path, data, history) => {
+  try {
+    const newImages = await uploadImagesToS3(
+      data.storeImages.filter((image) => image.imageURL === undefined),
+      path,
+    );
+    await updateReview(path, {
+      ...data,
+      reviewImages: [
+        ...data.storeImages
+          .filter((image) => image.imageURL)
+          .map((image) => image.image),
+        ...newImages,
+      ],
+    });
+    history.push(
+      `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+    );
+    return 200;
+  } catch (e) {
+    if (e.response.status < 500) {
+      if (e.response.status === 401) {
+        alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+        history.push(
+          `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+        );
+      } else {
+        alert('잘못된 요청입니다.');
+      }
+    } else alert('저장에 실패하였습니다.');
+    return e.response.status;
+  }
+};
+
+const ReviewUpdatePage = ({ history }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { review } = useSelector((state) => state.review);
   const [loadingText, setLoadingText] = useState('');
-
   const { register, handleSubmit, setValue } = useForm();
-
   const reviewText = useInput(
     review ? review.review.reviewText : '',
     (value) => value.length < 1000,
   );
-
-  const UpdateStoreReview = async (data) => {
-    try {
-      const userToken = localStorage.getItem('token');
-      const newImages = uploadImagesToS3(
-        data.storeImages.filter((image) => image.imageURL === undefined),
-      );
-      await updateStoreReview({
-        ...data,
-        token: userToken,
-        reviewImages: [
-          ...data.storeImages
-            .filter((image) => image.imageURL)
-            .map((image) => image.image),
-          ...newImages,
-        ],
-      });
-      history.push(
-        `/detail?storeName=${data.storeName}&storeAddress=${data.storeAddress}`,
-      );
-    } catch (e) {
-      if (e.response.statusCode < 500) alert('잘못된 요청입니다.');
-      else alert('저장에 실패하였습니다.');
-      console.error(e.response.data.message);
-    }
-  };
-
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
       setLoadingText('수정중..');
-      try {
-        await UpdateStoreReview({ ...data, storeImages: files });
-      } catch (e) {
-        alert(e.response.data.message);
-      }
+      await updateStoreReview(
+        {
+          storeID: review.storeID,
+          reviewID: review.review.reviewID,
+        },
+        { ...data, storeImages: files },
+        history,
+      );
       setLoading((loading) => false);
     }
   };
 
   useEffect(() => {
     if (review) {
-      setValue('userName', review.review.userName);
+      setValue('clusterName', review.review.clusterName);
       setValue('reviewDate', review.review.reviewDate);
-      setValue('storeName', review.storeName);
       setValue('storeAddress', review.storeAddress);
       setFiles(review.review.images);
     } else {
@@ -208,12 +214,12 @@ const ReviewUpdatePage = ({ history, location }) => {
             />
           </div>
           <div className="btn-group">
-            <Button name="submit" disabled={loading}></Button>
+            <Button name="submit" disabled={loading} />
             <Button
               name="cancel"
               disabled={loading}
               onClick={() => history.push('/')}
-            ></Button>
+            />
           </div>
         </StyledForm>
       </main>

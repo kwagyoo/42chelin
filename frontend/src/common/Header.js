@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
@@ -10,6 +10,10 @@ import {
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../image/Logo.png';
+import { removeCookie } from './Cookie';
+import TokenVerify from './TokenVerify';
+import client from '../lib/api/client';
+import DrawerDiv from './Drawer';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -26,7 +30,6 @@ const Wrapper = styled.div`
   display: flex;
   overflow: auto;
   align-items: center;
-  font-family: 'Do Hyeon', sans-serif;
   font-size: 20px;
   font-style: bold;
   .title {
@@ -182,23 +185,72 @@ const Spacer = styled.div`
 `;
 
 const Header = () => {
-  const name = localStorage.getItem('username');
-  const [isLogin, setisLogin] = useState('');
+  const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [favoriteStore, setfavoriteStore] = useState([]);
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const checkTokenVerify = useCallback(async () => {
+    try {
+      if (!isLogin) return;
+      await TokenVerify();
+      console.log('refresh success');
+    } catch (err) {
+      console.error('갱신 실패 ', err);
+      sessionStorage.removeItem('clusterName');
+      removeCookie('accToken');
+      removeCookie('refToken');
+      delete client.defaults.headers.common['Authorization'];
+      setName('');
+      setIsLogin(false);
+    }
+  }, [isLogin]);
 
   useEffect(() => {
-    if (!isLogin) setisLogin(localStorage.getItem('token'));
-  }, [isLogin]);
-  const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
+    if (!isLogin) {
+      const user = sessionStorage.getItem('clusterName');
+      if (user) {
+        setIsLogin(true);
+        setName(user);
+        setfavoriteStore(JSON.parse(sessionStorage.getItem('favoriteStore')));
+      }
+    } else {
+      const timer = setInterval(() => {
+        checkTokenVerify();
+      }, 1000 * 60);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [isLogin, checkTokenVerify]);
+
+  useEffect(() => {
+    if (visible) {
+      setfavoriteStore(JSON.parse(sessionStorage.getItem('favoriteStore')));
+    }
+  }, [visible]);
 
   const onLogout = () => {
+    console.log('logout');
     if (isLogin) {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      setisLogin('');
+      localStorage.removeItem('autoLogin');
+      sessionStorage.removeItem('clusterName');
+      delete client.defaults.headers.common['Authorization'];
+      setIsLogin(false);
+      removeCookie('accToken');
+      removeCookie('refToken');
       alert('로그아웃 되었습니다.');
     }
   };
+
   return (
     <React.Fragment>
       <HeaderBlock>
@@ -229,7 +281,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <a href={URL}>
+                <a href="/login">
                   <FontAwesomeIcon
                     icon={faSignInAlt}
                     style={{ color: 'black', width: '30px', height: '30px' }}
@@ -259,17 +311,20 @@ const Header = () => {
           <div className="header-right">
             {isLogin ? (
               <>
-                <UserName>
-                  <p>{name}</p>
-                </UserName>
                 <Button name="리뷰 작성" to="/write" />
-                <Button name="로그아웃" onClick={onLogout} />
+                <Button name={name} onClick={showDrawer} />
+                <DrawerDiv
+                  onClose={onClose}
+                  visible={visible}
+                  name={name}
+                  onLogout={onLogout}
+                  favoriteStore={favoriteStore}
+                />
               </>
             ) : (
-              <Button
-                name="로그인"
-                onClick={() => window.location.replace(URL)}
-              />
+              <>
+                <Button name="로그인" to="/login" />
+              </>
             )}
           </div>
         </Wrapper>

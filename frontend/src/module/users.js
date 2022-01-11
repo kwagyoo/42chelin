@@ -1,24 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  name: '',
-  access_token: '',
+  username: '',
+  isLogin: false,
 };
 
 export const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    getUserName: (state, action) => {
-      state.name = action.payload;
+    setUserName: (state, action) => {
+      state.username = action.payload;
     },
-    setAccessToken: (state) => {
-      const local = localStorage.getItem('token');
-      if (local) state.access_token = local;
+    setIsLogin: (state, action) => {
+      state.isLogin = action.payload;
     },
   },
 });
 
 const { reducer, actions } = userSlice;
-export const { getUserName, setAccessToken } = actions;
+export const { setUserName, setIsLogin } = actions;
 export default reducer;
