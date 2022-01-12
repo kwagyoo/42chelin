@@ -23,7 +23,7 @@ const LoginPage = () => {
   const { id, password } = inputs; // 비구조화 할당을 통해 값 추출
   const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
   const PwURL =
-    'https://api.intra.42.fr/oauth/authorize?client_id=a39797236e27fca852dea7a924abfedddc02aa178765598d3be2e4f47a56aecb&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Freset&response_type=code';
+    'https://api.intra.42.fr/oauth/authorize?client_id=a39797236e27fca852dea7a924abfedddc02aa178765598d3be2e4f47a56aecb&redirect_uri=http%3A%2F%2F42chelin.shop%2Freset&response_type=code';
   const [isError, setIsError] = useState(false);
 
   const onChange = (e) => {
