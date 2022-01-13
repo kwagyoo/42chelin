@@ -9,7 +9,7 @@ import { getStoreDetail } from '../lib/api/store';
 import qs from 'qs';
 import { loadImageFromS3 } from '../lib/api/aws';
 import { toggleLikeStore } from '../lib/api/store';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const StoreListBlock = styled.div`
   display: flex;
@@ -87,7 +87,8 @@ const getImageURLsFromS3 = async (storeList) => {
   }
 };
 
-const StoreDetailPage = ({ location }) => {
+const StoreDetailPage = () => {
+  const location = useLocation();
   const history = useHistory();
   const [storeList, setStoreList] = useState(null);
   const [isLike, setIsLike] = useState(false);
@@ -177,7 +178,7 @@ const StoreDetailPage = ({ location }) => {
       setStoreList('');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location]);
 
   const ToggleLike = async () => {
     if (likeButtonDisable) return;
@@ -206,8 +207,8 @@ const StoreDetailPage = ({ location }) => {
           storeName: storeList.storeName,
           storeAddress: storeList.storeAddress,
           storeID: storeList.storeID,
-          storeImage: storeList.storeImages[0]?.storeImage,
-          storeImageURL: storeList.storeImages[0]?.storeImageURL,
+          storeImage: storeList.storeImages[0]?.image,
+          storeImageURL: storeList.storeImages[0]?.imageURL,
           storeCategoryName: storeList.storeCategoryName,
         });
         sessionStorage.setItem('favoriteStore', JSON.stringify(parsedStore));

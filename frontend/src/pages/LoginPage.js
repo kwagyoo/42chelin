@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import SignBlock from '../block/SignBlock';
+import { getFavoriteStores } from '../common/CheckAutoLogin';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
 import AntModal from '../common/Modal';
@@ -63,6 +64,7 @@ const LoginPage = () => {
           expires: e.target.autoLogin.checked ? expires : '',
         });
       }
+      await getFavoriteStores();
       setTimeout(() => {
         TokenVerify();
       }, 1000 * 60 * 15 + 1000);

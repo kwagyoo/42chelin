@@ -129,7 +129,6 @@ const StorelistPage = ({ history }) => {
   const [stores, setStores] = useState([]);
   const [lastEval, setLastEval] = useState(undefined);
   const [endScroll, setEndScroll] = useState(false);
-
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
 
@@ -159,7 +158,9 @@ const StorelistPage = ({ history }) => {
       observer.unobserve(entry.target);
       setEndScroll(true);
       setTimeout(() => {
-        observer.observe(entry.target);
+        if (stores.length > 0 && !lastEval) {
+          observer.observe(entry.target);
+        }
       }, 1500);
     }
   };
@@ -190,6 +191,7 @@ const StorelistPage = ({ history }) => {
       observer.observe(scrollRef.current);
     }
     return () => observer && observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const goDetail = (stores) => {
