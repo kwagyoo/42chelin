@@ -35,3 +35,5 @@ export const toggleLikeStore = (request) => {
 
 export const getMyStores = (request) =>
   client.get(`/user/${request.clusterID}`);
+
+export const getAllStore = () => client.get(`/store/search/map`);

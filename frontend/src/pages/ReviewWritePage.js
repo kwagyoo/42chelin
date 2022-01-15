@@ -146,7 +146,7 @@ const ReviewWritePage = ({ location }) => {
         e.response.data.errorMessage === 'Cannot post two reviews in one day.'
       ) {
         alert('동일한가게에는 하루 한개의 리뷰만 올릴 수 있습니다');
-        history.goBack();
+        history.go('/');
         return;
       }
       if (e.response.status < 500) {

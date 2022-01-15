@@ -159,6 +159,7 @@ const manageDeleteReview = async (deleteReviewData) => {
 };
 
 const StoreReviewList = ({ store, storeReviews }) => {
+  console.log('storeReviews', storeReviews);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
@@ -219,20 +220,19 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <div className="review_img">
                   <div className="review_img_container">
                     {review.images.length > 0 && (
-                      <>
-                        <Image.PreviewGroup>
-                          {review.images.map((image, idx) => {
-                            return (
-                              <Image
-                                width={150}
-                                height={150}
-                                src={image.imageURL}
-                                key={idx}
-                              />
-                            );
-                          })}
-                        </Image.PreviewGroup>
-                      </>
+                      <Image.PreviewGroup>
+                        {review.images.map((image, idx) => {
+                          console.log(image);
+                          return (
+                            <Image
+                              width={150}
+                              height={150}
+                              src={image.imageURL}
+                              key={idx}
+                            />
+                          );
+                        })}
+                      </Image.PreviewGroup>
                     )}
                   </div>
                 </div>
