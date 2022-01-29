@@ -19,7 +19,6 @@ client.interceptors.response.use(
       const originalRequest = config;
       await TokenVerify();
       originalRequest.headers.Authorization = `Bearer ${getCookie('accToken')}`;
-      console.log('original', originalRequest);
       return axios(originalRequest);
     } else {
       return Promise.reject(error);

@@ -259,7 +259,7 @@ const StorelistPage = ({ history }) => {
                     xs={24}
                     md={12}
                     lg={8}
-                    xl={6}
+                    xl={4}
                     onClick={() => goDetail(stores[index])}
                   >
                     <PostBlock

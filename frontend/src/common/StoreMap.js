@@ -8,7 +8,7 @@ const Container = styled.div`
   #map {
     display: block;
     width: 100%;
-    height: 600px;
+    height: 700px;
     min-height: 300px;
   }
   .customoverlay {

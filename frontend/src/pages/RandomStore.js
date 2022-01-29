@@ -23,7 +23,12 @@ const Container = styled.div`
   ol {
     list-style: none;
   }
-  .randomBox {
+  h1,
+  h2,
+  h3 {
+    margin-bottom: 0.1rem;
+  }
+  .random-box {
     height: 400px;
   }
   @media (max-width: 425px) {
@@ -31,7 +36,6 @@ const Container = styled.div`
       font-size: 1em;
       height: 100%;
     }
-    // Todo: 크기가 커지면 자동으로 밀려나게 하고 싶었는데 안되서 일단 overflow hidden으로 처리함
     .menu_btn {
       display: flex;
       flex-direction: column;
@@ -124,7 +128,7 @@ const Container = styled.div`
     font-weight: bold;
   }
   .menu_print {
-    height: 60px;
+    height: 130px;
     display: none;
     justify-content: center;
     align-items: center;
@@ -138,7 +142,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     bottom: -60px;
-    margin-top: 30px;
+    margin-top: 10px;
   }
   button {
     background: black;
@@ -234,14 +238,14 @@ const RandomStore = () => {
     <MainBody>
       <Header />
       <Container>
-        <div className="randomBox">
+        <div className="random0ox">
           <div className="title">
             <h1>오늘 뭐먹지?</h1>
             <h3>오늘의 픽</h3>
           </div>
           <div className="menu_btn">
             <div className="menu_print" ref={store_print}>
-              <h2>{store.storeName}</h2>
+              <h1>{store.storeName}</h1>
             </div>
             <div className="menu_slot" ref={displaySlot}>
               <div className="slot_container">

@@ -60,7 +60,6 @@ const KakaoSearchPage = () => {
   const SearchStoreEvent = async () => {
     try {
       const res = await fetchKakaoApi(text);
-      console.log(res);
       const data = res.data;
       setSearchstoreList(data);
     } catch (e) {

@@ -20,6 +20,7 @@ const StoreListBlock = styled.div`
 
 const FlexWrapper = styled.div`
   width: 100%;
+  height: 250px;
   display: flex;
   justify-content: space-between;
   #map {

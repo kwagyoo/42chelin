@@ -2,12 +2,11 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { deleteReview } from '../lib/api/review';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setReview } from '../module/posts';
 import AntModal from '../common/Modal';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import { Image } from 'antd';
 
 const Wrapper = styled.div`
@@ -33,7 +32,7 @@ const ReviewListHeader = styled.div`
   text-align: center;
   overflow: hidden;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
   .btn-review-write {
     font-size: 1rem;
     background-color: #fafafa;
@@ -125,23 +124,6 @@ const ReviewDetail = styled.div`
     }
   }
 `;
-// const ImgContainer = styled.div`
-//   display: flex;
-//   width: 90%;
-//   flex-wrap: nowrap;
-//   overflow: auto;
-//   overflow-x: auto;
-//   overflow-y: none;
-//   -ms-overflow-style: none; /* IE and Edge */
-//   scrollbar-width: none; /* Firefox */
-//   -webkit-scrollbar {
-//     display: none; /* Chrome, Safari, Opera*/
-//   }
-// `;
-
-// const HiddenImg = styled(Image)`
-//   display: none;
-// `;
 
 const manageDeleteReview = async (deleteReviewData) => {
   try {
@@ -159,11 +141,11 @@ const manageDeleteReview = async (deleteReviewData) => {
 };
 
 const StoreReviewList = ({ store, storeReviews }) => {
-  console.log('storeReviews', storeReviews);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
   const history = useHistory();
+  const { isLogin } = useSelector((state) => state.users);
 
   const deleteStoreReview = async (review) => {
     if (!loading) {
@@ -199,11 +181,13 @@ const StoreReviewList = ({ store, storeReviews }) => {
       <AntModal visible={loading} loadingText={loadingText} />
       <ReviewListHeader>
         <div>리뷰</div>
-        <div>
-          <button className="btn-review-write" onClick={GoWritePage}>
-            리뷰 작성
-          </button>
-        </div>
+        {isLogin && (
+          <div>
+            <button className="btn-review-write" onClick={GoWritePage}>
+              리뷰 작성
+            </button>
+          </div>
+        )}
       </ReviewListHeader>
       {storeReviews &&
         storeReviews.map((review, idx) => (
@@ -222,7 +206,6 @@ const StoreReviewList = ({ store, storeReviews }) => {
                     {review.images.length > 0 && (
                       <Image.PreviewGroup>
                         {review.images.map((image, idx) => {
-                          console.log(image);
                           return (
                             <Image
                               width={150}
