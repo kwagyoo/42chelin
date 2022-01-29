@@ -6,7 +6,6 @@ import { fetchMyStores } from '../lib/api/store';
 import { loadImageFromS3 } from '../lib/api/aws';
 
 export const getFavoriteStores = async () => {
-  console.log('myfavorite 함수 실행');
   const clusterName = sessionStorage.getItem('clusterName');
   if (!clusterName) return;
   const res = await fetchMyStores(clusterName);
@@ -23,7 +22,6 @@ export const getFavoriteStores = async () => {
 };
 
 const checkAutoLogin = async () => {
-  console.log('auto login 실행');
   if (localStorage.getItem('autoLogin') === 'true') {
     if (!sessionStorage.getItem('clusterName')) {
       const accToken = getCookie('accToken');
@@ -43,7 +41,6 @@ const checkAutoLogin = async () => {
             client.defaults.headers.common[
               'Authorization'
             ] = `Bearer ${accToken}`;
-            console.log('재발급');
             await TokenVerify();
             sessionStorage.setItem('clusterName', decoded.clusterName);
             await getFavoriteStores();

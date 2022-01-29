@@ -11,7 +11,6 @@ const PwResetPage = ({ location }) => {
     async (code) => {
       try {
         await fetchResetPassword(code);
-        console.log('d');
         history.push('/login');
       } catch (err) {
         alert('오류가 발생하여 이전 페이지로 이동합니다.');

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMenu } from '../module/posts';
 
 const StoreItemBlock = styled.div`
@@ -38,6 +38,16 @@ const StoreHeader = styled.div`
   .store-header-title {
     display: flex;
     align-items: center;
+    h1 {
+      margin-bottom: 0.3rem;
+      font-weight: 400;
+    }
+    @media (max-width: 425px) {
+      h1 {
+        font-size: 1.3em;
+        font-weight: 500;
+      }
+    }
   }
   .btn-review-detail {
     font-size: 1rem;
@@ -90,6 +100,7 @@ const StoreReviewDetail = ({
   const clusterName = sessionStorage.getItem('clusterName');
   const history = useHistory();
   const dispatch = useDispatch();
+  const { isLogin } = useSelector((state) => state.users);
 
   const goUpdatePage = () => {
     dispatch(setMenu(storeList.storeMenus));
@@ -103,7 +114,7 @@ const StoreReviewDetail = ({
       <StoreHeader>
         <div className="store-header-title">
           <div className="store-name">
-            <h2>{storeList.storeName}</h2>
+            <h1>{storeList.storeName}</h1>
           </div>
           {clusterName ? (
             <button
@@ -127,9 +138,11 @@ const StoreReviewDetail = ({
             </button>
           )}
         </div>
-        <button className="btn-review-detail" onClick={goUpdatePage}>
-          메뉴 수정
-        </button>
+        {isLogin && (
+          <button className="btn-review-detail" onClick={goUpdatePage}>
+            메뉴 수정
+          </button>
+        )}
       </StoreHeader>
       {/* display block을 하면 table이 가로 전체를 차지하게 된다. */}
       <StyledTable>

@@ -115,9 +115,14 @@ const updateStoreReview = async (path, data, history) => {
         ...newImages,
       ],
     });
-    history.push(
-      `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+    setTimeout(
+      () =>
+        history.push(
+          `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+        ),
+      5000,
     );
+
     return 200;
   } catch (e) {
     if (e.response.status < 500) {

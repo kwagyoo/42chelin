@@ -20,6 +20,7 @@ const StoreListBlock = styled.div`
 
 const FlexWrapper = styled.div`
   width: 100%;
+  height: 250px;
   display: flex;
   justify-content: space-between;
   #map {
@@ -100,6 +101,7 @@ const StoreDetailPage = () => {
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
+
   useEffect(() => {
     //array 타입을 string형태로 바꾸기 위해 json.stringfy를 사용한다.
     localStorage.setItem('visited', JSON.stringify(visited));

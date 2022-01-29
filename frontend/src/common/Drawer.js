@@ -34,8 +34,13 @@ const StyledInfo = styled.div`
   width: 100%;
   height: 86px;
   border-bottom: 1px solid #bcbcbc;
-  padding: 0 20px;
+  padding: 0 20px 0 0;
   overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 5px;
+  &:hover {
+    background-color: gainsboro;
+  }
 `;
 
 const StyledTabs = styled(Tabs)`

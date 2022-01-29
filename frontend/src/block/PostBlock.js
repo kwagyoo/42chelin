@@ -14,11 +14,11 @@ const StoreCompactInfo = styled.div`
     border-color: #dbdbdb;
     background-color: white;
   }
-  .storeThumb {
+  .store-thumb {
     width: 100%;
     height: 200px;
   }
-  .storeInfo {
+  .store-info {
     width: 100%;
     padding: 5%;
     /* border-top: 1px solid;
@@ -27,15 +27,18 @@ const StoreCompactInfo = styled.div`
       width: 100%;
       margin-bottom: 0;
     }
-    .storeAddress {
+    .store-address {
       color: gray;
+      white-space: nowrap;
+      overflow: hidden;
     }
-    .storeName {
+    .store-name {
+      text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
     }
   }
-  .storeCount {
+  .store-count {
     display: flex;
     flex-direction: column;
     padding-right: 5px;
@@ -73,19 +76,19 @@ const PostBlock = ({ src, delay, store }) => {
   return (
     <StoreCompactInfo>
       <animated.article style={fadein}>
-        <div className="storeInfo">
-          <div className="storeName">
+        <div className="store-info">
+          <div className="store-name">
             <h2>{store?.storeName}</h2>
           </div>
-          <span className="storeAddress">{store?.storeAddress}</span>
+          <div className="store-address">{store?.storeAddress}</div>
           <br />
           <img
-            className="storeThumb"
+            className="store-thumb"
             src={imgurl}
             alt="Store Thumbnail"
             //   onError={MissingImg}
           />
-          <div className="storeCount">
+          <div className="store-count">
             <span>
               <FontAwesomeIcon
                 icon={fasFaHeart}

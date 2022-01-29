@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +14,8 @@ import { removeCookie } from './Cookie';
 import TokenVerify from './TokenVerify';
 import client from '../lib/api/client';
 import DrawerDiv from './Drawer';
+import { useDispatch } from 'react-redux';
+import { setIsLogin } from '../module/users';
 
 const HeaderBlock = styled.header`
   position: fixed;
@@ -187,9 +189,11 @@ const Spacer = styled.div`
 const Header = () => {
   const [name, setName] = useState('');
   const [isMenuClick, setIsMenuClick] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [login, setLogin] = useState(false);
   const [visible, setVisible] = useState(false);
   const [favoriteStore, setfavoriteStore] = useState([]);
+  const dispatch = useDispatch();
+  const history = useHistory();
   const showDrawer = () => {
     setVisible(true);
   };
@@ -200,9 +204,8 @@ const Header = () => {
 
   const checkTokenVerify = useCallback(async () => {
     try {
-      if (!isLogin) return;
+      if (!login) return;
       await TokenVerify();
-      console.log('refresh success');
     } catch (err) {
       console.error('갱신 실패 ', err);
       sessionStorage.removeItem('clusterName');
@@ -210,15 +213,15 @@ const Header = () => {
       removeCookie('refToken');
       delete client.defaults.headers.common['Authorization'];
       setName('');
-      setIsLogin(false);
+      setLogin(false);
     }
-  }, [isLogin]);
+  }, [login]);
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!login) {
       const user = sessionStorage.getItem('clusterName');
       if (user) {
-        setIsLogin(true);
+        setLogin(true);
         setName(user);
         setfavoriteStore(JSON.parse(sessionStorage.getItem('favoriteStore')));
       }
@@ -230,7 +233,7 @@ const Header = () => {
         clearInterval(timer);
       };
     }
-  }, [isLogin, checkTokenVerify]);
+  }, [login, checkTokenVerify]);
 
   useEffect(() => {
     if (visible) {
@@ -239,15 +242,16 @@ const Header = () => {
   }, [visible]);
 
   const onLogout = () => {
-    console.log('logout');
-    if (isLogin) {
+    if (login) {
       localStorage.removeItem('autoLogin');
       sessionStorage.removeItem('clusterName');
       delete client.defaults.headers.common['Authorization'];
-      setIsLogin(false);
+      setLogin(false);
+      dispatch(setIsLogin(false));
       removeCookie('accToken');
       removeCookie('refToken');
       alert('로그아웃 되었습니다.');
+      history.push('/');
     }
   };
 
@@ -260,7 +264,7 @@ const Header = () => {
               <img src={logo} alt="title" />
             </Link>
             <div className="title_header_smartphone">
-              {isLogin ? (
+              {login ? (
                 <>
                   <UserName>{name}</UserName>
                   <Link to="write">
@@ -309,7 +313,7 @@ const Header = () => {
             </button>
           </div>
           <div className="header-right">
-            {isLogin ? (
+            {login ? (
               <>
                 <Button name="리뷰 작성" to="/write" />
                 <Button name={name} onClick={showDrawer} />
