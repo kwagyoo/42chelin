@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 const Body = styled.div`
   background-color: #fafafa;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const StyledForm = styled.form`
@@ -122,10 +122,9 @@ const updateStoreReview = async (path, data, history) => {
         ),
       5000,
     );
-
     return 200;
   } catch (e) {
-    if (e.response.status < 500) {
+    if (e.response?.status < 500) {
       if (e.response.status === 401) {
         alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
         history.push(
@@ -135,7 +134,7 @@ const updateStoreReview = async (path, data, history) => {
         alert('잘못된 요청입니다.');
       }
     } else alert('저장에 실패하였습니다.');
-    return e.response.status;
+    return e.response?.status;
   }
 };
 

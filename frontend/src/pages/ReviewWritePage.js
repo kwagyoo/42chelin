@@ -18,7 +18,6 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 const Body = styled.div`
   background-color: #fafafa;
   width: 100vw;
-  height: 100vh;
   min-height: 100vh;
 `;
 
