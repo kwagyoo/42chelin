@@ -39,7 +39,7 @@ const Container = styled.div`
 const CarouselWrapper = ({ images }) => {
   const [modifiedImages, setModifiedImages] = useState(images);
   useEffect(() => {
-    if (modifiedImages && modifiedImages.length < 3)
+    if (modifiedImages && modifiedImages.length < 4)
       setModifiedImages([
         ...modifiedImages,
         ...Array(4 - images.length).fill('../image/default.png'),

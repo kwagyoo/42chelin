@@ -133,25 +133,23 @@ const ReviewWritePage = ({ location }) => {
   const sendReview = async (data) => {
     try {
       const imageNames = await uploadImagesToS3(data.images, data);
-      console.log('names', imageNames);
-      //   await writeReview({
-      //     ...data,
-      //     images: imageNames,
-      //   });
-      //   if (imageNames.length > 0) {
-      //     setTimeout(() => {
-      //       setModalText('이미지 가공중...');
-      //     }, 1000);
-      //   }
-      //   setTimeout(
-      //     () => {
-      //       history.push(
-      //         `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
-      //       );
-      //     },
-      //     imageNames.length > 0 ? 5000 : 1000,
-      //   );
-      setLoading((loading) => !loading);
+      await writeReview({
+        ...data,
+        images: imageNames,
+      });
+      if (imageNames.length > 0) {
+        setTimeout(() => {
+          setModalText('이미지 가공중...');
+        }, 1000);
+      }
+      setTimeout(
+        () => {
+          history.push(
+            `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
+          );
+        },
+        imageNames.length > 0 ? 5000 : 1000,
+      );
     } catch (e) {
       console.error(e.response);
       if (

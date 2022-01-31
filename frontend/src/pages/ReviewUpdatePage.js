@@ -100,44 +100,6 @@ const useInput = (initialValue, validator) => {
   return { value, onChange };
 };
 
-const updateStoreReview = async (path, data, history) => {
-  try {
-    const newImages = await uploadImagesToS3(
-      data.storeImages.filter((image) => image.imageURL === undefined),
-      path,
-    );
-    await updateReview(path, {
-      ...data,
-      reviewImages: [
-        ...data.storeImages
-          .filter((image) => image.imageURL)
-          .map((image) => image.image),
-        ...newImages,
-      ],
-    });
-    setTimeout(
-      () =>
-        history.push(
-          `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
-        ),
-      5000,
-    );
-    return 200;
-  } catch (e) {
-    if (e.response?.status < 500) {
-      if (e.response.status === 401) {
-        alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
-        history.push(
-          `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
-        );
-      } else {
-        alert('잘못된 요청입니다.');
-      }
-    } else alert('저장에 실패하였습니다.');
-    return e.response?.status;
-  }
-};
-
 const ReviewUpdatePage = ({ history }) => {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(0);
@@ -149,6 +111,46 @@ const ReviewUpdatePage = ({ history }) => {
     review ? review.review.reviewText : '',
     (value) => value.length < 1000,
   );
+
+  const updateStoreReview = async (path, data, history) => {
+    try {
+      const newImages = await uploadImagesToS3(
+        data.storeImages.filter((image) => image.imageURL === undefined),
+        path,
+      );
+      await updateReview(path, {
+        ...data,
+        reviewImages: [
+          ...data.storeImages
+            .filter((image) => image.imageURL)
+            .map((image) => image.image),
+          ...newImages,
+        ],
+      });
+      setTimeout(
+        () =>
+          history.push(
+            `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+          ),
+        newImages.length > 0 ? 5000 : 1000,
+      );
+      return 200;
+    } catch (e) {
+      if (e.response?.status < 500) {
+        if (e.response.status === 401) {
+          alert('기능을 사용할 권한이 없습니다. 이전 페이지로 이동합니다.');
+          history.push(
+            `/detail?storeID=${path.storeID}&storeAddress=${data.storeAddress}`,
+          );
+        } else {
+          alert('잘못된 요청입니다.');
+        }
+      } else alert('저장에 실패하였습니다.');
+      setLoading((loading) => false);
+      return e.response?.status;
+    }
+  };
+
   const handleSubmitBtn = async (data) => {
     if (!loading) {
       setLoading((loading) => true);
@@ -161,7 +163,6 @@ const ReviewUpdatePage = ({ history }) => {
         { ...data, storeImages: files },
         history,
       );
-      setLoading((loading) => false);
     }
   };
 

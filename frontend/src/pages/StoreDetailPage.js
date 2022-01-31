@@ -68,7 +68,6 @@ const getImageURLsFromS3 = async (storeList) => {
   try {
     const fixedReviews = await Promise.all(
       storeList.storeReviews.map(async (review) => {
-        console.log(review);
         const imageURLs = await Promise.all(
           review.images.map(async (image) => {
             const imageURL = await loadImageFromS3(image);
@@ -116,7 +115,6 @@ const StoreDetailPage = () => {
     try {
       res = await getStoreDetail({ ...query, clusterName });
       const { storeName, storeAddress, storeID, storeCategoryName } = res.data;
-      console.log('res', res.data);
       const fixedImages = await getImageURLsFromS3(res.data);
       const data = {
         storeName,
