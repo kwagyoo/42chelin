@@ -34,25 +34,29 @@ const RegisterPage = ({ location }) => {
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (email.match(pattern) === null) {
       setError('이메일 형식이 아닙니다');
+      setLoading((loading) => !loading);
       return;
     }
     if (password.length < 5 && password.length > 13) {
       setError('비밀번호는 5자리에서 13자리로 정해주세요');
+      setLoading((loading) => !loading);
       return;
     }
     if (passwordConfirm.length > 0 && password !== passwordConfirm) {
       setError('비밀번호가 다릅니다');
+      setLoading((loading) => !loading);
       return;
     } else setError('');
     try {
       setLoading(true);
       await fetchRegister(code, email, password);
+      setLoading((loading) => !loading);
       history.push('/login');
     } catch (e) {
       if (e.response.data.errorMessage) alert('동일한 계정이 이미 존재합니다');
+      setLoading((loading) => !loading);
       history.push('/login');
     }
-    setLoading((loading) => !loading);
   };
   return (
     <>

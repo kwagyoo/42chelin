@@ -15,6 +15,9 @@ import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
 import StoreInfoUpdate from './pages/StoreInfoUpdate';
 import PwResetPage from './pages/PwResetPage';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const App = () => {
   AWS.config.update({

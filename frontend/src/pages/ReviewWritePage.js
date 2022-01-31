@@ -18,7 +18,6 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 const Body = styled.div`
   background-color: #fafafa;
   width: 100vw;
-  height: 100vh;
   min-height: 100vh;
 `;
 
@@ -125,6 +124,7 @@ const ReviewWritePage = ({ location }) => {
   const [files, setFiles] = useState([]); //업로드한 파일의 배열, 동시에 올린 파일끼리는 안에서 배열로 다시 묶여있다.
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [modalText, setModalText] = useState('게시글 저장중...');
   const history = useHistory();
   const { register, handleSubmit, setValue } = useForm();
 
@@ -132,13 +132,23 @@ const ReviewWritePage = ({ location }) => {
 
   const sendReview = async (data) => {
     try {
-      const imageNames = uploadImagesToS3(data.images, data);
+      const imageNames = await uploadImagesToS3(data.images, data);
       await writeReview({
         ...data,
         images: imageNames,
       });
-      history.push(
-        `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
+      if (imageNames.length > 0) {
+        setTimeout(() => {
+          setModalText('이미지 가공중...');
+        }, 1000);
+      }
+      setTimeout(
+        () => {
+          history.push(
+            `/detail?storeID=${data.storeID}&storeAddress=${data.storeAddress}`,
+          );
+        },
+        imageNames.length > 0 ? 5000 : 1000,
       );
     } catch (e) {
       console.error(e.response);
@@ -146,7 +156,7 @@ const ReviewWritePage = ({ location }) => {
         e.response.data.errorMessage === 'Cannot post two reviews in one day.'
       ) {
         alert('동일한가게에는 하루 한개의 리뷰만 올릴 수 있습니다');
-        history.goBack();
+        history.go('/');
         return;
       }
       if (e.response.status < 500) {
@@ -157,6 +167,9 @@ const ReviewWritePage = ({ location }) => {
           alert('잘못된 요청입니다.');
         }
       } else alert('서버에 문제가 발생하였습니다.');
+
+      setModalText('게시글 저장중...');
+      setLoading((loading) => !loading);
     }
   };
 
@@ -169,7 +182,6 @@ const ReviewWritePage = ({ location }) => {
       setLoading((loading) => !loading);
       await sendReview({ ...combineData, images: files });
     }
-    setLoading((loading) => !loading);
   };
 
   useEffect(() => {
@@ -179,7 +191,10 @@ const ReviewWritePage = ({ location }) => {
         .then((res) => {
           setStore({
             placeName: res.place_name,
-            address: res.road_address_name,
+            address:
+              res.road_address_name.length > 0
+                ? res.road_address_name
+                : res.address_name,
             id: res.id,
             category_code: res.category_group_code,
             category_name: res.category_name,
@@ -212,7 +227,7 @@ const ReviewWritePage = ({ location }) => {
     <Body>
       <Header />
       <main>
-        {loading && <AntModal visible="true" loadingText={'게시글 저장중..'} />}
+        {loading && <AntModal visible="true" loadingText={modalText} />}
         <StyledForm
           name="dynamic_form_nest_item"
           autoComplete="off"

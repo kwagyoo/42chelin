@@ -128,19 +128,16 @@ const StorelistPage = ({ history }) => {
   const [change, setChange] = useState(true);
   const [stores, setStores] = useState([]);
   const [lastEval, setLastEval] = useState(undefined);
-  const [endScroll, setEndScroll] = useState(false);
+  const [endScroll, setEndScroll] = useState(true);
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
-
   const onChange = useCallback((e) => {
     setText(e.target.value);
   }, []);
-
   const ChangeList = useCallback((e) => {
     if (e.target.id === 'btnradio1') setChange(true);
     else setChange(false);
   }, []);
-
   const onKeyPress = useCallback(
     (e) => {
       if (e.key === 'Enter') {
@@ -157,11 +154,6 @@ const StorelistPage = ({ history }) => {
     if (entry.isIntersecting) {
       observer.unobserve(entry.target);
       setEndScroll(true);
-      setTimeout(() => {
-        if (stores.length > 0 && !lastEval) {
-          observer.observe(entry.target);
-        }
-      }, 1500);
     }
   };
 
@@ -183,16 +175,19 @@ const StorelistPage = ({ history }) => {
   }, [endScroll]);
 
   useEffect(() => {
-    let observer;
-    if (scrollRef) {
-      observer = new IntersectionObserver(onIntersect, {
-        threshold: 0.5,
-      });
-      observer.observe(scrollRef.current);
+    if (stores.length > 0 && !lastEval) return;
+    if (stores.length > 0) {
+      let observer;
+      if (scrollRef) {
+        observer = new IntersectionObserver(onIntersect, {
+          threshold: 0.5,
+        });
+        observer.observe(scrollRef.current);
+      }
+      return () => observer && observer.disconnect();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-    return () => observer && observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [stores, lastEval]);
 
   const goDetail = (stores) => {
     if (!stores) return;
@@ -264,7 +259,7 @@ const StorelistPage = ({ history }) => {
                     xs={24}
                     md={12}
                     lg={8}
-                    xl={6}
+                    xl={4}
                     onClick={() => goDetail(stores[index])}
                   >
                     <PostBlock
@@ -280,7 +275,7 @@ const StorelistPage = ({ history }) => {
             </div>
           </>
         ) : (
-          <StoreMap storeList={stores} history={history} />
+          <StoreMap history={history} />
         )}
       </MainBody>
     </ListBody>

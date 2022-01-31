@@ -20,6 +20,7 @@ const StoreListBlock = styled.div`
 
 const FlexWrapper = styled.div`
   width: 100%;
+  height: 250px;
   display: flex;
   justify-content: space-between;
   #map {
@@ -83,7 +84,9 @@ const getImageURLsFromS3 = async (storeList) => {
       storeReviews: fixedReviews,
     };
   } catch (e) {
-    alert(e.response.data.message);
+    if (e.response) {
+      alert(e.response.data.message);
+    } else console.error(e);
   }
 };
 
@@ -100,6 +103,7 @@ const StoreDetailPage = () => {
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
+
   useEffect(() => {
     //array 타입을 string형태로 바꾸기 위해 json.stringfy를 사용한다.
     localStorage.setItem('visited', JSON.stringify(visited));
@@ -140,7 +144,11 @@ const StoreDetailPage = () => {
         } else {
           alert('잘못된 요청입니다.');
         }
-      } else alert('서버에 문제가 발생하였습니다.');
+      } else if (e.response) alert('서버에 문제가 발생하였습니다.');
+      else {
+        alert('처리 중 오류가 발생하였습니다.');
+        console.error(e);
+      }
       return e.response?.status;
     }
 

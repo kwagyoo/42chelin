@@ -8,16 +8,24 @@ const CardBox = styled.div`
 const CardImg = styled.img`
   margin: 0 auto;
   overflow-y: hidden;
-  height: 225px;
-  width: 225px;
+  height: 250px;
+  width: 250px;
   object-fit: cover;
+  @media (max-width: 1440px) {
+    height: 250px;
+    width: 250px;
+  }
   @media (max-width: 1024px) {
     height: 250px;
     width: 250px;
   }
   @media (max-width: 425px) {
     height: 250px;
-    width: 330px;
+    width: 250px;
+  }
+  @media (max-width: 320px) {
+    height: 230px;
+    width: 200px;
   }
 `;
 

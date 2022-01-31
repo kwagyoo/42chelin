@@ -30,7 +30,6 @@ const TokenVerify = async () => {
           client.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${accToken}`;
-          console.log('재발급');
         }
         if (refToken !== getCookie('refToken')) {
           setCookie('refToken', refToken, {

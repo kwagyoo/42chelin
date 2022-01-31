@@ -15,7 +15,7 @@ export const getStoreInfoKakao = async (request) => {
         storeName: request.placeName,
       },
     });
-    return res.data.body;
+    return res.data;
   } catch (error) {
     return Promise.reject(error);
   }

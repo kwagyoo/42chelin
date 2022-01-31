@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import DefalutImg from '../image/default.png';
 
 const StyledImg = styled.img`
-  width: 86px;
-  height: 86px;
+  width: 90px;
+  height: 80px;
+  margin: 10px 0 10px 0;
 `;
 
 const StoreBlock = (store) => {

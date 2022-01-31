@@ -1,13 +1,14 @@
 /* global kakao */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getAllStore } from '../lib/api/store';
 
 const Container = styled.div`
   #map {
     display: block;
     width: 100%;
-    height: 600px;
+    height: 700px;
     min-height: 300px;
   }
   .customoverlay {
@@ -55,7 +56,18 @@ const Container = styled.div`
   }
 `;
 
-const StoreMap = ({ storeList, history }) => {
+const StoreMap = ({ history }) => {
+  const [storeList, setStoresList] = useState([]);
+
+  useEffect(() => {
+    const getMapStore = async () => {
+      const res = await getAllStore();
+      setStoresList(res.data.data);
+    };
+    getMapStore();
+    return () => {};
+  }, []);
+
   useEffect(() => {
     //map size
     var container = document.getElementById('map');
@@ -119,6 +131,7 @@ const StoreMap = ({ storeList, history }) => {
       });
     });
   });
+
   return (
     <Container>
       <div id="map" />
