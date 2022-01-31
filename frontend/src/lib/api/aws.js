@@ -1,23 +1,27 @@
 import AWS from 'aws-sdk';
 import loadImage from 'blueimp-load-image';
 
-export const uploadImagesToS3 = (images, path) => {
-  const imageNames = Promise.all(
+export const uploadImagesToS3 = async (images, path) => {
+  const imageNames = await Promise.all(
     images.map(async (image) => {
       const imageName =
         path.storeID +
         '/' +
         Math.random().toString(36).substr(2, 15) +
         image.name.slice(image.name.lastIndexOf('.'));
-      loadImage(image, {
-        meta: true,
-        orientation: true,
-      }).then((data) => {
-        console.log(data);
-        if (data.imageHead && data.exif) {
-          loadImage.writeExifData(data.imageHead, data, 'Orientation', 1);
-        }
-      });
+      loadImage(
+        image,
+        function (event, data) {
+          console.log(event, data);
+        },
+        { meta: true, canvas: true, orientation: true },
+      );
+      //   .then((data) => {
+      //     console.log('data', data, data.exif);
+      //     if (data.imageHead && data.exif) {
+      //       loadImage.writeExifData(data.imageHead, data, 'Orientation', 1);
+      //     }
+      //   });
       return imageName;
     }),
   );

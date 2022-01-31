@@ -68,6 +68,7 @@ const getImageURLsFromS3 = async (storeList) => {
   try {
     const fixedReviews = await Promise.all(
       storeList.storeReviews.map(async (review) => {
+        console.log(review);
         const imageURLs = await Promise.all(
           review.images.map(async (image) => {
             const imageURL = await loadImageFromS3(image);
@@ -84,7 +85,9 @@ const getImageURLsFromS3 = async (storeList) => {
       storeReviews: fixedReviews,
     };
   } catch (e) {
-    alert(e.response.data.message);
+    if (e.response) {
+      alert(e.response.data.message);
+    } else console.error(e);
   }
 };
 
@@ -113,6 +116,7 @@ const StoreDetailPage = () => {
     try {
       res = await getStoreDetail({ ...query, clusterName });
       const { storeName, storeAddress, storeID, storeCategoryName } = res.data;
+      console.log('res', res.data);
       const fixedImages = await getImageURLsFromS3(res.data);
       const data = {
         storeName,
@@ -142,7 +146,11 @@ const StoreDetailPage = () => {
         } else {
           alert('잘못된 요청입니다.');
         }
-      } else alert('서버에 문제가 발생하였습니다.');
+      } else if (e.response) alert('서버에 문제가 발생하였습니다.');
+      else {
+        alert('처리 중 오류가 발생하였습니다.');
+        console.error(e);
+      }
       return e.response?.status;
     }
 
