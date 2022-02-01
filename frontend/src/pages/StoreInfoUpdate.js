@@ -9,7 +9,7 @@ import { getStoreInfoKakao } from '../lib/api/kakao';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Form, Input, Button, Space } from 'antd';
+import { Form, Input, InputNumber, Button, Space } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 
@@ -218,7 +218,7 @@ const StoreInfoUpdate = ({ location }) => {
                       name={[field.name, 'price']}
                       rules={[{ required: true, message: 'Missing price' }]}
                     >
-                      <Input placeholder="가격" type="number" />
+                      <InputNumber placeholder="가격" type="number" />
                     </StyledForm.Item>
                     <MinusCircleOutlined onClick={() => remove(field.name)} />
                   </Space>

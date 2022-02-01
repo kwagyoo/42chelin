@@ -26,8 +26,10 @@ const Container = styled.div`
   @media (max-width: 1023px) {
     flex-basis: 30%;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 728px) {
     flex-basis: 25%;
+    width: 100%;
+    margin-bottom: 10px;
   }
   @media (max-width: 425px) {
     width: 100%;
@@ -70,14 +72,14 @@ const CarouselWrapper = ({ images }) => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 728,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },

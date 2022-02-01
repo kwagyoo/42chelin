@@ -16,7 +16,7 @@ const ReviewList = styled.div`
   display: flex;
   border-bottom: 1px solid #d9d9d9;
   margin-top: 20px;
-  .review_user_name {
+  .review-user-name {
     flex-grow: 0;
     flex-basis: 10%;
     font-size: 15px;
@@ -58,14 +58,14 @@ const ReviewDetail = styled.div`
   .Date {
     color: #9b9b9b;
   }
-  .review_info {
+  .review-info {
     flex-grow: 1;
     flex-shrink: 1;
     width: 50%;
-    .review_img {
+    .review-img {
       height: 170px;
     }
-    .review_img_container {
+    .review-img-container {
       display: flex;
       flex-direction: row;
       overflow-x: auto;
@@ -80,11 +80,11 @@ const ReviewDetail = styled.div`
       }
     }
   }
-  .review_info .review_text {
-    height: 50px;
+  .review-info .review-text {
+    min-height: 50px;
     overflow: auto;
   }
-  .review_detail_buttons {
+  .review-detail-buttons {
     width: 90px;
     display: flex;
     flex-direction: row;
@@ -93,19 +93,19 @@ const ReviewDetail = styled.div`
     align-items: start;
     justify-content: flex-end;
   }
-  .detail_button p {
+  .detail-button p {
     visibility: visible;
   }
-  .detail_button p:hover {
+  .detail-button p:hover {
     color: gray;
   }
-  .detail_button {
+  .detail-button {
     background: none;
     border: none;
     display: block;
   }
 
-  .detail_button:hover {
+  .detail-button:hover {
     cursor: pointer;
   }
   .hide {
@@ -113,13 +113,13 @@ const ReviewDetail = styled.div`
   }
 
   @media screen and (max-width: 1200px) {
-    .review_detail_buttons {
+    .review-detail-buttons {
       width: 60px;
     }
-    .detail_button svg {
+    .detail-button svg {
       visibility: visible;
     }
-    .review_detail_buttons p {
+    .review-detail-buttons p {
       visibility: hidden;
     }
   }
@@ -192,17 +192,17 @@ const StoreReviewList = ({ store, storeReviews }) => {
       {storeReviews &&
         storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
-            <div className="review_user_name">
+            <div className="review-user-name">
               {review.clusterName.substr(0, 1) +
                 '*'.repeat(review.clusterName.length - 2) +
                 review.clusterName.substr(review.clusterName.length - 1, 1)}
             </div>
             <ReviewDetail>
-              <div className="review_info">
+              <div className="review-info">
                 <div className="Date">{review.reviewDate}</div>
-                <div className="review_text">{review.reviewText}</div>
-                <div className="review_img">
-                  <div className="review_img_container">
+                <div className="review-text">{review.reviewText}</div>
+                <div className="review-img">
+                  <div className="review-img-container">
                     {review.images.length > 0 && (
                       <Image.PreviewGroup>
                         {review.images.map((image, idx) => {
@@ -220,11 +220,11 @@ const StoreReviewList = ({ store, storeReviews }) => {
                   </div>
                 </div>
               </div>
-              <div className="review_detail_buttons">
+              <div className="review-detail-buttons">
                 <button
                   onClick={() => goUpdatePage(review)}
                   className={
-                    'detail_button ' +
+                    'detail-button ' +
                     (review.clusterName ===
                     sessionStorage.getItem('clusterName')
                       ? null
@@ -242,7 +242,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 <button
                   onClick={() => deleteStoreReview(review)}
                   className={
-                    'detail_button ' +
+                    'detail-button ' +
                     (review.clusterName ===
                     sessionStorage.getItem('clusterName')
                       ? null

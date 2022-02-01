@@ -31,15 +31,13 @@ const FlexWrapper = styled.div`
   }
 
   @media (max-width: 1023px) {
-    .carousel {
-      margin: auto;
-    }
     #map {
       flex-basis: 35%;
     }
   }
   @media (max-width: 728px) {
     flex-direction: column;
+    height: 550px;
   }
   @media (max-width: 425px) {
     #map {
