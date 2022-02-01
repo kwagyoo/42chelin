@@ -12,11 +12,15 @@ body {
   font-family: 'Noto Sans CJK KR' !important;
 }
 
+html,
+body {
+  overflow-x: hidden; /*add This*/
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
 h2 {
   display: block;
   font-size: 1.3rem;

@@ -21,6 +21,9 @@ const ListBody = styled.div`
   }
   height: 100%;
   padding-bottom: 10px;
+  @media only screen and (min-width: 428px) {
+    overflow-x: hidden;
+  }
 `;
 
 const SearchInput = styled.div`
@@ -72,6 +75,24 @@ const MainBody = styled.div`
 
     ul > li > button:active {
       color: blue;
+    }
+  }
+  @media (min-width: 1200px) {
+    .ant-col-xl-4 {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+  }
+  @media (min-width: 1700px) {
+    .ant-col-xl-4 {
+      flex: 0 0 16.66667%;
+      max-width: 16.66667%;
+    }
+  }
+  @media (min-width: 2000px) {
+    .ant-col-xl-4 {
+      flex: 0 0 12.5%;
+      max-width: 12.5%;
     }
   }
 `;
@@ -256,9 +277,8 @@ const StorelistPage = ({ history }) => {
                 stores.map((store, index) => (
                   <Col
                     key={index}
-                    xs={24}
-                    md={12}
-                    lg={8}
+                    xs={12}
+                    md={8}
                     xl={4}
                     onClick={() => goDetail(stores[index])}
                   >

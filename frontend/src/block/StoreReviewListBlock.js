@@ -20,8 +20,6 @@ const ReviewList = styled.div`
     flex-grow: 0;
     flex-basis: 10%;
     font-size: 15px;
-    @media (max-width: 425px) {
-    }
   }
 `;
 
@@ -49,7 +47,7 @@ const ReviewListHeader = styled.div`
 
 const ReviewDetail = styled.div`
   width: 70%;
-  height: 250px;
+  min-height: 250px;
   display: flex;
   flex-grow: 1;
   flex-direction: row;
@@ -82,7 +80,6 @@ const ReviewDetail = styled.div`
   }
   .review-info .review-text {
     min-height: 50px;
-    overflow: auto;
   }
   .review-detail-buttons {
     width: 90px;
