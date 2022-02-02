@@ -12,7 +12,7 @@ import { uploadImagesToS3 } from '../lib/api/aws';
 import querystring from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Form, Input, Button, Space } from 'antd';
+import { Form, Input, InputNumber, Button, Space } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Body = styled.div`
@@ -281,7 +281,7 @@ const ReviewWritePage = ({ location }) => {
                       name={[name, 'price']}
                       fieldKey={[fieldKey, 'price']}
                     >
-                      <Input placeholder="가격" />
+                      <InputNumber placeholder="가격" />
                     </StyledForm.Item>
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Space>
