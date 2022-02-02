@@ -120,7 +120,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-right: 20%;
+    padding-right: 15%;
   }
   .slide_box li {
     height: 50px;

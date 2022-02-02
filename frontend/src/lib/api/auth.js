@@ -8,7 +8,7 @@ export const updatePassword = (data) =>
   });
 
 export const fetchRegister = (code, email, password) =>
-  client.post(`/user/test`, {
+  client.post(`/user`, {
     code: code,
     email: email,
     password: password,
