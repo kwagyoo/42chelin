@@ -51,7 +51,8 @@ const Footer = () => {
             https://github.com/kwagyoo/42chelin
           </a>
         </span>
-        <span> 버그 제보는 이슈로 남겨주세요</span>
+        <span>email : bkwag93@gmail.com yhw7979@gmail.com</span>
+        <span> 버그 제보는 이슈또는 이메일로 남겨주세요</span>
       </div>
       <div className="footer_logo">
         <img src={logo} alt="title" />
