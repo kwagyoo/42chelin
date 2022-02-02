@@ -47,7 +47,7 @@ const ReviewListHeader = styled.div`
 
 const ReviewDetail = styled.div`
   width: 70%;
-  min-height: 250px;
+  min-height: ${(props) => (props.imageLength > 0 ? '250px' : '125px')};
   display: flex;
   flex-grow: 1;
   flex-direction: row;
@@ -194,13 +194,15 @@ const StoreReviewList = ({ store, storeReviews }) => {
                 '*'.repeat(review.clusterName.length - 2) +
                 review.clusterName.substr(review.clusterName.length - 1, 1)}
             </div>
-            <ReviewDetail>
+            <ReviewDetail
+              imageLength={review.images ? review.images.length : 0}
+            >
               <div className="review-info">
                 <div className="Date">{review.reviewDate}</div>
                 <div className="review-text">{review.reviewText}</div>
-                <div className="review-img">
-                  <div className="review-img-container">
-                    {review.images.length > 0 && (
+                {review.images.length > 0 && (
+                  <div className="review-img">
+                    <div className="review-img-container">
                       <Image.PreviewGroup>
                         {review.images.map((image, idx) => {
                           return (
@@ -213,9 +215,9 @@ const StoreReviewList = ({ store, storeReviews }) => {
                           );
                         })}
                       </Image.PreviewGroup>
-                    )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <div className="review-detail-buttons">
                 <button
