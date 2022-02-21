@@ -132,7 +132,7 @@ const LoginPage = () => {
           Login
         </button>
         <div>
-          <a href={URL}>아직 42chelin계정이 없으신가요</a>
+          <a href={URL}>아이디가 없으신가요?</a>
           <br />
           <a href={PwURL}>비밀번호 초기화</a>
         </div>
