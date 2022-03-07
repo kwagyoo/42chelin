@@ -80,6 +80,7 @@ const ReviewDetail = styled.div`
   }
   .review-info .review-text {
     min-height: 50px;
+    white-space: pre-wrap;
   }
   .review-detail-buttons {
     width: 90px;
@@ -189,11 +190,7 @@ const StoreReviewList = ({ store, storeReviews }) => {
       {storeReviews &&
         storeReviews.map((review, idx) => (
           <ReviewList key={idx}>
-            <div className="review-user-name">
-              {review.clusterName.substr(0, 1) +
-                '*'.repeat(review.clusterName.length - 2) +
-                review.clusterName.substr(review.clusterName.length - 1, 1)}
-            </div>
+            <div className="review-user-name">{review.clusterName}</div>
             <ReviewDetail
               imageLength={review.images ? review.images.length : 0}
             >

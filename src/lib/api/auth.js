@@ -7,11 +7,11 @@ export const updatePassword = (data) =>
     currPassword: data.currPassword,
   });
 
-export const fetchRegister = (code, email, password) =>
+export const fetchRegister = (email, password, clusterName) =>
   client.post(`/user`, {
-    code: code,
     email: email,
     password: password,
+    clusterName: clusterName,
   });
 
 export const fetchLogin = (id, password) =>
@@ -24,5 +24,5 @@ export const fetchLogin = (id, password) =>
 export const fetchRefresh = (id) =>
   client.post(`/user/${id}/refresh`, { refresh_token: getCookie('refToken') });
 
-export const fetchResetPassword = (code) =>
-  client.post(`/user/reset`, { code });
+export const fetchResetPassword = ({ email, clusterName }) =>
+  client.post(`/user/reset`, { email: email, clusterName: clusterName });

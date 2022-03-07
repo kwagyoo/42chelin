@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import SignBlock from '../block/SignBlock';
@@ -6,6 +6,7 @@ import { getFavoriteStores } from '../common/CheckAutoLogin';
 import { setCookie } from '../common/Cookie';
 import Header from '../common/Header';
 import AntModal from '../common/Modal';
+import PwResetModal from '../common/PwResetModal';
 import TokenVerify from '../common/TokenVerify';
 import logo from '../image/Logo.png';
 import { fetchLogin } from '../lib/api/auth';
@@ -21,11 +22,8 @@ const LoginPage = () => {
     password: '',
   });
   const { id, password } = inputs; // 비구조화 할당을 통해 값 추출
-  const URL = `${process.env.REACT_APP_INTRA}/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIECT_URL}&response_type=code`;
-  const PwURL =
-    'https://api.intra.42.fr/oauth/authorize?client_id=a39797236e27fca852dea7a924abfedddc02aa178765598d3be2e4f47a56aecb&redirect_uri=http%3A%2F%2F42chelin.shop%2Freset&response_type=code';
   const [isError, setIsError] = useState(false);
-
+  const [show, setShow] = useState(false);
   const onChange = (e) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
     setInputs({
@@ -79,10 +77,17 @@ const LoginPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (sessionStorage.getItem('clusterName')) {
+      alert('로그아웃 해주세요');
+      history.push('/');
+    }
+  }, [history]);
   return (
     <>
       <Header />
       {loading && <AntModal visible="true" loadingText={'로그인중..'} />}
+      {show && <PwResetModal setShow={setShow} />}
       <SignBlock onSubmit={onLogin}>
         <img src={logo} alt="logo" />
         <div className="idForm">
@@ -131,10 +136,19 @@ const LoginPage = () => {
         <button className="btn" disabled={loading}>
           Login
         </button>
-        <div>
-          <a href={URL}>아이디가 없으신가요?</a>
+        <div className="login-div">
+          <button onClick={() => history.push('/register')}>
+            아이디가 없으신가요?
+          </button>
           <br />
-          <a href={PwURL}>비밀번호 초기화</a>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setShow(true);
+            }}
+          >
+            비밀번호 초기화
+          </button>
         </div>
       </SignBlock>
     </>
