@@ -307,6 +307,7 @@ const ReviewWritePage = ({ location }) => {
               {...register('reviewText')}
               value={review.value}
               maxLength={1000}
+              wrap="hard"
               onChange={review.onChange}
               required
             />

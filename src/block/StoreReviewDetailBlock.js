@@ -68,7 +68,10 @@ const StyledTable = styled.table`
   .menu-list-li {
     display: flex;
     justify-content: space-between;
-    width: 200px;
+    width: 400px;
+    @media (max-width: 570px) {
+      width: 300px;
+    }
   }
   th {
     /* margin-bottom: 10px; */

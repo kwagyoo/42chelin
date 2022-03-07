@@ -14,7 +14,6 @@ import LoginPage from './pages/LoginPage';
 import PrivateRoute from './common/PrivateRoute';
 import checkAutoLogin from './common/CheckAutoLogin';
 import StoreInfoUpdate from './pages/StoreInfoUpdate';
-import PwResetPage from './pages/PwResetPage';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -45,7 +44,6 @@ const App = () => {
         <Route path="/random" component={RandomStore} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
-        <Route path="/reset" component={PwResetPage} />
       </Switch>
       <Footer />
     </>

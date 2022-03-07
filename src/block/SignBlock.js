@@ -29,51 +29,23 @@ const StyledLoginForm = styled.form`
     -webkit-box-shadow: 0 0 0 1000px white inset;
     box-shadow: 0 0 0 1000px white inset;
   }
-  .idForm {
-    border-bottom: 2px solid #adadad;
-    margin: 15px 30px 15px 30px;
-    padding: 10px 10px;
-  }
 
-  .pwForm {
-    border-bottom: 2px solid #adadad;
-    margin: 15px 30px 15px 30px;
-    padding: 10px 10px;
-  }
+  .idForm,
+  .pwForm,
+  .nameForm,
   .pwConfirmForm {
     border-bottom: 2px solid #adadad;
-    margin: 30px;
+    margin: 15px 30px 15px 30px;
     padding: 10px 10px;
-  }
-
-  .id {
-    width: 100%;
-    border: none;
-    outline: none;
-    color: #636e72;
-    font-size: 16px;
-    height: 25px;
-    background: none;
-  }
-
-  .pw {
-    width: 100%;
-    border: none;
-    outline: none;
-    color: #636e72;
-    font-size: 16px;
-    height: 25px;
-    background: none;
-  }
-
-  .pwConfirm {
-    width: 100%;
-    border: none;
-    outline: none;
-    color: #636e72;
-    font-size: 16px;
-    height: 25px;
-    background: none;
+    input {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: #636e72;
+      font-size: 16px;
+      height: 25px;
+      background: none;
+    }
   }
 
   .btn {
@@ -96,6 +68,18 @@ const StyledLoginForm = styled.form`
 
   .btn:hover {
     background-position: right;
+  }
+
+  .login-div {
+    button {
+      border: none;
+      background-color: white;
+      :hover {
+        color: gray;
+        cursor: pointer;
+      }
+      word-break: break-all;
+    }
   }
 `;
 
